@@ -1,5 +1,7 @@
 # Acfs - *API Client for Services*
 
+TODO: Develop asynchronous parallel API client library for service oriented applications.
+
 TODO: Write a gem description
 
 ## Installation
@@ -19,6 +21,11 @@ Or install it yourself as:
 ## Usage
 
 TODO: Write usage instructions here
+
+## TODO
+
+* Library Code
+* Documentation
 
 ## Contributing
 

@@ -1,5 +1,6 @@
 require "acfs/version"
 
 module Acfs
-  # Your code goes here...
+  autoload :Base, 'acfs/base'
+
 end
