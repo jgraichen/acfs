@@ -1,6 +1,6 @@
 # Acfs - *API Client for Services*
 
-[![Build Status](https://travis-ci.org/jgraichen/acfs.png?branch=master)](https://travis-ci.org/jgraichen/acfs) [![Code Climate](https://codeclimate.com/github/jgraichen/acfs.png)](https://codeclimate.com/github/jgraichen/acfs)
+[![Gem Version](https://badge.fury.io/rb/acfs.png)](http://badge.fury.io/rb/acfs) [![Build Status](https://travis-ci.org/jgraichen/acfs.png?branch=master)](https://travis-ci.org/jgraichen/acfs) [![Code Climate](https://codeclimate.com/github/jgraichen/acfs.png)](https://codeclimate.com/github/jgraichen/acfs) [![Dependency Status](https://gemnasium.com/jgraichen/acfs.png)](https://gemnasium.com/jgraichen/acfs)
 
 TODO: Develop asynchronous parallel API client library for service oriented applications.
 
