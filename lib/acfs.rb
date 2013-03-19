@@ -1,6 +1,7 @@
 require "acfs/version"
 
 module Acfs
-  autoload :Base, 'acfs/base'
+  autoload :Client, 'acfs/client'
+  autoload :Model, 'acfs/model'
 
 end
