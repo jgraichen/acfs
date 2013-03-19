@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Acfs::Initialization do
-  let(:model) { MyModel }
+  let(:model) { Class.new.tap { |c| c.send :include, Acfs::Initialization }}
 
   describe '#initialize' do
     it 'should allow to set attributes with initializer' do

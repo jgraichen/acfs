@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Acfs::Attributes do
-  let(:model) { Class.new(MyModel) }
+  let(:model) { Class.new.tap { |c| c.send :include, Acfs::Attributes }}
 
   describe '#initialize' do
     before { model.send :attribute, :name, default: 'John' }
@@ -33,7 +33,10 @@ describe Acfs::Attributes do
     before { model.send :attribute, :name, default: 'John' }
 
     it 'should return value' do
-      expect(model.new(name: 'Paul').name).to be == 'Paul'
+      mo = model.new
+      mo.name = 'Paul'
+
+      expect(mo.name).to be == 'Paul'
     end
 
     it 'should return default value' do

@@ -27,7 +27,7 @@ module Acfs
 
       def initialize(*attrs) # :nodoc:
         self.class.attributes.each { |k, v| send :"#{k}=", v }
-        super
+        super *attrs
       end
 
       # Returns ActiveModel compatible list of attributes and values.
