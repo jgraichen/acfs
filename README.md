@@ -28,7 +28,7 @@ TODO: Write usage instructions here
 
 ```ruby
 class MyModel
-  include Acfs::Attributes
+  include Acfs::Model
 
   attribute :name, :string
   attribute :age, :integer, default: 15
