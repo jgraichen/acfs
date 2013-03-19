@@ -1,12 +1,12 @@
 module Acfs
   module VERSION
-    MAJOR = 0
-    MINOR = 1
+    MAJOR = 1
+    MINOR = 0
     PATCH = 0
-    STAGE = 'dev'
+    STAGE = 'dev0'
 
-    def self.to_s
-      [MAJOR, MINOR, PATCH, STAGE].reject(&:nil?).join('.')
-    end
+    STRING = [MAJOR, MINOR, PATCH, STAGE].reject(&:nil?).join('.')
+
+    def self.to_s; STRING end
   end
 end
