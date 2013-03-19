@@ -1,5 +1,7 @@
 require 'acfs'
 
+Dir[File.expand_path('spec/support/**/*.rb')].each {|f| require f}
+
 RSpec.configure do |config|
   # ## Mock Framework
   #

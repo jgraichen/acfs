@@ -3,7 +3,7 @@ module Acfs
     MAJOR = 0
     MINOR = 1
     PATCH = 0
-    STAGE = nil
+    STAGE = 'dev'
 
     def self.to_s
       [MAJOR, MINOR, PATCH, STAGE].reject(&:nil?).join('.')
