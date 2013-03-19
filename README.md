@@ -24,6 +24,26 @@ Or install it yourself as:
 
 TODO: Write usage instructions here
 
+### Acfs::Attributes
+
+```ruby
+class MyModel
+  include Acfs::Attributes
+
+  attribute :name, :string
+  attribute :age, :integer, default: 15
+end
+
+MyModel.attributes # => { "name" => "", "age" => 15 }
+
+mo = MyModel.new name: 'Johnny', age: 12
+mo.name # => "Johnny"
+mo.age = '13'
+mo.age # => 13
+mo.attributes # => { "name" => "Johnny", "age" => 13 }
+
+```
+
 ## TODO
 
 * Library Code
