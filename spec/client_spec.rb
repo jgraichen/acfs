@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Acfs::Client do
-  let(:client) { MyClient }
+  let(:client) { Class.new MyClient }
 
   describe '#initialize' do
     it "should use global base_url by default" do
