@@ -12,6 +12,9 @@ module Acfs
   #     attribute :special, My::Special::Type
   #   end
   #
+  # For each attribute a setter and getter will be created and values will be
+  # type casted when set.
+  #
   module Attributes
     def self.included(base)
       base.class_eval do
@@ -22,6 +25,14 @@ module Acfs
 
     module InstanceMethods # :nodoc:
 
+      # Returns ActiveModel compatible list of attributes and values.
+      #
+      #   class User
+      #     attribute :name, type: String, default: 'Anon'
+      #   end
+      #   user = User.new(name: 'John')
+      #   user.attributes # => { "name" => "John" }
+      #
       def attributes
         @attributes ||= self.class.attributes.stringify_keys
       end
@@ -81,6 +92,8 @@ module Acfs
   end
 end
 
+# Load attribute type classes.
+#
 Dir[File.dirname(__FILE__) + "/attributes/*.rb"].sort.each do |path|
   filename = File.basename(path)
   require "acfs/attributes/#{filename}"
