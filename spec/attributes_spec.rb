@@ -15,6 +15,20 @@ describe Acfs::Attributes do
     end
   end
 
+  describe '#attributes' do
+    before do
+      model.send :attribute, :name, default: 'John'
+      model.send :attribute, :age, type: :integer, default: 25
+    end
+
+    it 'should return hash of all attributes' do
+      expect(model.new.attributes).to be == {
+          'name' => 'John',
+          'age' => 25
+      }
+    end
+  end
+
   describe '.attribute' do
     it 'should add an attribute to model attribute list' do
       model.send :attribute, :name
