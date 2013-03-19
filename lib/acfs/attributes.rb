@@ -16,31 +16,23 @@ module Acfs
   # type casted when set.
   #
   module Attributes
-    def self.included(base) # :nodoc:
-      base.class_eval do
-        extend ClassMethods
-        include InstanceMethods
-      end
+    extend ActiveSupport::Concern
+
+    def initialize(*attrs) # :nodoc:
+      self.class.attributes.each { |k, v| send :"#{k}=", v }
+      super *attrs
     end
 
-    module InstanceMethods # :nodoc:
-
-      def initialize(*attrs) # :nodoc:
-        self.class.attributes.each { |k, v| send :"#{k}=", v }
-        super *attrs
-      end
-
-      # Returns ActiveModel compatible list of attributes and values.
-      #
-      #   class User
-      #     attribute :name, type: String, default: 'Anon'
-      #   end
-      #   user = User.new(name: 'John')
-      #   user.attributes # => { "name" => "John" }
-      #
-      def attributes
-        self.class.attributes.keys.inject({}) { |h, k| h[k.to_s] = send k; h }
-      end
+    # Returns ActiveModel compatible list of attributes and values.
+    #
+    #   class User
+    #     attribute :name, type: String, default: 'Anon'
+    #   end
+    #   user = User.new(name: 'John')
+    #   user.attributes # => { "name" => "John" }
+    #
+    def attributes
+      self.class.attributes.keys.inject({}) { |h, k| h[k.to_s] = send k; h }
     end
 
     module ClassMethods # :nodoc:
