@@ -16,7 +16,7 @@ module Acfs
   # type casted when set.
   #
   module Attributes
-    def self.included(base)
+    def self.included(base) # :nodoc:
       base.class_eval do
         extend ClassMethods
         include InstanceMethods
@@ -24,6 +24,11 @@ module Acfs
     end
 
     module InstanceMethods # :nodoc:
+
+      def initialize(*attrs) # :nodoc:
+        self.class.attributes.each { |k, v| send :"#{k}=", v }
+        super
+      end
 
       # Returns ActiveModel compatible list of attributes and values.
       #
@@ -34,7 +39,7 @@ module Acfs
       #   user.attributes # => { "name" => "John" }
       #
       def attributes
-        @attributes ||= self.class.attributes.stringify_keys
+        self.class.attributes.keys.inject({}) { |h, k| h[k.to_s] = send k; h }
       end
     end
 
@@ -81,11 +86,11 @@ module Acfs
         @attributes[name] = type.cast opts.has_key?(:default) ? opts[:default] : nil
 
         self.send :define_method, name do
-          attributes[name.to_s]
+          instance_variable_get :"@#{name}"
         end
 
         self.send :define_method, :"#{name}=" do |value|
-          attributes[name.to_s] = type.cast value
+          instance_variable_set :"@#{name}", type.cast(value)
         end
       end
     end

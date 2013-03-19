@@ -29,6 +29,50 @@ describe Acfs::Attributes do
     end
   end
 
+  describe '#_getter_' do
+    before { model.send :attribute, :name, default: 'John' }
+
+    it 'should return value' do
+      expect(model.new(name: 'Paul').name).to be == 'Paul'
+    end
+
+    it 'should return default value' do
+      expect(model.new.name).to be == 'John'
+    end
+
+    it 'should return matching ivar\'s value' do
+      o = model.new
+      o.instance_variable_set :@name, 'Johannes'
+
+      expect(o.name).to be == 'Johannes'
+    end
+  end
+
+  describe '#_setter_' do
+    before { model.send :attribute, :name, default: 'John' }
+
+    it 'should set value' do
+      o = model.new
+      o.name = 'Paul'
+
+      expect(o.name).to be == 'Paul'
+    end
+
+    it 'should set instance var' do
+      o = model.new
+      o.name = 'Paul'
+
+      expect(o.instance_variable_get(:@name)).to be == 'Paul'
+    end
+
+    it 'should update attributes hash' do
+      o = model.new
+      o.name = 'Johannes'
+
+      expect(o.attributes['name']).to be == 'Johannes'
+    end
+  end
+
   describe '.attribute' do
     it 'should add an attribute to model attribute list' do
       model.send :attribute, :name
