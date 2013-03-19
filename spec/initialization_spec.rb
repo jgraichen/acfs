@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Acfs::Model do
+describe Acfs::Initialization do
   let(:model) { MyModel }
 
   describe '#initialize' do

@@ -8,5 +8,7 @@ module Acfs
   autoload :Base
 
   autoload :Model
+  autoload :Attributes
+  autoload :Initialization
 
 end
