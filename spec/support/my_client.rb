@@ -1,6 +1,5 @@
 
-class MyClient
-  include Acfs::Client
+class MyClient < Acfs::Client
 
 end
 

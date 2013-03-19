@@ -1,14 +1,21 @@
 require 'active_support/core_ext/class/attribute_accessors'
 
 module Acfs
-  module Client
-    def self.included(base)
-      base.class_eval do
-        cattr_accessor :base_url
-      end
+  class Client
+    attr_reader :base_url
+    cattr_accessor :base_url
+
+    # Initializes a new API client object. Allows to override global
+    # config options.
+    #
+    #   client = MyApiClient.new base_url: 'http://myservice.com'
+    #   client.base_url # => "http://myservice.com"
+    #
+    def initialize(opts = {})
+      @base_url = opts[:base_url] || self.class.base_url
     end
 
-    def initialize
+    def load(&block)
 
     end
   end
