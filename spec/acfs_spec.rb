@@ -12,7 +12,7 @@ describe "Acfs" do
   it 'should load single resource' do
     pending "TODO: Implement high level feature"
 
-    user = client.users.fetch 2
+    user = client.users.find 2
 
     client.run
 
@@ -23,8 +23,8 @@ describe "Acfs" do
   it 'should load single resource (block)' do
     pending "TODO: Implement high level feature"
 
-    client.fetch do |cl|
-      user = cl.users.fetch 2
+    client.run do |cl|
+      user = cl.users.find 2
     end
 
     exepct(user.name).to be == 'John'
@@ -48,7 +48,7 @@ describe "Acfs" do
   it 'should load associated resources' do
     pending "TODO: Implement high level feature"
 
-    @user = client.user.fetch(1) do |user|
+    @user = client.user.find(1) do |user|
       @comments = user.comments.all
     end
 
