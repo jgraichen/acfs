@@ -58,3 +58,9 @@ mo.attributes # => { "name" => "Johnny", "age" => 13 }
 5. Commit your changes (`git commit -am 'Add some feature'`)
 6. Push to the branch (`git push origin my-new-feature`)
 7. Create new Pull Request
+
+## License
+
+MIT License
+
+Copyright (c) 2013 Jan Graichen. MIT license, see LICENSE for more details.
