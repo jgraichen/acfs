@@ -12,37 +12,37 @@ describe "Acfs" do
   it 'should load single resource' do
     pending "TODO: Implement high level feature"
 
-    user = client.users.find 2
+    @user = client.users.find 2
 
     client.run
 
-    exepct(user.name).to be == 'John'
-    expect(user.age).to be == 26
+    exepct(@user.name).to be == 'John'
+    expect(@user.age).to be == 26
   end
 
   it 'should load single resource (block)' do
     pending "TODO: Implement high level feature"
 
     client.run do |cl|
-      user = cl.users.find 2
+      @user = cl.users.find 2
     end
 
-    exepct(user.name).to be == 'John'
-    expect(user.age).to be == 26
+    exepct(@user.name).to be == 'John'
+    expect(@user.age).to be == 26
   end
 
   it 'should load multiple resources' do
     pending "TODO: Implement high level feature"
 
-    users = client.users.all
+    @users = client.users.all
 
     client.run
 
-    expect(users).to have(2).items
-    expect(users[0].name).to be == 'Anon'
-    expect(users[0].age).to be == 12
-    expect(users[1].name).to be == 'John'
-    expect(users[1].age).to be == 26
+    expect(@users).to have(2).items
+    expect(@users[0].name).to be == 'Anon'
+    expect(@users[0].age).to be == 12
+    expect(@users[1].name).to be == 'John'
+    expect(@users[1].age).to be == 26
   end
 
   it 'should load associated resources' do
