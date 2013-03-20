@@ -1,4 +1,6 @@
 require 'active_model'
+require 'acfs/attributes'
+require 'acfs/initialization'
 
 module Acfs
   module Model

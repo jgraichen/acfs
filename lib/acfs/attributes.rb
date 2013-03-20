@@ -1,12 +1,11 @@
 module Acfs
 
-  # == Acfs Attribute
+  # == Acfs Attributes
   #
   # Allows to specify attributes of a class with default values and type safety.
   #
   #   class User
-  #     include Acfs::Attributes
-  #
+  #     include Acfs::Model
   #     attribute :name, :string, default: 'Anon'
   #     attribute :age, :integer
   #     attribute :special, My::Special::Type
@@ -26,6 +25,7 @@ module Acfs
     # Returns ActiveModel compatible list of attributes and values.
     #
     #   class User
+    #     include Acfs::Model
     #     attribute :name, type: String, default: 'Anon'
     #   end
     #   user = User.new(name: 'John')
@@ -41,10 +41,11 @@ module Acfs
       # setter for given attribute name. Existing methods will be overridden.
       #
       #   class User
+      #     include Acfs::Model
       #     attribute :name, type: String, default: 'Anon'
       #   end
       #
-      # Available types can be found in `Acfs::Attributes::*`.
+      # Available types can be found in `Acfs::Model::Attributes::*`.
       #
       def attribute(*attrs)
         opts = attrs.extract_options!
@@ -62,6 +63,7 @@ module Acfs
       # Return list of possible attributes and default values for this model class.
       #
       #   class User
+      #     include Acfs::Model
       #     attribute :name, String
       #     attribute :age, Integer, default: 25
       #   end
