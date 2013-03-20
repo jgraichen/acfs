@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Acfs::Attributes do
-  let(:model) { Class.new.tap { |c| c.send :include, Acfs::Attributes }}
+  let(:model) { Class.new.tap { |c| c.send :include, Acfs::Model }}
 
   describe '#initialize' do
     before { model.send :attribute, :name, default: 'John' }
