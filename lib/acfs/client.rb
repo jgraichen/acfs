@@ -1,9 +1,12 @@
-require 'active_support/core_ext/class/attribute_accessors'
+require 'active_support/core_ext/class'
+require 'acfs/resources'
 
 module Acfs
   class Client
     attr_reader :base_url
     cattr_accessor :base_url
+
+    include Acfs::Resources
 
     # Initializes a new API client object. Allows to override global
     # config options.
@@ -15,8 +18,5 @@ module Acfs
       @base_url = opts[:base_url] || self.class.base_url
     end
 
-    def load(&block)
-
-    end
   end
 end
