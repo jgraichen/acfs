@@ -3,7 +3,6 @@ require 'acfs/resources'
 
 module Acfs
   class Client
-    attr_reader :base_url
     cattr_accessor :base_url
 
     include Acfs::Resources
@@ -16,6 +15,12 @@ module Acfs
     #
     def initialize(opts = {})
       @base_url = opts[:base_url] || self.class.base_url
+    end
+
+    # Return runtime base URL.
+    #
+    def base_url
+      @base_url
     end
 
   end
