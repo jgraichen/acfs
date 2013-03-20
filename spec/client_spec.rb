@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Acfs::Client do
   let(:client) do
-    Class.new(MyClient)
+    Class.new(Acfs::Client)
   end
 
   describe '#initialize' do
@@ -13,7 +13,7 @@ describe Acfs::Client do
     end
 
     it "should allow to specify a runtime base_url" do
-      client.new(base_url: 'http://abc.de/api/v1').tap do |cl|
+      cl = client.new(base_url: 'http://abc.de/api/v1').tap do |cl|
         expect(cl.base_url).to eq('http://abc.de/api/v1')
       end
     end
