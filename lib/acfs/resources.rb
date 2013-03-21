@@ -16,12 +16,12 @@ module Acfs
   # Returned objects are proxies that will contain no data until
   # request are fired and responses processed:
   #
-  #    client.run
+  #    Acfs.run
   #
   # Resource calls can also be automatically processed by wrapping
   # all in `Acfs::Client.run`:
   #
-  #    client.run do |cl|
+  #    Acfs.run do |cl|
   #      @user = cl.users.fetch(1)
   #    end
   #    @user.name # => "Anon"
