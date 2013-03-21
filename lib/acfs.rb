@@ -6,4 +6,18 @@ require 'acfs/model'
 
 module Acfs
 
+
+  class << self
+
+    # Run all queued
+    def run(&block)
+      yield if block_given?
+    ensure
+      hydra.run
+    end
+
+    def hydra
+      @hydra ||= Typhoeus::Hydra.new
+    end
+  end
 end
