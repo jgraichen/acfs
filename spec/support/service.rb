@@ -10,12 +10,12 @@ end
 class MyUser
   include Acfs::Model
 
-  attribute :name, default: 'Anon'
+  attribute :name, :string, default: 'Anon'
   attribute :age, :integer
 end
 
 class Comment
   include Acfs::Model
 
-  attribute :text
+  attribute :text, :string
 end
