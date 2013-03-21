@@ -35,6 +35,14 @@ module Acfs
       self.class.attributes.keys.inject({}) { |h, k| h[k.to_s] = send k; h }
     end
 
+    # Update all attributes with given hash.
+    #
+    def attributes=(attributes)
+      self.attributes.each do |key, _|
+        send :"#{key}=", attributes[key] if attributes.has_key? key
+      end
+    end
+
     module ClassMethods # :nodoc:
 
       # Define a model attribute by name and type. Will create getter and
@@ -42,37 +50,31 @@ module Acfs
       #
       #   class User
       #     include Acfs::Model
-      #     attribute :name, type: String, default: 'Anon'
+      #     attribute :name, :string, default: 'Anon'
       #   end
       #
       # Available types can be found in `Acfs::Model::Attributes::*`.
       #
-      def attribute(*attrs)
-        opts = attrs.extract_options!
-        type = opts.delete(:type) || :string
-
+      def attribute(name, type, opts = {})
         if type.is_a? Symbol or type.is_a? String
           type = "::Acfs::Attributes::#{type.to_s.classify}".constantize
         end
 
-        attrs.each do |attr|
-          define_attribute attr.to_sym, type, opts
-        end
+        define_attribute name.to_sym, type, opts
       end
 
       # Return list of possible attributes and default values for this model class.
       #
       #   class User
       #     include Acfs::Model
-      #     attribute :name, String
-      #     attribute :age, Integer, default: 25
+      #     attribute :name, :string
+      #     attribute :age, :integer, default: 25
       #   end
       #   User.attributes # => { "name": nil, "age": 25 }
       #
       def attributes
         @attributes ||= {}
       end
-
 
       private
       def define_attribute(name, type, opts = {}) # :nodoc:
