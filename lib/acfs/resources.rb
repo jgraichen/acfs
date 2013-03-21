@@ -1,4 +1,4 @@
-require 'acfs/collection'
+require 'acfs/resource'
 
 module Acfs
 
@@ -41,7 +41,7 @@ module Acfs
       # for accessing finders and loading sets of resources.
       #
       def resources(name, opts = {})
-        collection = Collection.new name, opts
+        collection = Resource.new name, opts
 
         define_method name.to_sym do
           collection
