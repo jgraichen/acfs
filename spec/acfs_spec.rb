@@ -5,17 +5,27 @@ describe "Acfs" do
   let(:comment_service) { CommentService.new(base_url: 'http://comments.example.com') }
 
   before do
-    stub_request(:get, "http://users.example.com/users").to_return(:body => '[{"id":1,"name":"Anon","age":12},{"id":2,"name":"John","age":26}]')
-    stub_request(:get, "http://users.example.com/users/2").to_return(:body => '{"id":2,"name":"John","age":26}')
-    stub_request(:get, "http://users.example.com/users/2/friends").to_return(:body => '[{"id":1,"name":"Anon","age":12}]')
-    stub_request(:get, "http://comments.example.com/comments?user=2").to_return(:body => '[{"id":1,"text":"Comment #1"},{"id":2,"text":"Comment #2"}]')
+    Acfs.use Acfs::Middleware::JsonCoder
+
+    headers = { 'Content-Type' => 'application/json' }
+    stub_request(:get, "http://users.example.com/users").to_return(:body => '[{"id":1,"name":"Anon","age":12},{"id":2,"name":"John","age":26}]', headers: headers)
+    stub_request(:get, "http://users.example.com/users/2").to_return(:body => '{"id":2,"name":"John","age":26}', headers: headers)
+    stub_request(:get, "http://users.example.com/users/2/friends").to_return(:body => '[{"id":1,"name":"Anon","age":12}]', headers: headers)
+    stub_request(:get, "http://comments.example.com/comments?user=2").to_return(:body => '[{"id":1,"text":"Comment #1"},{"id":2,"text":"Comment #2"}]', headers: headers)
   end
+
+  #it 'should return proxy objects until loaded' do
+  #  @user = user_service.users.find(2)
+  #
+  #  expect(@user).to_not be_loaded
+  #end
 
   it 'should load single resource' do
     @user = user_service.users.find(2)
 
     Acfs.run
 
+    #expect(@user).to be_loaded
     expect(@user.name).to be == 'John'
     expect(@user.age).to be == 26
   end
@@ -35,7 +45,7 @@ describe "Acfs" do
   it 'should load associated resources' do
     pending "TODO: Implement high level feature"
 
-    @user = user_service.user.find(1) do |user|
+    @user = user_service.users.find(2) do |user|
       @friends = user.friends.all
     end
 
@@ -50,7 +60,7 @@ describe "Acfs" do
   it 'should load associated resources from different service' do
     pending "TODO: Implement high level feature"
 
-    @user = user_service.user.find(1) do |user|
+    @user = user_service.users.find(2) do |user|
       @comments = comment_service.comments.find user: user.id
     end
 
