@@ -1,6 +1,8 @@
+require 'delegate'
+
 module Acfs
 
-  class Collection < Delegator
+  class Collection < ::Delegator
 
     def initialize
       super([])
