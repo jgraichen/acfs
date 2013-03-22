@@ -16,8 +16,8 @@ describe Acfs::Request do
     context 'with parameters' do
       let(:params) { { id: 10 }}
 
-      it 'should return URL with query' do
-        expect(request.url).to be == "#{url}?id=10"
+      it 'should return URL without query' do
+        expect(request.url).to be == "#{url}"
       end
     end
 
@@ -25,8 +25,8 @@ describe Acfs::Request do
       let(:url) { 'http://api.example.org/v1/examples?b=ac' }
       let(:params) { { id: 10 }}
 
-      it 'should strip query from URL and append params' do
-        expect(request.url).to be == 'http://api.example.org/v1/examples?id=10'
+      it 'should strip query from URL' do
+        expect(request.url).to be == 'http://api.example.org/v1/examples'
       end
     end
   end
@@ -44,6 +44,28 @@ describe Acfs::Request do
 
     it 'should return request headers' do
       expect(request.params).to be == params
+    end
+  end
+
+  describe '#data' do
+    let(:data) { { id: 10, name: 'Anon' } }
+
+    it 'should return request data' do
+      expect(request.data).to be == data
+    end
+  end
+
+  describe '#data' do
+    context 'with data' do
+      let(:data) { { id: 10, name: 'Anon' } }
+
+      it { expect(request).to be_data }
+    end
+
+    context 'without data' do
+      let(:data) { nil }
+
+      it { expect(request).to_not be_data }
     end
   end
 end

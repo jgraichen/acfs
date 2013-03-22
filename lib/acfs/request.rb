@@ -15,12 +15,19 @@ module Acfs
         @headers = options.delete(:headers) || {}
         @params  = options.delete(:params) || {}
 
-        url.query = params.any? ? params.to_param : nil
+        url.query = nil # params.any? ? params.to_param : nil
       end.to_s
     end
 
     def data?
       !data.nil?
+    end
+
+    class << self
+      def new(*attrs)
+        return attrs[0] if attrs[0].is_a? self
+        super
+      end
     end
   end
 end
