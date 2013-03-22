@@ -22,7 +22,7 @@ module Acfs
 
     autoload :Base
     autoload :Print
-    autoload :JsonCoder
+    autoload :JsonDecoder
   end
 
   module Adapter

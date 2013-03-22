@@ -5,7 +5,7 @@ describe "Acfs" do
   let(:comment_service) { CommentService.new(base_url: 'http://comments.example.com') }
 
   before do
-    Acfs.use Acfs::Middleware::JsonCoder
+    Acfs.use Acfs::Middleware::JsonDecoder
 
     headers = { 'Content-Type' => 'application/json' }
     stub_request(:get, "http://users.example.com/users").to_return(:body => '[{"id":1,"name":"Anon","age":12},{"id":2,"name":"John","age":26}]', headers: headers)
