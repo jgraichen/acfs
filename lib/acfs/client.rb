@@ -16,5 +16,9 @@ module Acfs
     def initialize(opts = {})
       @base_url = opts.delete(:base_url) || self.class.base_url
     end
+
+    def queue(request, &block)
+      Acfs.queue(request, &block)
+    end
   end
 end

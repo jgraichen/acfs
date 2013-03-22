@@ -18,37 +18,34 @@ module Acfs
     #
     def find(id, &block)
       model = resource_class.new
-      url = "#{client.base_url}/#{name}/#{id}"
 
-      request = Typhoeus::Request.new url, followlocation: true
-      request.on_complete do |response|
-        model.attributes = ::MultiJson.load response.body
-
+      client.queue(url(id)) do |response|
+        model.attributes = response.data
         block.call model unless block.nil?
       end
-
-      Acfs.hydra.queue request
 
       model
     end
 
     # Trt to load all resources.
     #
-    def all
+    def all(&block)
       collection = Collection.new
-      url = "#{client.base_url}/#{name}"
 
-      request = Typhoeus::Request.new url, followlocation: true
-      request.on_complete do |response|
-        json = ::MultiJson.load response.body
-        json.each do |obj|
+      client.queue(url) do |response|
+        response.data.each do |obj|
           collection << resource_class.new.tap { |m| m.attributes = obj }
         end
+        block.call collection unless block.nil?
       end
 
-      Acfs.hydra.queue request
-
       collection
+    end
+
+    def url(suffix = nil)
+      "#{client.base_url}/#{name.to_s || options[:path]}".tap do |url|
+        url << "/#{suffix}" if suffix
+      end
     end
 
     # Return resource class. The resource class will be extracted
