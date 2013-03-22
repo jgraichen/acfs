@@ -7,7 +7,7 @@ module Acfs
     class Base
       attr_reader :app, :options
 
-      def initialize(app, options)
+      def initialize(app, options = {})
         @app     = app
         @options = options
       end
