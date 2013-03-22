@@ -1,4 +1,5 @@
 require 'multi_json'
+require 'acfs/collection'
 
 module Acfs
 
@@ -26,6 +27,23 @@ module Acfs
       Acfs.hydra.queue request
 
       model
+    end
+
+    def all
+      collection = Collection.new
+      url = "#{client.base_url}/#{name}"
+
+      request = Typhoeus::Request.new url, followlocation: true
+      request.on_complete do |response|
+        json = ::MultiJson.load response.body
+        json.each do |obj|
+          collection << resource_class.new.tap { |m| m.attributes = obj }
+        end
+      end
+
+      Acfs.hydra.queue request
+
+      collection
     end
 
     def resource_class

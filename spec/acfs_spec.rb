@@ -30,8 +30,6 @@ describe "Acfs" do
   end
 
   it 'should load multiple resources' do
-    pending "TODO: Implement high level feature"
-
     @users = user_service.users.all
 
     Acfs.run
