@@ -18,7 +18,7 @@ module Acfs
     extend ActiveSupport::Concern
 
     def initialize(*attrs) # :nodoc:
-      self.class.attributes.each { |k, v| send :"#{k}=", v }
+      self.class.attributes.each { |k, v| public_send :"#{k}=", v }
       super *attrs
     end
 
@@ -32,7 +32,7 @@ module Acfs
     #   user.attributes # => { "name" => "John" }
     #
     def attributes
-      self.class.attributes.keys.inject({}) { |h, k| h[k.to_s] = send k; h }
+      self.class.attributes.keys.inject({}) { |h, k| h[k.to_s] = public_send k; h }
     end
 
     # Update all attributes with given hash.
