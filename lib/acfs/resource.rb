@@ -1,5 +1,4 @@
 require 'multi_json'
-require 'acfs/collection'
 
 module Acfs
 
@@ -17,13 +16,15 @@ module Acfs
 
     # Try to load a resource by given id.
     #
-    def find(id)
+    def find(id, &block)
       model = resource_class.new
       url = "#{client.base_url}/#{name}/#{id}"
 
       request = Typhoeus::Request.new url, followlocation: true
       request.on_complete do |response|
         model.attributes = ::MultiJson.load response.body
+
+        block.call model unless block.nil?
       end
 
       Acfs.hydra.queue request
