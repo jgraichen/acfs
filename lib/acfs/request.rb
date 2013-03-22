@@ -1,8 +1,12 @@
+require 'acfs/request/callbacks'
+
 module Acfs
 
   class Request
     attr_accessor :body, :format
     attr_reader :url, :headers, :params, :data
+
+    include Request::Callbacks
 
     def initialize(url, options = {})
       @url     = url
@@ -14,25 +18,6 @@ module Acfs
 
     def data?
       !data.nil?
-    end
-
-    def on_complete(&block)
-      @on_complete ||= []
-
-      if block_given?
-        @on_complete << block
-        return self
-      end
-
-      @on_complete
-    end
-
-    def complete!(response)
-      on_complete.each do |block|
-        block.call response
-      end
-
-      response
     end
   end
 end

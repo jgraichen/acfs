@@ -9,7 +9,7 @@ module Acfs
 
     include Formats
 
-    def initialize(request, status, headers, body)
+    def initialize(request, status = 200, headers = {}, body = nil)
       @request = request
       @status  = status
       @headers = headers
