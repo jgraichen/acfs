@@ -1,5 +1,3 @@
-require 'cgi'
-
 require 'acfs/request/callbacks'
 
 module Acfs

@@ -1,5 +1,3 @@
-require 'active_support/core_ext/class'
-
 module Acfs
   class Client
     attr_reader :base_url
