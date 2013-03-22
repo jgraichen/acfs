@@ -10,6 +10,7 @@ end
 class MyUser
   include Acfs::Model
 
+  attribute :id, :integer
   attribute :name, :string, default: 'Anon'
   attribute :age, :integer
 end
