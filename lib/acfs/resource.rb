@@ -15,6 +15,8 @@ module Acfs
       @options = options
     end
 
+    # Try to load a resource by given id.
+    #
     def find(id)
       model = resource_class.new
       url = "#{client.base_url}/#{name}/#{id}"
@@ -29,6 +31,8 @@ module Acfs
       model
     end
 
+    # Trt to load all resources.
+    #
     def all
       collection = Collection.new
       url = "#{client.base_url}/#{name}"
@@ -46,6 +50,14 @@ module Acfs
       collection
     end
 
+    # Return resource class. The resource class will be extracted
+    # from the resource name or can be specified by the `:class` option.
+    #
+    #   class User
+    #     resource :friends # Will have class Friend
+    #     resource :comment_votes, class: 'Vote' # Will have class Vote
+    #   end
+    #
     def resource_class
       return options[:class] if options[:class].is_a? Class
 
