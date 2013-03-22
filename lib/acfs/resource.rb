@@ -19,7 +19,14 @@ module Acfs
     def find(id, &block)
       model = resource_class.new
 
-      client.queue(url(id)) do |response|
+      request = case id
+                  when Hash
+                    Acfs::Request.new url, params: id
+                  else
+                    Acfs::Request.new url(id.to_s)
+                end
+
+      client.queue(request) do |response|
         model.attributes = response.data
         block.call model unless block.nil?
       end
@@ -29,10 +36,10 @@ module Acfs
 
     # Trt to load all resources.
     #
-    def all(&block)
+    def all(params = {}, &block)
       collection = Collection.new
 
-      client.queue(url) do |response|
+      client.queue(Acfs::Request.new(url, params: params)) do |response|
         response.data.each do |obj|
           collection << resource_class.new.tap { |m| m.attributes = obj }
         end
@@ -44,7 +51,7 @@ module Acfs
 
     def url(suffix = nil)
       "#{client.base_url}/#{name.to_s || options[:path]}".tap do |url|
-        url << "/#{suffix}" if suffix
+        url << "/#{suffix.to_param}" if suffix
       end
     end
 

@@ -58,10 +58,8 @@ describe "Acfs" do
   end
 
   it 'should load associated resources from different service' do
-    pending "TODO: Implement high level feature"
-
     @user = user_service.users.find(2) do |user|
-      @comments = comment_service.comments.find user: user.id
+      @comments = comment_service.comments.all user: user.id
     end
 
     Acfs.run
