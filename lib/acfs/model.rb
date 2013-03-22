@@ -1,24 +1,23 @@
 require 'active_model'
-require 'acfs/attributes'
-require 'acfs/initialization'
 
 module Acfs
   module Model
-    def self.included(base)
-      base.class_eval do
-        if ActiveModel::VERSION::MAJOR >= 4
-          include ActiveModel::Model
-        else
-          extend  ActiveModel::Naming
-          extend  ActiveModel::Translation
-          include ActiveModel::Conversion
-          include ActiveModel::Validations
+    extend ActiveSupport::Concern
 
-          include Acfs::Initialization
-        end
+    included do
+      if ActiveModel::VERSION::MAJOR >= 4
+        include ActiveModel::Model
+      else
+        extend  ActiveModel::Naming
+        extend  ActiveModel::Translation
+        include ActiveModel::Conversion
+        include ActiveModel::Validations
 
-        include Acfs::Attributes
+        include Initialization
       end
+
+      include Attributes
+      include Relations
     end
   end
 end

@@ -1,5 +1,3 @@
-require 'acfs/resource'
-
 module Acfs
 
   # Allows to define and load API resources in a client class.

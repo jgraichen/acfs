@@ -1,5 +1,4 @@
 require 'active_support/core_ext/class'
-require 'acfs/resources'
 
 module Acfs
   class Client

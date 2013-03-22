@@ -1,11 +1,17 @@
 require 'active_support'
 require 'acfs/version'
 
-require 'acfs/client'
-require 'acfs/model'
-
 module Acfs
+  extend ActiveSupport::Autoload
 
+  autoload :Attributes
+  autoload :Client
+  autoload :Collection
+  autoload :Initialization
+  autoload :Model
+  autoload :Relations
+  autoload :Resource
+  autoload :Resources
 
   class << self
 
