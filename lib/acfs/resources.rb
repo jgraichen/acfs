@@ -16,14 +16,6 @@ module Acfs
   #
   #    Acfs.run
   #
-  # Resource calls can also be automatically processed by wrapping
-  # all in `Acfs::Client.run`:
-  #
-  #    Acfs.run do |cl|
-  #      @user = cl.users.fetch(1)
-  #    end
-  #    @user.name # => "Anon"
-  #
   module Resources
     extend ActiveSupport::Concern
 
