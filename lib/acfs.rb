@@ -10,9 +10,7 @@ module Acfs
   class << self
 
     # Run all queued
-    def run(&block)
-      yield if block_given?
-    ensure
+    def run
       hydra.run
     end
 

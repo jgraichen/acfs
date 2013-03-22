@@ -20,15 +20,6 @@ describe "Acfs" do
     expect(@user.age).to be == 26
   end
 
-  it 'should load single resource (block)' do
-    Acfs.run do
-      @user = user_service.users.find 2
-    end
-
-    expect(@user.name).to be == 'John'
-    expect(@user.age).to be == 26
-  end
-
   it 'should load multiple resources' do
     @users = user_service.users.all
 
