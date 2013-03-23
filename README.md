@@ -47,7 +47,7 @@ mo.attributes # => { "name" => "Johnny", "age" => 13 }
 
 ```ruby
 class MyClient
-  resource :models, class: 'MyModel'
+  resources :models, class: 'MyModel'
 end
 
 client = MyClient.new base_url: 'http://api.example.org'
