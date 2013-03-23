@@ -5,4 +5,4 @@ rvm:
 
 gemfile:
   - gemfiles/Gemfile.rails-3-2
-  - gemfiles/Gemfile.rails-head
+  - gemfiles/Gemfile.rails-4-0
