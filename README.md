@@ -41,7 +41,21 @@ mo.name # => "Johnny"
 mo.age = '13'
 mo.age # => 13
 mo.attributes # => { "name" => "Johnny", "age" => 13 }
+```
 
+### Acfs::Client
+
+```ruby
+class MyClient
+  resource :models, class: 'MyModel'
+end
+
+client = MyClient.new base_url: 'http://api.example.org'
+@model = client.models.find 14
+
+Acfs.run
+
+@model.name # => ...
 ```
 
 ## TODO
