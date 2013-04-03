@@ -10,7 +10,10 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'acfs'
+    gem 'acfs', '0.3.0'
+
+**Note:** Acfs is under development. API may change anytime. No semantic versioning until version `1.0`. Version `1.0`
+does not mean complete feature set but stable basic code base.
 
 And then execute:
 
