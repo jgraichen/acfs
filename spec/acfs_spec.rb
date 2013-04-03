@@ -21,7 +21,7 @@ describe "Acfs" do
   #end
 
   it 'should load single resource' do
-    @user = user_service.users.find(2)
+    @user = MyUser.find(2)
 
     Acfs.run
 
@@ -31,7 +31,7 @@ describe "Acfs" do
   end
 
   it 'should load multiple resources' do
-    @users = user_service.users.all
+    @users = MyUser.all
 
     Acfs.run
 
@@ -45,7 +45,7 @@ describe "Acfs" do
   it 'should load associated resources' do
     pending "TODO: Implement high level feature"
 
-    @user = user_service.users.find(2) do |user|
+    @user = MyUser.find(2) do |user|
       @friends = user.friends.all
     end
 
@@ -58,8 +58,8 @@ describe "Acfs" do
   end
 
   it 'should load associated resources from different service' do
-    @user = user_service.users.find(2) do |user|
-      @comments = comment_service.comments.all user: user.id
+    @user = MyUser.find(2) do |user|
+      @comments = Comment.where user: user.id
     end
 
     Acfs.run
