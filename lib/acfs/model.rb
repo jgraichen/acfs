@@ -1,6 +1,7 @@
 require 'active_model'
 
 require 'acfs/model/attributes'
+require 'acfs/model/loadable'
 require 'acfs/model/locatable'
 require 'acfs/model/query_methods'
 require 'acfs/model/relations'
@@ -24,6 +25,8 @@ module Acfs
       end
 
       include Model::Attributes
+      include Model::Loadable
+      include Model::Locatable
       include Model::QueryMethods
       include Model::Relations
       include Model::Service

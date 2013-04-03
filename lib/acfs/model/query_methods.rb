@@ -33,13 +33,34 @@ module Acfs::Model
                       Acfs::Request.new url(id.to_s)
                   end
 
-        service.new(options).queue(request) do |response|
+        service.queue(request) do |response|
           model.attributes = response.data
+          model.loaded!
           block.call model unless block.nil?
         end
 
         model
       end
+
+      # Try to load all resources.
+      #
+      def all(params = {}, &block)
+        collection = ::Acfs::Collection.new
+
+        service.queue(Acfs::Request.new(url, params: params)) do |response|
+          response.data.each do |obj|
+            collection << self.new.tap do |m|
+              m.attributes = obj
+              m.loaded!
+            end
+          end
+          collection.loaded!
+          block.call collection unless block.nil?
+        end
+
+        collection
+      end
+      alias :where :all
     end
   end
 end
