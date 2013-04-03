@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Acfs::Attributes do
+describe Acfs::Model::Attributes do
   let(:model) { Class.new.tap { |c| c.send :include, Acfs::Model }}
 
   describe '#initialize' do
@@ -106,7 +106,7 @@ describe Acfs::Attributes do
     end
 
     it 'should accept an class type' do
-      model.send :attribute, :age, Acfs::Attributes::Integer, default: '12'
+      model.send :attribute, :age, Acfs::Model::Attributes::Integer, default: '12'
 
       expect(model.attributes).to be == { :age => 12 }
     end

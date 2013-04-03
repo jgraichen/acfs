@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Acfs::Initialization do
+describe 'Acfs::Model::Initialization' do
   let(:model) do
     Class.new.tap do |c|
       c.class_eval do
