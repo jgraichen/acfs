@@ -1,12 +1,10 @@
-module Acfs
-  module Model
+module Acfs::Model
 
-    module Relations
-      extend ActiveSupport::Concern
+  module Relations
+    extend ActiveSupport::Concern
 
-      module ClassMethods
+    module ClassMethods
 
-      end
     end
   end
 end
