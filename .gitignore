@@ -16,6 +16,5 @@ test/tmp
 test/version_tmp
 tmp
 .idea
-idea
 *.iml
 .rvmrc
