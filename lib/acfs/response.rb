@@ -1,3 +1,5 @@
+require 'acfs/response/formats'
+
 module Acfs
 
   # This represents a response. In addition to an standard HTTP
@@ -7,7 +9,7 @@ module Acfs
     attr_accessor :data
     attr_reader :request, :status, :headers, :body
 
-    include Formats
+    include Response::Formats
 
     def initialize(request, status = 200, headers = {}, body = nil)
       @request = request

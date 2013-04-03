@@ -6,10 +6,8 @@ module Acfs
   extend ActiveSupport::Autoload
 
   autoload :Collection
-  autoload :Formats
   autoload :Model
   autoload :Request
-  autoload :Resource
   autoload :Response
   autoload :Service
 
