@@ -23,9 +23,11 @@ describe "Acfs" do
   it 'should load single resource' do
     @user = MyUser.find(2)
 
+    expect(@user).to_not be_loaded
+
     Acfs.run
 
-    #expect(@user).to be_loaded
+    expect(@user).to be_loaded
     expect(@user.name).to be == 'John'
     expect(@user.age).to be == 26
   end
