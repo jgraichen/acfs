@@ -20,7 +20,7 @@ module Acfs
         include ActiveModel::Conversion
         include ActiveModel::Validations
 
-        require 'model/initialization'
+        require 'acfs/model/initialization'
         include Model::Initialization
       end
 
