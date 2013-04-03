@@ -20,9 +20,9 @@ module Acfs::Model
       #   end
       #   MyUser.find 5 # Will fetch `http://acc.serv.org/users/5`
       #
-      def service(klass = nil)
+      def service(klass = nil, options = {})
         return @service unless klass
-        @service = klass
+        @service = klass.new options
       end
     end
   end

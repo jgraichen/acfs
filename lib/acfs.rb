@@ -5,14 +5,13 @@ require 'acfs/version'
 module Acfs
   extend ActiveSupport::Autoload
 
-  autoload :Client
   autoload :Collection
+  autoload :Formats
   autoload :Model
   autoload :Request
   autoload :Resource
-  autoload :Resources
   autoload :Response
-  autoload :Formats
+  autoload :Service
 
   module Middleware
     extend ActiveSupport::Autoload
