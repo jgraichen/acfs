@@ -22,9 +22,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
-
-### Acfs::Attributes
+### Attributes
 
 ```ruby
 class MyModel
@@ -43,24 +41,41 @@ mo.age # => 13
 mo.attributes # => { "name" => "Johnny", "age" => 13 }
 ```
 
-### Acfs::Client
+### Service, Model & Collection
 
 ```ruby
-class MyClient
-  resources :models, class: 'MyModel'
+class MyService < Acfs::Service
+  self.base_url = 'http://acc.srv'
 end
 
-client = MyClient.new base_url: 'http://api.example.org'
-@model = client.models.find 14
+class User
+  include Acfs::Model
+  service MyService
 
-Acfs.run
+  attribute :id, :integer
+end
 
-@model.name # => ...
+@user = User.find 14
+
+@user.loaded? #=> false
+
+Acfs.run # This will run all queued request as parallel as possible.
+         # For @user the following URL will be requested:
+         # `http://acc.srv/users/14`
+
+@model.name # => "..."
+
+@users = User.all
+@users.loaded? #=> false
+
+Acfs.run # Will request `http://acc.srv/users`
+
+@users #=> [<User>, ...]
 ```
 
 ## TODO
 
-* Library Code
+* Develop Library
 * Documentation
 
 ## Contributing
