@@ -5,12 +5,9 @@ require 'acfs/version'
 module Acfs
   extend ActiveSupport::Autoload
 
-  autoload :Attributes
   autoload :Client
   autoload :Collection
-  autoload :Initialization
   autoload :Model
-  autoload :Relations
   autoload :Request
   autoload :Resource
   autoload :Resources

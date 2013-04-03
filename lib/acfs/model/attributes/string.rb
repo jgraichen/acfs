@@ -1,4 +1,4 @@
-module Acfs
+module Acfs::Model
   module Attributes
 
     # String attribute type. Use it in your model as an attribute type:

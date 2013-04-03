@@ -1,5 +1,10 @@
 require 'active_model'
 
+require 'acfs/model/attributes'
+require 'acfs/model/query_methods'
+require 'acfs/model/relations'
+require 'acfs/model/service'
+
 module Acfs
   module Model
     extend ActiveSupport::Concern
@@ -13,11 +18,13 @@ module Acfs
         include ActiveModel::Conversion
         include ActiveModel::Validations
 
-        include Initialization
+        require 'model/initialization'
+        include Model::Initialization
       end
 
-      include Attributes
-      include Relations
+      include Model::Attributes
+      include Model::Relations
+      include Model::Service
     end
   end
 end
