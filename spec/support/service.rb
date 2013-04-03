@@ -1,15 +1,15 @@
 
-class UserService < Acfs::Client
-  self.base_url = 'http://accounts.acfs'
+class UserService < Acfs::Service
+  self.base_url = 'http://users.example.org'
 end
 
-class CommentService < Acfs::Client
-  self.base_url = 'http://comments.acfs'
+class CommentService < Acfs::Service
+  self.base_url = 'http://comments.example.org'
 end
 
 class MyUser
   include Acfs::Model
-  service UserService
+  service UserService, path: 'users'
 
   attribute :id, :integer
   attribute :name, :string, default: 'Anon'
