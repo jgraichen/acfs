@@ -1,8 +1,11 @@
 require 'delegate'
 
+require 'acfs/model/loadable'
+
 module Acfs
 
   class Collection < ::Delegator
+    include Model::Loadable
 
     def initialize
       super([])
