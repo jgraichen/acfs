@@ -13,7 +13,7 @@ describe Acfs::Middleware::JsonDecoder do
   end
 
   context 'with JSON response' do
-    let(:headers) { { 'Content-Type' => 'application/json' } }
+    let(:headers) { { 'Content-Type' => 'application/json; charset=utf-8' } }
     let(:body)    { data.to_json }
 
     it 'should decode body data' do
