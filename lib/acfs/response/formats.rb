@@ -7,7 +7,10 @@ module Acfs
     module Formats
 
       def mime_type
-        @mime_type ||= Mime::Type.parse(headers['Content-Type']).first
+        @mime_type ||= begin
+          content_type = headers['Content-Type'].split(/;\s*\w+="?\w+"?/).first
+          Mime::Type.parse(content_type).first
+        end
       end
 
       def json?
