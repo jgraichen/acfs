@@ -5,3 +5,4 @@ gemspec path: '../'
 
 gem 'activesupport', '~> 4.0.0.beta1'
 gem 'activemodel', '~> 4.0.0.beta1'
+gem 'actionpack', '~> 4.0.0.beta1'
