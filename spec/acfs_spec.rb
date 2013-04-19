@@ -3,7 +3,9 @@ require 'spec_helper'
 describe "Acfs" do
 
   before do
+    Acfs.clear
     Acfs.use Acfs::Middleware::JsonDecoder
+    Acfs.use Acfs::Middleware::MessagePackDecoder
 
     headers = { 'Content-Type' => 'application/json' }
     stub_request(:get, "http://users.example.org/users").to_return(:body => '[{"id":1,"name":"Anon","age":12},{"id":2,"name":"John","age":26}]', headers: headers)

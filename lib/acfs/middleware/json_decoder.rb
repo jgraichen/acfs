@@ -7,8 +7,9 @@ module Acfs
     #
     class JsonDecoder < Base
 
-      def response(response)
+      def response(response, nxt)
         response.data = ::MultiJson.load(response.body) if response.json?
+        nxt.call response
       end
     end
   end

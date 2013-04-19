@@ -21,7 +21,7 @@ module Acfs
       # @return [ Acfs::Request ] The request itself.
       #
       def on_complete(&block)
-        callbacks << block if block_given?
+        callbacks.insert 0, block if block_given?
         self
       end
 
@@ -38,8 +38,13 @@ module Acfs
       # @return [ Acfs::Request ] The request itself.
       #
       def complete!(response)
-        callbacks.each { |cb| cb.call response }
+        call_callback response, 0
         self
+      end
+
+      private
+      def call_callback(res, index)
+        callbacks[index].call res, proc { |res| call_callback res, index + 1 } if index < callbacks.size
       end
     end
   end

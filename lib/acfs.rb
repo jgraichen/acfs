@@ -34,9 +34,9 @@ module Acfs
     end
 
     def queue(req, &block)
-      request = middleware.call Request.new(req)
+      request = Request.new req
       request.on_complete &block if block_given?
-      adapter.queue request
+      middleware.call request
     end
 
     def adapter
@@ -44,7 +44,9 @@ module Acfs
     end
 
     def middleware
-      @middleware ||= lambda { |request| request }
+      @middleware ||= proc do |request|
+        adapter.queue request
+      end
     end
 
     def use(klass, options = {})
@@ -55,5 +57,11 @@ module Acfs
       @middlewares << klass
       @middleware = klass.new(middleware, options)
     end
+
+    def clear
+      @middleware  = nil
+      @middlewares = nil
+    end
   end
 end
+
