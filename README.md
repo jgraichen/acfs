@@ -114,6 +114,7 @@ Acfs.run # This call will fire all request as parallel as possible.
 @user.name       # => "John
 @comments.size   # => 25
 @friends[0].name # => "Miraculix"
+```
 
 ## TODO
 
