@@ -17,6 +17,7 @@ module Acfs
     autoload :Base
     autoload :Print
     autoload :JsonDecoder
+    autoload :MessagePackDecoder, 'acfs/middleware/msgpack_decoder'
   end
 
   module Adapter
