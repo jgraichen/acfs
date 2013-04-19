@@ -2,6 +2,9 @@ require 'acfs/request/callbacks'
 
 module Acfs
 
+  # Encapsulate all data required to make up a request to the
+  # underlaying http library.
+  #
   class Request
     attr_accessor :body, :format
     attr_reader :url, :headers, :params, :data
