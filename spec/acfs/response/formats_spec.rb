@@ -11,9 +11,9 @@ describe Acfs::Response::Formats do
   context 'with JSON mimetype' do
     let(:mime_type) { 'application/json' }
 
-    describe '#mime_type' do
+    describe '#content_type' do
       it 'should return Mime::JSON' do
-        expect(response.mime_type).to be == Mime::JSON
+        expect(response.content_type).to be == Mime::JSON
       end
     end
 
@@ -26,9 +26,9 @@ describe Acfs::Response::Formats do
     context 'with charset option' do
       let(:mime_type) { 'application/json; charset=utf8' }
 
-      describe '#mime_type' do
+      describe '#content_type' do
         it 'should return Mime::JSON' do
-          expect(response.mime_type).to be == Mime::JSON
+          expect(response.content_type).to be == Mime::JSON
         end
       end
 
