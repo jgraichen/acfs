@@ -120,19 +120,19 @@ Acfs.run # This call will fire all request as parallel as possible.
 
 * Create/Update operations
 * High level features
-** Pagination? Filtering? (If service API provides such features.)
-** Messaging Queue support for services and models
+    * Pagination? Filtering? (If service API provides such features.)
+    * Messaging Queue support for services and models
 * Documentation
 
 ## Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. a) Add specs for your feature
-3. b) Implement your feature
-3. c) Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create new Pull Request
+4. Add specs for your feature
+5. Implement your feature
+6. Commit your changes (`git commit -am 'Add some feature'`)
+7. Push to the branch (`git push origin my-new-feature`)
+8. Create new Pull Request
 
 ## License
 
