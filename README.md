@@ -10,10 +10,10 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'acfs', '0.3.0'
+    gem 'acfs', '0.5.1'
 
-**Note:** Acfs is under development. API may change at any time. No semantic versioning will be applied until version
-`1.0`. Version `1.0` does not mean a complete feature set but a first stable code base.
+**Note:** Acfs is under development. I'll try to avoid changes to the public
+API but internal APIs may change quite often.
 
 And then execute:
 
@@ -25,71 +25,113 @@ Or install it yourself as:
 
 ## Usage
 
-### Attributes
+First you need to define your service(s):
 
 ```ruby
-class MyModel
-  include Acfs::Model
-
-  attribute :name, :string
-  attribute :age, :integer, default: 15
+class UserService < Acfs::Service
+  self.base_url = 'http://users.myapp.org'
 end
-
-MyModel.attributes # => { "name" => "", "age" => 15 }
-
-mo = MyModel.new name: 'Johnny', age: 12
-mo.name # => "Johnny"
-mo.age = '13'
-mo.age # => 13
-mo.attributes # => { "name" => "Johnny", "age" => 13 }
 ```
 
-### Service, Model & Collection
+This specifies where the `UserService` can be reached. You can now create some
+models representing resources serviced by the `UserService`.
 
 ```ruby
-class MyService < Acfs::Service
-  self.base_url = 'http://acc.srv'
-end
-
 class User
   include Acfs::Model
-  service MyService
+  service UserService # Associate `User` model with `UserService`.
 
-  attribute :id, :integer
+  # Define model attributes and types
+  # Types are needed to parse and generate request and response payload.
+
+  attribute :id, :uuid # Types can be classes or symbols.
+                       # Symbols will be used to load a class from `Acfs::Model::Attributes` namespace.
+                       # Eg. `:uuid` will load class `Acfs::Model::Attributes::Uuid`.
+
+  attribute :name, :string, default: 'Anonymous'
+  attribute :age, ::Acfs::Model::Attributes::Integer # Or use :integer
+
 end
+```
 
+The service and model classes can be shipped as a gem or git submodule to be
+included by the frontend application(s).
+
+You can use the model there:
+
+```ruby
 @user = User.find 14
 
 @user.loaded? #=> false
 
 Acfs.run # This will run all queued request as parallel as possible.
          # For @user the following URL will be requested:
-         # `http://acc.srv/users/14`
+         # `http://users.myapp.org/users/14`
 
 @model.name # => "..."
 
 @users = User.all
 @users.loaded? #=> false
 
-Acfs.run # Will request `http://acc.srv/users`
+Acfs.run # Will request `http://users.myapp.org/users`
 
 @users #=> [<User>, ...]
 ```
 
+If you need multiple resources or dependent resources first define a "plan"
+how they can be loaded:
+
+```ruby
+@user = User.find(5) do |user|
+  # Block will be executed right after user with id 5 is loaded
+
+  # You can load additional resources also from other services
+  # Eg. fetch comments from `CommentSerivce`. The line below will
+  # load comments from `http://comments.myapp.org/comments?user=5`
+  @comments = Comment.where user: user.id
+
+  # You can load multiple resources in parallel if you have multiple
+  # ids.
+  @friends  = User.find 1, 4, 10 do |friends|
+    # This block will be executed when all friends are loaded.
+    # [ ... ]
+  end
+end
+
+Acfs.run # This call will fire all request as parallel as possible.
+         # The sequence above would look similar to:
+         #
+         # Start                Fin
+         #   |===================|       `Acfs.run`
+         #   |====|                      /users/5
+         #   |    |==============|       /comments?user=5
+         #   |    |======|               /users/1
+         #   |    |=======|              /users/4
+         #   |    |======|               /users/10
+
+# Now we can access all resources:
+
+@user.name       # => "John
+@comments.size   # => 25
+@friends[0].name # => "Miraculix"
+
 ## TODO
 
-* Develop Library
+* Create/Update operations
+* High level features
+** Pagination? Filtering? (If service API provides such features.)
+** Messaging Queue support for services and models
 * Documentation
 
 ## Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Add specs for your feature
-4. Implement your feature
-5. Commit your changes (`git commit -am 'Add some feature'`)
-6. Push to the branch (`git push origin my-new-feature`)
-7. Create new Pull Request
+3a. Add specs for your feature
+3b. Implement your feature
+3c. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
 
 ## License
 
