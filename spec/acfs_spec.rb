@@ -10,6 +10,8 @@ describe "Acfs" do
     headers = { 'Content-Type' => 'application/json' }
     stub_request(:get, "http://users.example.org/users").to_return(:body => '[{"id":1,"name":"Anon","age":12},{"id":2,"name":"John","age":26}]', headers: headers)
     stub_request(:get, "http://users.example.org/users/2").to_return(:body => '{"id":2,"name":"John","age":26}', headers: headers)
+    stub_request(:get, "http://users.example.org/users/3").to_return(:body => '{"id":2,"name":"Miraculix","age":122}', headers: headers)
+    stub_request(:get, "http://users.example.org/users/100").to_return(:body => '{"id":2,"name":"Jimmy","age":45}', headers: headers)
     stub_request(:get, "http://users.example.org/users/2/friends").to_return(:body => '[{"id":1,"name":"Anon","age":12}]', headers: headers)
     stub_request(:get, "http://comments.example.org/comments?user=2").to_return(:body => '[{"id":1,"text":"Comment #1"},{"id":2,"text":"Comment #2"}]', headers: headers)
   end
@@ -24,6 +26,34 @@ describe "Acfs" do
     expect(@user).to be_loaded
     expect(@user.name).to be == 'John'
     expect(@user.age).to be == 26
+  end
+
+  it 'should load multiple single resources' do
+    @users = MyUser.find(2, 3, 100) do |users|
+      # This block should be called only after *all* resources are loaded.
+      @john = users[0]
+      @mirx = users[1]
+      @jimy = users[2]
+    end
+
+    expect(@users).to_not be_loaded
+
+    Acfs.run
+
+    expect(@users).to be_loaded
+    expect(@users).to have(3).items
+
+    expect(@users[0].name).to be == 'John'
+    expect(@users[0].age).to be == 26
+    expect(@users[0]).to be == @john
+
+    expect(@users[1].name).to be == 'Miraculix'
+    expect(@users[1].age).to be == 122
+    expect(@users[1]).to be == @mirx
+
+    expect(@users[2].name).to be == 'Jimmy'
+    expect(@users[2].age).to be == 45
+    expect(@users[2]).to be == @jimy
   end
 
   it 'should load multiple resources' do
