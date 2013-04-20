@@ -16,9 +16,10 @@ module Acfs::Model
   #
   module Attributes
     extend ActiveSupport::Concern
+    include ActiveModel::AttributeMethods
 
     def initialize(*attrs) # :nodoc:
-      self.class.attributes.each { |k, v| public_send :"#{k}=", v }
+      self.write_attributes self.class.attributes, change: false
       super *attrs
     end
 
@@ -38,9 +39,48 @@ module Acfs::Model
     # Update all attributes with given hash.
     #
     def attributes=(attributes)
-      self.attributes.each do |key, _|
-        send :"#{key}=", attributes[key] if attributes.has_key? key
+      write_attributes attributes
+    end
+
+    # Read an attribute.
+    #
+    def read_attribute(name)
+      instance_variable_get :"@#{name}"
+    end
+
+    # Write a hash of attributes and values.
+    #
+    def write_attributes(attributes, opts = {})
+      procs = {}
+
+      attributes.each do |key, _|
+        if attributes[key].is_a? Proc
+          procs[key] = attributes[key]
+        else
+          write_attribute key, attributes[key], opts
+        end
       end
+
+      procs.each do |key, proc|
+        write_attribute key, instance_exec(&proc), opts
+      end
+    end
+
+    # Write an attribute.
+    #
+    def write_attribute(name, value, opts = {})
+      if (type = self.class.attribute_types[name.to_sym]).nil?
+        raise "Unknown attribute #{name}."
+      end
+
+      write_raw_attribute name, type.cast(value), opts
+    end
+
+    # Write an attribute without checking type and existence or casting
+    # value to attributes type.
+    #
+    def write_raw_attribute(name, value, _ = {})
+      instance_variable_set :"@#{name}", value
     end
 
     module ClassMethods # :nodoc:
@@ -76,17 +116,26 @@ module Acfs::Model
         @attributes ||= {}
       end
 
+      # Return hash of attributes and there types.
+      #
+      def attribute_types
+        @attribute_types ||= {}
+      end
+
       private
       def define_attribute(name, type, opts = {}) # :nodoc:
-        @attributes       ||= {}
-        @attributes[name] = type.cast opts.has_key?(:default) ? opts[:default] : nil
+        default_value    = opts.has_key?(:default) ? opts[:default] : nil
+        default_value    = type.cast default_value unless default_value.is_a? Proc
+        attributes[name] = default_value
+        attribute_types[name.to_sym] = type
+        define_attribute_method name
 
         self.send :define_method, name do
-          instance_variable_get :"@#{name}"
+          read_attribute name
         end
 
         self.send :define_method, :"#{name}=" do |value|
-          instance_variable_set :"@#{name}", type.cast(value)
+          write_attribute name, value
         end
       end
     end

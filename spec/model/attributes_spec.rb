@@ -13,6 +13,17 @@ describe Acfs::Model::Attributes do
     it 'should set default attributes' do
       expect(model.new.name).to be == 'John'
     end
+
+    context 'with dynamic default value' do
+      before do
+        model.attribute :name, :string, default: 'John'
+        model.attribute :mail, :string, default: -> { "#{name}@srv.tld" }
+      end
+
+      it 'should set dynamic default attributes' do
+        expect(model.new.mail).to be == 'John@srv.tld'
+      end
+    end
   end
 
   describe '#attributes' do
