@@ -23,5 +23,6 @@ class Comment
   include Acfs::Model
   service CommentService
 
+  attribute :id, :integer
   attribute :text, :string
 end

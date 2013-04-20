@@ -24,18 +24,5 @@ module Acfs::Model
       end if params
     end
 
-    # Indicates if the model is persisted. Default is +false+.
-    #
-    #  class User
-    #    include Acfs::Model
-    #    attribute :name
-    #  end
-    #
-    #  user = User.new(name: 'bob')
-    #  user.persisted? # => false
-    #
-    def persisted?
-      false
-    end
   end
 end
