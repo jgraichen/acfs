@@ -39,8 +39,8 @@ class UserService < Acfs::Service
 end
 ```
 
-This specifies where the `UserService` can be reached. You can now create some
-models representing resources serviced by the `UserService`.
+This specifies where the `UserService` is located. You can now create some
+models representing resources served by the `UserService`.
 
 ```ruby
 class User
