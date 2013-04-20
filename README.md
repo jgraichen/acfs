@@ -31,7 +31,7 @@ First you need to define your service(s):
 class UserService < Acfs::Service
   self.base_url = 'http://users.myapp.org'
 
-  # You can configure middlewares you want use for the service here.
+  # You can configure middlewares you want to use for the service here.
   # Each service has it own middleware stack.
   #
   use Acfs::Middleware::JsonDecoder
