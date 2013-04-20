@@ -3,17 +3,25 @@ require 'spec_helper'
 describe "Acfs" do
 
   before do
-    Acfs.clear
-    Acfs.use Acfs::Middleware::JsonDecoder
-    Acfs.use Acfs::Middleware::MessagePackDecoder
-
-    headers = { 'Content-Type' => 'application/json' }
-    stub_request(:get, "http://users.example.org/users").to_return(:body => '[{"id":1,"name":"Anon","age":12},{"id":2,"name":"John","age":26}]', headers: headers)
-    stub_request(:get, "http://users.example.org/users/2").to_return(:body => '{"id":2,"name":"John","age":26}', headers: headers)
-    stub_request(:get, "http://users.example.org/users/3").to_return(:body => '{"id":2,"name":"Miraculix","age":122}', headers: headers)
-    stub_request(:get, "http://users.example.org/users/100").to_return(:body => '{"id":2,"name":"Jimmy","age":45}', headers: headers)
-    stub_request(:get, "http://users.example.org/users/2/friends").to_return(:body => '[{"id":1,"name":"Anon","age":12}]', headers: headers)
-    stub_request(:get, "http://comments.example.org/comments?user=2").to_return(:body => '[{"id":1,"text":"Comment #1"},{"id":2,"text":"Comment #2"}]', headers: headers)
+    headers         = {}
+    stub_request(:get, "http://users.example.org/users").to_return(
+        body: MessagePack.dump([{ id: 1, name: "Anon", age: 12 }, { id: 2, name: "John", age: 26 }]),
+        headers: headers.merge({'Content-Type' => 'application/x-msgpack'}))
+    stub_request(:get, "http://users.example.org/users/2").to_return(
+        body: MessagePack.dump({ id: 2, name: "John", age: 26 }),
+        headers: headers.merge({'Content-Type' => 'application/x-msgpack'}))
+    stub_request(:get, "http://users.example.org/users/3").to_return(
+        body: MessagePack.dump({ id: 2, name: "Miraculix", age: 122 }),
+        headers: headers.merge({'Content-Type' => 'application/x-msgpack'}))
+    stub_request(:get, "http://users.example.org/users/100").to_return(
+        body: '{"id":2,"name":"Jimmy","age":45}',
+        headers: headers.merge({'Content-Type' => 'application/json'}))
+    stub_request(:get, "http://users.example.org/users/2/friends").to_return(
+        body: '[{"id":1,"name":"Anon","age":12}]',
+        headers: headers.merge({'Content-Type' => 'application/json'}))
+    stub_request(:get, "http://comments.example.org/comments?user=2").to_return(
+        body: '[{"id":1,"text":"Comment #1"},{"id":2,"text":"Comment #2"}]',
+        headers: headers.merge({'Content-Type' => 'application/json'}))
   end
 
   it 'should load single resource' do

@@ -33,34 +33,8 @@ module Acfs
       adapter.run
     end
 
-    def queue(req, &block)
-      request = Request.new req
-      request.on_complete &block if block_given?
-      middleware.call request
-    end
-
     def adapter
       @adapter ||= Adapter::Typhoeus.new
-    end
-
-    def middleware
-      @middleware ||= proc do |request|
-        adapter.queue request
-      end
-    end
-
-    def use(klass, options = {})
-      @middlewares ||= []
-
-      return false if @middlewares.include? klass
-
-      @middlewares << klass
-      @middleware = klass.new(middleware, options)
-    end
-
-    def clear
-      @middleware  = nil
-      @middlewares = nil
     end
   end
 end

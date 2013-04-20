@@ -37,7 +37,7 @@ module Acfs::Model
       def all(params = {}, &block)
         collection = ::Acfs::Collection.new
 
-        service.queue(Acfs::Request.new(url, params: params)) do |response|
+        request = Acfs::Request.new(url, params: params) do |response|
           response.data.each do |obj|
             collection << self.new.tap do |m|
               m.attributes = obj
@@ -47,6 +47,7 @@ module Acfs::Model
           collection.loaded!
           block.call collection unless block.nil?
         end
+        service.queue request
 
         collection
       end
@@ -56,12 +57,12 @@ module Acfs::Model
       def find_single(id, opts, &block)
         model = self.new
 
-        request = Acfs::Request.new url(id.to_s)
-        service.queue(request) do |response|
+        request = Acfs::Request.new url(id.to_s) do |response|
           model.attributes = response.data
           model.loaded!
           block.call model unless block.nil?
         end
+        service.queue request
 
         model
       end

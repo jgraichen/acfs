@@ -11,7 +11,7 @@ module Acfs
 
     include Request::Callbacks
 
-    def initialize(url, options = {})
+    def initialize(url, options = {}, &block)
       @url = URI.parse(url).tap do |url|
         @data    = options.delete(:data) || nil
         @format  = options.delete(:format) || :json
@@ -20,6 +20,7 @@ module Acfs
 
         url.query = nil # params.any? ? params.to_param : nil
       end.to_s
+      on_complete &block if block_given?
     end
 
     def data?

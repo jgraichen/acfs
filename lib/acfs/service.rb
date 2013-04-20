@@ -1,3 +1,6 @@
+require 'acfs/service/middleware'
+require 'acfs/service/queue'
+
 module Acfs
 
   # Service object.
@@ -5,6 +8,9 @@ module Acfs
   class Service
     attr_accessor :options
     class_attribute :base_url
+
+    include Service::Queue
+    include Service::Middleware
 
     def initialize(options = {})
       @options = options
@@ -21,10 +27,6 @@ module Acfs
       url += "/#{(options[:path] || resource_class.name.pluralize.underscore).to_s}"
       url += "/#{options[:suffix].to_s}" if options[:suffix]
       url
-    end
-
-    def queue(request, &block)
-      Acfs.queue request, &block
     end
   end
 end
