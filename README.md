@@ -2,9 +2,12 @@
 
 [![Gem Version](https://badge.fury.io/rb/acfs.png)](http://badge.fury.io/rb/acfs) [![Build Status](https://travis-ci.org/jgraichen/acfs.png?branch=master)](https://travis-ci.org/jgraichen/acfs) [![Coverage Status](https://coveralls.io/repos/jgraichen/acfs/badge.png?branch=master)](https://coveralls.io/r/jgraichen/acfs) [![Code Climate](https://codeclimate.com/github/jgraichen/acfs.png)](https://codeclimate.com/github/jgraichen/acfs) [![Dependency Status](https://gemnasium.com/jgraichen/acfs.png)](https://gemnasium.com/jgraichen/acfs)
 
-TODO: Develop asynchronous parallel API client library for service oriented applications.
+Acfs is a library to develop API client libraries for single services within a
+larger service oriented application.
 
-TODO: Write a gem description
+Acfs covers model and service abstraction, convenient query and filter methods,
+full middleware stack for pre-processing requests and responses on a per service
+level and automatic request queuing and parallel processing. See Usage for more.
 
 ## Installation
 
@@ -122,7 +125,7 @@ Acfs.run # This call will fire all request as parallel as possible.
 @friends[0].name # => "Miraculix"
 ```
 
-## TODO
+## Future List
 
 * Create/Update operations
 * High level features
