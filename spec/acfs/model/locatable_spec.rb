@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Acfs::Model::Locatable' do
+describe Acfs::Model::Locatable do
   let(:model) { MyUser }
 
   describe '.url' do
