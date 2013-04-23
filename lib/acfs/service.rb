@@ -1,5 +1,5 @@
+require 'acfs/service/request_handler'
 require 'acfs/service/middleware'
-require 'acfs/service/queue'
 
 module Acfs
 
@@ -9,7 +9,7 @@ module Acfs
     attr_accessor :options
     class_attribute :base_url
 
-    include Service::Queue
+    include Service::RequestHandler
     include Service::Middleware
 
     def initialize(options = {})
