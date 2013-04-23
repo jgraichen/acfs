@@ -5,7 +5,8 @@ describe Acfs::Request do
   let(:headers) { nil }
   let(:params)  { nil }
   let(:data)    { nil }
-  let(:options) { {headers: headers, params: params, data: data} }
+  let(:method)  { :get }
+  let(:options) { {method: method, headers: headers, params: params, data: data} }
   let(:request) { Acfs::Request.new(url, options) }
 
   describe '#url' do
@@ -36,6 +37,20 @@ describe Acfs::Request do
 
     it 'should return request headers' do
       expect(request.headers).to be == headers
+    end
+  end
+
+  describe '#method' do
+    context 'when nil given' do
+      let(:method) { nil }
+
+      it 'should default to :get' do
+        expect(request.method).to be == :get
+      end
+    end
+
+    it 'should return request method' do
+      expect(request.method).to be == method
     end
   end
 

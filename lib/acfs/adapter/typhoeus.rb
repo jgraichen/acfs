@@ -9,8 +9,10 @@ module Acfs
 
       # Run all queued requests.
       #
-      def run
-        hydra.run
+      def run(request = nil)
+        return hydra.run unless request
+
+        convert_request(request).run
       end
 
       # Add a new request or URL to the queue.
@@ -25,7 +27,11 @@ module Acfs
       end
 
       def convert_request(req)
-        request = ::Typhoeus::Request.new req.url, params: req.params, headers: req.headers, body: req.body
+        request = ::Typhoeus::Request.new req.url,
+                                          method: req.method,
+                                          params: req.params,
+                                          headers: req.headers,
+                                          body: req.body
 
         request.on_complete do |response|
           req.complete! convert_response(req, response)
