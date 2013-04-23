@@ -8,11 +8,8 @@ module Acfs
     module Middleware
       extend ActiveSupport::Concern
 
-      # Queue a new request. The request will travel through
-      # all registered middleware.
-      #
-      def queue(req)
-        super self.class.middleware.call req
+      def prepare(_) # :nodoc:
+        self.class.middleware.call super
       end
 
       module ClassMethods
