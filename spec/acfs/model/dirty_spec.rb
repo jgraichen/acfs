@@ -4,7 +4,11 @@ describe Acfs::Model::Dirty do
   let(:model) { MyUser.new }
   before do
     stub_request(:get, "http://users.example.org/users/1").to_return(
-        body: MessagePack.dump({ id: 1, name: "Anon", age: 12 }),
+        body: MessagePack.dump({ id: 1, name: 'Anon', age: 12 }),
+        headers: {'Content-Type' => 'application/x-msgpack'})
+
+    stub_request(:post, 'http://users.example.org/users').to_return(
+        body: MessagePack.dump({ id: 5, name: 'dhh', age: 12 }),
         headers: {'Content-Type' => 'application/x-msgpack'})
   end
 
@@ -14,8 +18,8 @@ describe Acfs::Model::Dirty do
 
   describe '#changed?' do
     context 'after attribute change' do
-      let(:user) { MyUser.new }
-      before { user.name = "dhh" }
+      let(:user) { MyUser.new name: 'dhh' }
+
       it { expect(user).to be_changed }
 
       context 'and saving' do

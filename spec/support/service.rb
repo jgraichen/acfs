@@ -3,6 +3,7 @@ class UserService < Acfs::Service
   self.base_url = 'http://users.example.org'
   use Acfs::Middleware::MessagePackDecoder
   use Acfs::Middleware::JsonDecoder
+  use Acfs::Middleware::JsonEncoder
 end
 
 class CommentService < Acfs::Service

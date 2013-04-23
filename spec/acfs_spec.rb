@@ -25,10 +25,8 @@ describe "Acfs" do
   end
 
   it 'should update single resource synchronously' do
-    pending "TODO"
-
-    stub = stub_request(:patch, "http://users.example.org/users/2")
-      .with(body: '{"name":"Johnny"}', headers: { 'If-Unmodified-Since' => '', 'If-None-Match' => 'LukeSkywalker' })
+    stub = stub_request(:put, "http://users.example.org/users/2")
+      .to_return { |request| { body: request.body, headers: {'Content-Type' => request.headers['Content-Type']}} }
 
     @user = MyUser.find(2)
     Acfs.run
@@ -129,6 +127,7 @@ describe "Acfs" do
 
     Acfs.run
 
+    expect(@user.id).to be == 2
     expect(@user.name).to be == 'John'
     expect(@user.age).to be == 26
 
