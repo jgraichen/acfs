@@ -101,7 +101,7 @@ describe Acfs::Model::Attributes do
     it 'should add an attribute to model attribute list' do
       model.send :attribute, :name, :string
 
-      expect(model.attributes).to be == { :name => '' }
+      expect(model.attributes).to be == { :name => nil }
     end
 
     it 'should accept a default value' do
