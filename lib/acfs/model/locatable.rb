@@ -20,5 +20,10 @@ module Acfs::Model
         service.url_for(self, suffix: suffix)
       end
     end
+
+    def url
+      return nil if id.nil?
+      self.class.service.url_for self, suffix: read_attribute(:id)
+    end
   end
 end
