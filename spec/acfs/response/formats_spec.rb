@@ -8,6 +8,14 @@ describe Acfs::Response::Formats do
   let(:body)      { nil }
   let(:response)  { Acfs::Response.new request, status, headers, body }
 
+  context 'without Content-Type header' do
+    let(:headers)   { {} }
+
+    it "should fallback on 'text/plain'" do
+      expect(response.content_type).to be == Mime::TEXT
+    end
+  end
+
   context 'with JSON mimetype' do
     let(:mime_type) { 'application/json' }
 
