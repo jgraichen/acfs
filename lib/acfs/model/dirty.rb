@@ -21,7 +21,7 @@ module Acfs
         reset_changes
       end
 
-      def save!(*_) # :nodoc:
+      def save!(*) # :nodoc:
         super.tap { |__| swap_changes }
       end
 

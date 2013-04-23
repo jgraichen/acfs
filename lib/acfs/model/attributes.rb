@@ -20,7 +20,7 @@ module Acfs::Model
 
     def initialize(*attrs) # :nodoc:
       self.write_attributes self.class.attributes, change: false
-      super *attrs
+      super
     end
 
     # Returns ActiveModel compatible list of attributes and values.
@@ -73,7 +73,7 @@ module Acfs::Model
         raise "Unknown attribute #{name}."
       end
 
-      write_raw_attribute name, type.cast(value), opts
+      write_raw_attribute name, value.nil? ? nil : type.cast(value), opts
     end
 
     # Write an attribute without checking type and existence or casting
@@ -125,7 +125,7 @@ module Acfs::Model
       private
       def define_attribute(name, type, opts = {}) # :nodoc:
         default_value    = opts.has_key?(:default) ? opts[:default] : nil
-        default_value    = type.cast default_value unless default_value.is_a? Proc
+        default_value    = type.cast default_value unless default_value.is_a? Proc or default_value.nil?
         attributes[name] = default_value
         attribute_types[name.to_sym] = type
         define_attribute_method name
