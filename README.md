@@ -125,9 +125,30 @@ Acfs.run # This call will fire all request as parallel as possible.
 @friends[0].name # => "Miraculix"
 ```
 
-## Future List
+Acfs has basic update support using `PUT` requests:
 
-* Create/Update operations
+```ruby
+@user = User.find 5
+@user.name = "Bob"
+
+@user.changed? # => true
+@user.persisted? # => false
+
+@user.save # Or .save!
+           # Will PUT new resource to service synchronously.
+
+@user.changed? # => false
+@user.persisted? # => true
+```
+
+## Roadmap
+
+* Create operations
+* Update
+    * Better new? detection eg. storing ETag from request resources.
+    * Use PATCH for with only changed attributes and `If-Unmodifed-Since`
+      and `If-Match` header fields if resource was surly loaded from service
+      and not created with an id (e.g `User.new id: 5, name: "john"`).
 * High level features
     * Pagination? Filtering? (If service API provides such features.)
     * Messaging Queue support for services and models
