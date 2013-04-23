@@ -1,6 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext'
 require 'acfs/version'
+require 'acfs/errors'
 
 module Acfs
   extend ActiveSupport::Autoload
@@ -18,6 +19,8 @@ module Acfs
     autoload :Print
     autoload :JsonDecoder
     autoload :MessagePackDecoder, 'acfs/middleware/msgpack_decoder'
+    autoload :JsonEncoder
+    autoload :MessagePackEncoder, 'acfs/middleware/msgpack_encoder'
   end
 
   module Adapter
