@@ -7,7 +7,7 @@ describe Acfs::Model::Attributes do
     before { model.attribute :name, :string, default: 'John' }
 
     it 'should have attribute list' do
-      expect(model.new.attributes).to include('name')
+      expect(model.new.attributes).to include(:name)
     end
 
     it 'should set default attributes' do
@@ -33,10 +33,28 @@ describe Acfs::Model::Attributes do
     end
 
     it 'should return hash of all attributes' do
-      expect(model.new.attributes).to be == {
-          'name' => 'John',
-          'age' => 25
-      }
+      expect(model.new.attributes).to be == { name: 'John', age: 25 }.stringify_keys
+    end
+  end
+
+  describe '#write_attributes' do
+    before do
+      model.attribute :name, :string, default: 'John'
+      model.attribute :age, :integer, default: 25
+    end
+    let(:m) { model.new }
+
+    it 'should update attributes' do
+      m.write_attributes name: 'James'
+
+      expect(m.attributes).to be == { name: 'James', age: 25 }.stringify_keys
+    end
+
+    it 'should do nothing on non-array types' do
+      ret = m.write_attributes 'James'
+
+      expect(ret).to be_false
+      expect(m.attributes).to be == { name: 'John', age: 25 }.stringify_keys
     end
   end
 

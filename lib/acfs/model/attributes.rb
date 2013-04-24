@@ -33,7 +33,7 @@ module Acfs::Model
     #   user.attributes # => { "name" => "John" }
     #
     def attributes
-      self.class.attributes.keys.inject({}) { |h, k| h[k.to_s] = public_send k; h }
+      HashWithIndifferentAccess.new self.class.attributes.keys.inject({}) { |h, k| h[k.to_sym] = public_send k; h }
     end
 
     # Update all attributes with given hash.
@@ -51,6 +51,8 @@ module Acfs::Model
     # Write a hash of attributes and values.
     #
     def write_attributes(attributes, opts = {})
+      return false unless attributes.respond_to? :each
+
       procs = {}
 
       attributes.each do |key, _|
@@ -64,6 +66,7 @@ module Acfs::Model
       procs.each do |key, proc|
         write_attribute key, instance_exec(&proc), opts
       end
+      true
     end
 
     # Write an attribute.

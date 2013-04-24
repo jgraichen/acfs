@@ -28,7 +28,7 @@ describe "Acfs" do
     stub = stub_request(:put, "http://users.example.org/users/2")
       .to_return { |request| { body: request.body, headers: {'Content-Type' => request.headers['Content-Type']}} }
 
-    @user = MyUser.find(2)
+    @user = MyUser.find 2
     Acfs.run
 
     expect(@user).to_not be_changed
