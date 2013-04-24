@@ -158,6 +158,7 @@ Acfs has basic update support using `PUT` requests:
           Modified Headers, conflict detection, ...
     * Pagination? Filtering? (If service API provides such features.)
     * Messaging Queue support for services and models
+    * Allow stubbing of resources as objects for testing services.
 * Documentation
 
 ## Contributing
