@@ -4,6 +4,7 @@ module Acfs
     # Allow to track the persistence state of a model.
     #
     module Persistence
+      extend ActiveSupport::Concern
 
       # Check if the model is persisted. A model is persisted if
       # it is saved after beeing created or when it was not changed
@@ -53,6 +54,23 @@ module Acfs
         end
 
         self.class.service.run request
+      end
+
+      module ClassMethods
+
+        # Create a new resource sending given data.
+        #
+        def create(data, opts = {})
+          model = new
+          request = Acfs::Request.new url, method: :post, data: data
+          request.on_complete do |response|
+            model.attributes = response.data
+            model.loaded!
+          end
+
+          service.run request
+          model
+        end
       end
 
       private

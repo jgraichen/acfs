@@ -46,6 +46,17 @@ describe "Acfs" do
     expect(@user).to be_persisted
   end
 
+  it 'should create a single resource synchronously' do
+    stub = stub_request(:post, "http://users.example.org/sessions")
+      .to_return body: '{"id":"sessionhash","user":1}', headers: {'Content-Type' => 'application/json'}
+
+    session = Session.create ident: 'Anon'
+
+    expect(stub).to have_been_requested
+    expect(session.id).to be == 'sessionhash'
+    expect(session.user).to be == 1
+  end
+
   it 'should load single resource' do
     @user = MyUser.find(2)
 

@@ -20,6 +20,14 @@ class MyUser
   attribute :age, :integer
 end
 
+class Session
+  include Acfs::Model
+  service UserService
+
+  attribute :id, :string
+  attribute :user, :integer
+end
+
 class Comment
   include Acfs::Model
   service CommentService
