@@ -133,6 +133,7 @@ describe "Acfs" do
 
   it 'should load associated resources from different service' do
     @user = MyUser.find 2 do |user|
+      expect(user.id).to be == 2
       @comments = Comment.where user: user.id
     end
 
