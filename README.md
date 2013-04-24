@@ -149,7 +149,13 @@ Acfs has basic update support using `PUT` requests:
     * Use PATCH for with only changed attributes and `If-Unmodifed-Since`
       and `If-Match` header fields if resource was surly loaded from service
       and not created with an id (e.g `User.new id: 5, name: "john"`).
+    * Conflict detection (ETag / If-Unmodified-Since)
 * High level features
+    * Support for custom mime types on client and server side. (`application/vnd.myservice.user.v2+msgpack`)
+    * Server side components
+        * Reusing model definitions for generating responses?
+        * Rails responders providing REST operations with integrated ETag,
+          Modified Headers, conflict detection, ...
     * Pagination? Filtering? (If service API provides such features.)
     * Messaging Queue support for services and models
 * Documentation
