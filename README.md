@@ -143,7 +143,6 @@ Acfs has basic update support using `PUT` requests:
 
 ## Roadmap
 
-* Create operations
 * Update
     * Better new? detection eg. storing ETag from request resources.
     * Use PATCH for with only changed attributes and `If-Unmodifed-Since`
