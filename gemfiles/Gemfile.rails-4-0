@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in acfs.gemspec
-gemspec path: '../'
+# Load root Gemfile
+self.instance_eval Bundler.read_file '../Gemfile'
 
 gem 'activesupport', '~> 4.0.0.beta1'
 gem 'activemodel', '~> 4.0.0.beta1'
