@@ -82,6 +82,7 @@ module Acfs
         def create(data, opts = {})
           model = new
           model.save! opts.merge data: data
+          model
         rescue InvalidResource => err
           (err.errors || []).each do |field, errors|
             model.errors.set field, errors
