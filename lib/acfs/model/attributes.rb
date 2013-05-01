@@ -73,7 +73,7 @@ module Acfs::Model
     #
     def write_attribute(name, value, opts = {})
       if (type = self.class.attribute_types[name.to_sym]).nil?
-        raise "Unknown attribute #{name}."
+        raise "Unknown attribute `#{name}`."
       end
 
       write_raw_attribute name, value.nil? ? nil : type.cast(value), opts
