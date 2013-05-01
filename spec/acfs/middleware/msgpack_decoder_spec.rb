@@ -14,21 +14,12 @@ describe Acfs::Middleware::MessagePackDecoder do
 
   context 'with Message Pack response' do
     let(:headers) { { 'Content-Type' => 'application/x-msgpack' } }
-    let(:body)    { MessagePack.dump data }
+    let(:body)    { MessagePack.pack data }
 
     it 'should decode body data' do
       request.complete! response
 
       expect(response.data).to be == data.map(&:stringify_keys)
-    end
-  end
-
-  context 'with invalid response' do
-    let(:headers) { { 'Content-Type' => 'application/x-msgpack' } }
-    let(:body)    { MessagePack.dump(data)[4..-4] }
-
-    it 'should raise an error' do
-      expect { request.complete! response }.to raise_error(MessagePack::MalformedFormatError)
     end
   end
 

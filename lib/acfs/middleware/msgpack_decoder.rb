@@ -14,7 +14,7 @@ module Acfs
       CONTENT_TYPES = %w(application/x-msgpack)
 
       def response(response, nxt)
-        response.data = ::MessagePack.load(response.body) if message_pack?(response)
+        response.data = ::MessagePack.unpack(response.body) if message_pack?(response)
         nxt.call response
       end
 
