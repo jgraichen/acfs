@@ -57,7 +57,6 @@ module Acfs
           if response.success?
             update_with response.data
           else
-            puts response.inspect
             self.class.raise! response
           end
         end
@@ -84,7 +83,6 @@ module Acfs
           model = new
           model.save! opts.merge data: data
         rescue InvalidResource => err
-          puts err.errors.inspect
           (err.errors || []).each do |field, errors|
             model.errors.set field, errors
           end
