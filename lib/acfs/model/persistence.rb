@@ -47,10 +47,19 @@ module Acfs
         false
       end
 
-      def save!(*) # :nodoc:
-        request = new? ? create_request : put_request
+      def save!(opts = {}) # :nodoc:
+        #raise ::Acfs::InvalidResource errors: errors.to_a unless valid?
+
+        opts[:data] = attributes unless opts[:data]
+
+        request = new? ? create_request(opts) : put_request(opts)
         request.on_complete do |response|
-          update_with response.data
+          if response.success?
+            update_with response.data
+          else
+            puts response.inspect
+            self.class.raise! response
+          end
         end
 
         self.class.service.run request
@@ -58,17 +67,27 @@ module Acfs
 
       module ClassMethods
 
-        # Create a new resource sending given data.
+        # Create a new resource sending given data. If resource cannot be
+        # created an error will be thrown.
+        #
+        def create!(data, opts = {})
+          new.tap do |model|
+            model.save! opts.merge data: data
+          end
+        end
+
+        # Create a new resource sending given data. If resource cannot be
+        # create model will be returned and error hash contains response
+        # errors if available.
         #
         def create(data, opts = {})
           model = new
-          request = Acfs::Request.new url, method: :post, data: data
-          request.on_complete do |response|
-            model.attributes = response.data
-            model.loaded!
+          model.save! opts.merge data: data
+        rescue InvalidResource => err
+          puts err.errors.inspect
+          (err.errors || []).each do |field, errors|
+            model.errors.set field, errors
           end
-
-          service.run request
           model
         end
       end
@@ -79,12 +98,12 @@ module Acfs
         loaded!
       end
 
-      def create_request
-        Acfs::Request.new self.class.url, method: :post, data: attributes
+      def create_request(opts = {})
+        Acfs::Request.new self.class.url, method: :post, data: opts[:data]
       end
 
-      def put_request
-        Acfs::Request.new url, method: :put, data: attributes
+      def put_request(opts = {})
+        Acfs::Request.new url, method: :put, data: opts[:data]
       end
     end
   end

@@ -14,8 +14,29 @@ describe Acfs::Model::Persistence do
           body: MessagePack.dump({ id: 1, name: 'Idefix', age: 12 }),
           headers: {'Content-Type' => 'application/x-msgpack'})
 
-    @post_stub = stub_request(:post, 'http://users.example.org/users').to_return(
+    @post_stub = stub_request(:post, 'http://users.example.org/users')
+    .with(body: '{"id":null,"name":"Idefix","age":12}')
+    .to_return(
         body: MessagePack.dump({ id: 5, name: 'Idefix', age: 12 }),
+        headers: {'Content-Type' => 'application/x-msgpack'})
+
+    stub_request(:post, 'http://users.example.org/users')
+    .with(body: '{"id":null,"name":"Anon","age":null}')
+    .to_return(
+        body: MessagePack.dump({ id: 5, name: 'Anon', age: 12 }),
+        headers: {'Content-Type' => 'application/x-msgpack'})
+
+    stub_request(:post, 'http://users.example.org/users')
+    .with(body: '{"name":"Idefix","age":12}')
+    .to_return(
+        body: MessagePack.dump({ id: 5, name: 'Idefix', age: 12 }),
+        headers: {'Content-Type' => 'application/x-msgpack'})
+
+    stub_request(:post, 'http://users.example.org/users')
+    .with(body: '{"age":12}')
+    .to_return(
+        status: 422,
+        body: MessagePack.dump({ errors: { name: [ 'required' ] }}),
         headers: {'Content-Type' => 'application/x-msgpack'})
   end
 
@@ -75,6 +96,64 @@ describe Acfs::Model::Persistence do
 
       it { expect(model).to_not be_persisted }
       it { expect(model).to_not be_new }
+    end
+  end
+
+  describe '.create!' do
+    context 'with valid data' do
+      let(:data) { { name: 'Idefix', age: 12 } }
+
+      it 'should create new resource' do
+        model = model_class.create! data
+        expect(model.name).to be == 'Idefix'
+        expect(model.age).to be == 12
+      end
+
+      it 'should be persisted' do
+        model = model_class.create! data
+        expect(model).to be_persisted
+      end
+    end
+
+    context 'with invalid data' do
+      let(:data) { { age: 12 } }
+
+      it 'should raise an error' do
+        expect { model_class.create! data }.to raise_error ::Acfs::InvalidResource do |error|
+          expect(error.errors).to be == { name: ['required'] }.stringify_keys
+        end
+      end
+    end
+  end
+
+  describe '.create' do
+    context 'with valid data' do
+      let(:data) { { name: 'Idefix', age: 12 } }
+
+      it 'should create new resource' do
+        model = model_class.create! data
+        expect(model.name).to be == 'Idefix'
+        expect(model.age).to be == 12
+      end
+
+      it 'should be persisted' do
+        model = model_class.create! data
+        expect(model).to be_persisted
+      end
+    end
+
+    context 'with invalid data' do
+      let(:data) { { age: 12 } }
+
+      it 'should return not persisted resource' do
+        model = model_class.create data
+        expect(model).to_not be_persisted
+      end
+
+      it 'should contain error hash' do
+        model = model_class.create data
+        expect(model.errors.to_hash).to be == { name: [ "required" ]}.stringify_keys
+      end
     end
   end
 end

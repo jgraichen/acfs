@@ -10,8 +10,8 @@ module Acfs
   class ErroneousResponse < Error
     attr_accessor :response
 
-    def initialize(response)
-      self.response = response
+    def initialize(data = {})
+      self.response = data[:response]
     end
   end
 
@@ -20,4 +20,12 @@ module Acfs
   class ResourceNotFound < ErroneousResponse
   end
 
+  class InvalidResource < ErroneousResponse
+    attr_accessor :errors
+
+    def initialize(data)
+      self.errors = data[:errors]
+      super
+    end
+  end
 end
