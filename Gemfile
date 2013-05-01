@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 # Specify your gem's dependencies in acfs.gemspec
-gemspec path: File.dirname(__FILE__)
+gemroot = File.dirname File.absolute_path __FILE__
+gemspec path: gemroot
 
 # Platform specific development dependencies
 #
