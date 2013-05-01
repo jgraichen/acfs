@@ -3,13 +3,8 @@ require 'spec_helper'
 describe Acfs::Model::Dirty do
   let(:model) { MyUser.new }
   before do
-    stub_request(:get, "http://users.example.org/users/1").to_return(
-        body: MessagePack.dump({ id: 1, name: 'Anon', age: 12 }),
-        headers: {'Content-Type' => 'application/x-msgpack'})
-
-    stub_request(:post, 'http://users.example.org/users').to_return(
-        body: MessagePack.dump({ id: 5, name: 'dhh', age: 12 }),
-        headers: {'Content-Type' => 'application/x-msgpack'})
+    stub_request(:get, "http://users.example.org/users/1").to_return response({ id: 1, name: 'Anon', age: 12 })
+    stub_request(:post, 'http://users.example.org/users').to_return response({ id: 5, name: 'dhh', age: 12 })
   end
 
   it 'includes ActiveModel::Dirty' do

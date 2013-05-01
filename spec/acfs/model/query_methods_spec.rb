@@ -7,9 +7,7 @@ describe Acfs::Model::QueryMethods do
     context 'with single id' do
       context 'with successful response' do
         before do
-          stub_request(:get, 'http://users.example.org/users/1').to_return(
-              body: MessagePack.dump({ id: 1, name: 'Anon', age: 12 }),
-              headers: {'Content-Type' => 'application/x-msgpack'})
+          stub_request(:get, 'http://users.example.org/users/1').to_return response({ id: 1, name: 'Anon', age: 12 })
         end
 
         it 'should load a single remote resource' do
@@ -33,10 +31,7 @@ describe Acfs::Model::QueryMethods do
 
       context 'with 404 response' do
         before do
-          stub_request(:get, 'http://users.example.org/users/1').to_return(
-              status: 404,
-              body: MessagePack.dump({ error: 'not found' }),
-              headers: {'Content-Type' => 'application/x-msgpack'})
+          stub_request(:get, 'http://users.example.org/users/1').to_return response({ error: 'not found' }, status: 404)
         end
 
         it 'should raise a NotFound error' do
@@ -50,9 +45,7 @@ describe Acfs::Model::QueryMethods do
 
       context 'with 500 response' do
         before do
-          stub_request(:get, 'http://users.example.org/users/1').to_return(
-              status: 500,
-              headers: {'Content-Type' => 'text/plain'})
+          stub_request(:get, 'http://users.example.org/users/1').to_return response(nil, status: 500)
         end
 
         it 'should raise a response error' do
@@ -67,12 +60,8 @@ describe Acfs::Model::QueryMethods do
 
     context 'with multiple ids' do
       before do
-        stub_request(:get, 'http://users.example.org/users/1').to_return(
-            body: MessagePack.dump({ id: 1, name: 'Anon', age: 12 }),
-            headers: {'Content-Type' => 'application/x-msgpack'})
-        stub_request(:get, 'http://users.example.org/users/2').to_return(
-            body: MessagePack.dump({ id: 2, name: 'Johnny', age: 42 }),
-            headers: {'Content-Type' => 'application/x-msgpack'})
+        stub_request(:get, 'http://users.example.org/users/1').to_return response({ id: 1, name: 'Anon', age: 12 })
+        stub_request(:get, 'http://users.example.org/users/2').to_return response({ id: 2, name: 'Johnny', age: 42 })
       end
 
       context 'with successful response' do
@@ -100,10 +89,7 @@ describe Acfs::Model::QueryMethods do
 
       context 'with one 404 response' do
         before do
-          stub_request(:get, 'http://users.example.org/users/1').to_return(
-              status: 404,
-              body: MessagePack.dump({ error: 'not found' }),
-              headers: {'Content-Type' => 'application/x-msgpack'})
+          stub_request(:get, 'http://users.example.org/users/1').to_return response({ error: 'not found' }, status: 404)
         end
 
         it 'should raise resource not found error' do

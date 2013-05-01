@@ -3,41 +3,28 @@ require 'spec_helper'
 describe Acfs::Model::Persistence do
   let(:model_class) { MyUser }
   before do
-    @get_stub = stub_request(:get, "http://users.example.org/users/1").to_return(
-        body: MessagePack.dump({ id: 1, name: "Anon", age: 12 }),
-        headers: {'Content-Type' => 'application/x-msgpack'})
+    @get_stub = stub_request(:get, "http://users.example.org/users/1").to_return response({ id: 1, name: "Anon", age: 12 })
 
     @patch_stub = stub_request(:put, 'http://users.example.org/users/1')
         .with(
           body: '{"id":1,"name":"Idefix","age":12}')
-        .to_return(
-          body: MessagePack.dump({ id: 1, name: 'Idefix', age: 12 }),
-          headers: {'Content-Type' => 'application/x-msgpack'})
+        .to_return response({ id: 1, name: 'Idefix', age: 12 })
 
     @post_stub = stub_request(:post, 'http://users.example.org/users')
     .with(body: '{"id":null,"name":"Idefix","age":12}')
-    .to_return(
-        body: MessagePack.dump({ id: 5, name: 'Idefix', age: 12 }),
-        headers: {'Content-Type' => 'application/x-msgpack'})
+    .to_return response({ id: 5, name: 'Idefix', age: 12 })
 
     stub_request(:post, 'http://users.example.org/users')
     .with(body: '{"id":null,"name":"Anon","age":null}')
-    .to_return(
-        body: MessagePack.dump({ id: 5, name: 'Anon', age: 12 }),
-        headers: {'Content-Type' => 'application/x-msgpack'})
+    .to_return response({ id: 5, name: 'Anon', age: 12 })
 
     stub_request(:post, 'http://users.example.org/users')
     .with(body: '{"name":"Idefix","age":12}')
-    .to_return(
-        body: MessagePack.dump({ id: 5, name: 'Idefix', age: 12 }),
-        headers: {'Content-Type' => 'application/x-msgpack'})
+    .to_return response({ id: 5, name: 'Idefix', age: 12 })
 
     stub_request(:post, 'http://users.example.org/users')
     .with(body: '{"age":12}')
-    .to_return(
-        status: 422,
-        body: MessagePack.dump({ errors: { name: [ 'required' ] }}),
-        headers: {'Content-Type' => 'application/x-msgpack'})
+    .to_return response({ errors: { name: [ 'required' ] }}, status: 422)
   end
 
   context 'new model' do

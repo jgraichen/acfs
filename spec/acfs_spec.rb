@@ -4,24 +4,12 @@ describe "Acfs" do
 
   before do
     headers = {}
-    stub_request(:get, "http://users.example.org/users").to_return(
-        body: MessagePack.dump([{ id: 1, name: "Anon", age: 12 }, { id: 2, name: "John", age: 26 }]),
-        headers: headers.merge({'Content-Type' => 'application/x-msgpack'}))
-    stub_request(:get, "http://users.example.org/users/2").to_return(
-        body: MessagePack.dump({ id: 2, name: "John", age: 26 }),
-        headers: headers.merge({'Content-Type' => 'application/x-msgpack', 'ETag' => 'LukeSkywalker' }))
-    stub_request(:get, "http://users.example.org/users/3").to_return(
-        body: MessagePack.dump({ id: 3, name: "Miraculix", age: 122 }),
-        headers: headers.merge({'Content-Type' => 'application/x-msgpack'}))
-    stub_request(:get, "http://users.example.org/users/100").to_return(
-        body: '{"id":100,"name":"Jimmy","age":45}',
-        headers: headers.merge({'Content-Type' => 'application/json'}))
-    stub_request(:get, "http://users.example.org/users/2/friends").to_return(
-        body: '[{"id":1,"name":"Anon","age":12}]',
-        headers: headers.merge({'Content-Type' => 'application/json'}))
-    stub_request(:get, "http://comments.example.org/comments?user=2").to_return(
-        body: '[{"id":1,"text":"Comment #1"},{"id":2,"text":"Comment #2"}]',
-        headers: headers.merge({'Content-Type' => 'application/json'}))
+    stub_request(:get, "http://users.example.org/users").to_return response([{ id: 1, name: "Anon", age: 12 }, { id: 2, name: "John", age: 26 }])
+    stub_request(:get, "http://users.example.org/users/2").to_return response({ id: 2, name: "John", age: 26 })
+    stub_request(:get, "http://users.example.org/users/3").to_return response({ id: 3, name: "Miraculix", age: 122 })
+    stub_request(:get, "http://users.example.org/users/100").to_return response({ id:100, name: "Jimmy", age: 45 })
+    stub_request(:get, "http://users.example.org/users/2/friends").to_return response([{ id: 1, name: "Anon", age: 12 }])
+    stub_request(:get, "http://comments.example.org/comments?user=2").to_return response([{ id: 1, text: "Comment #1"}, { id: 2, text: "Comment #2" }])
   end
 
   it 'should update single resource synchronously' do
@@ -47,8 +35,7 @@ describe "Acfs" do
   end
 
   it 'should create a single resource synchronously' do
-    stub = stub_request(:post, "http://users.example.org/sessions")
-      .to_return body: '{"id":"sessionhash","user":1}', headers: {'Content-Type' => 'application/json'}
+    stub = stub_request(:post, "http://users.example.org/sessions").to_return response({id: 'sessionhash', user: 1})
 
     session = Session.create ident: 'Anon'
 
