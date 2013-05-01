@@ -58,9 +58,13 @@ module Acfs::Model
         model = self.new
 
         request = Acfs::Request.new url(id.to_s) do |response|
-          model.attributes = response.data
-          model.loaded!
-          block.call model unless block.nil?
+          if response.success?
+            model.attributes = response.data
+            model.loaded!
+            block.call model unless block.nil?
+          else
+            raise_error_for response
+          end
         end
         service.queue request
 
@@ -79,6 +83,15 @@ module Acfs::Model
               end
             end
           end
+        end
+      end
+      
+      def raise_error_for(response)
+        case response.code
+          when 404
+            raise ::Acfs::ResourceNotFound.new response
+          else
+            raise ::Acfs::ErroneousResponse.new response
         end
       end
     end

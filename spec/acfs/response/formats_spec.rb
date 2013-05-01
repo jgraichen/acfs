@@ -6,7 +6,7 @@ describe Acfs::Response::Formats do
   let(:headers)   { { 'Content-Type' => mime_type } }
   let(:request)   { Acfs::Request.new 'fubar' }
   let(:body)      { nil }
-  let(:response)  { Acfs::Response.new request, status, headers, body }
+  let(:response)  { Acfs::Response.new request, status: status, headers: headers, body: body }
 
   context 'without Content-Type header' do
     let(:headers)   { {} }

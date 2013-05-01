@@ -5,7 +5,7 @@ describe Acfs::Middleware::JsonDecoder do
   let(:body)     { data.to_param }
   let(:headers)  { {} }
   let(:request)  { Acfs::Request.new "fubar" }
-  let(:response) { Acfs::Response.new request, 200, headers, body }
+  let(:response) { Acfs::Response.new request, status: 200, headers: headers, body: body }
   let(:decoder)  { Acfs::Middleware::JsonDecoder.new lambda { |req| req } }
 
   before do

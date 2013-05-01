@@ -1,4 +1,6 @@
 require 'acfs/response/formats'
+require 'acfs/response/status'
+require 'active_support/core_ext/module/delegation'
 
 module Acfs
 
@@ -7,15 +9,20 @@ module Acfs
   #
   class Response
     attr_accessor :data
-    attr_reader :request, :status, :headers, :body
+    attr_reader :headers, :body
 
     include Response::Formats
+    include Response::Status
 
-    def initialize(request, status = 200, headers = {}, body = nil)
-      @request = request
-      @status  = status
-      @headers = headers
-      @body    = body
+    #delegate :status, :status_message, :success?, :modified?, :timed_out?,
+    #         :response_body, :response_headers, :response_code, :headers,
+    #         to: :response
+
+    def initialize(request, data = {})
+      @request  = request
+      @status   = data[:status]
+      @headers  = data[:headers]
+      @body     = data[:body]
     end
   end
 end

@@ -28,6 +28,23 @@ describe Acfs::Model::QueryMethods do
         @user = model.find 1, &proc
         Acfs.run
       end
+
+      context 'with 404 response' do
+        before do
+          stub_request(:get, 'http://users.example.org/users/1').to_return(
+              status: 404,
+              body: MessagePack.dump({ error: 'not found' }),
+              headers: {'Content-Type' => 'application/x-msgpack'})
+        end
+
+        it 'should raise a NotFound error' do
+          @user = model.find 1
+
+          expect { Acfs.run }.to raise_error(Acfs::ResourceNotFound)
+
+          expect(@user).to_not be_loaded
+        end
+      end
     end
 
     context 'with multiple ids' do
