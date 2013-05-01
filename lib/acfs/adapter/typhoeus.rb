@@ -21,6 +21,12 @@ module Acfs
         hydra.queue convert_request(req)
       end
 
+      # Remove all requests from queue.
+      #
+      def clear
+        hydra.abort
+      end
+
     protected
       def hydra
         @hydra ||= ::Typhoeus::Hydra.new
@@ -41,7 +47,10 @@ module Acfs
       end
 
       def convert_response(request, response)
-        Acfs::Response.new(request, response.code, response.headers, response.body)
+        Acfs::Response.new request,
+                           status: response.code,
+                           headers: response.headers,
+                           body: response.body
       end
     end
   end

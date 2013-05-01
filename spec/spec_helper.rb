@@ -27,4 +27,8 @@ RSpec.configure do |config|
     # Only allow expect syntax
     c.syntax = :expect
   end
+
+  config.before :each do
+    Acfs.adapter.clear
+  end
 end
