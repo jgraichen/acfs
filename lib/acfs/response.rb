@@ -9,7 +9,7 @@ module Acfs
   #
   class Response
     attr_accessor :data
-    attr_reader :headers, :body
+    attr_reader :headers, :body, :request
 
     include Response::Formats
     include Response::Status
