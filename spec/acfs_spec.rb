@@ -3,7 +3,6 @@ require 'spec_helper'
 describe 'Acfs' do
 
   before do
-    headers = {}
     stub_request(:get, 'http://users.example.org/users').to_return response([{ id: 1, name: 'Anon', age: 12 }, { id: 2, name: 'John', age: 26 }])
     stub_request(:get, 'http://users.example.org/users/2').to_return response({ id: 2, name: 'John', age: 26 })
     stub_request(:get, 'http://users.example.org/users/3').to_return response({ id: 3, name: 'Miraculix', age: 122 })
