@@ -2,12 +2,9 @@
 
 [![Gem Version](https://badge.fury.io/rb/acfs.png)](http://badge.fury.io/rb/acfs) [![Build Status](https://travis-ci.org/jgraichen/acfs.png?branch=master)](https://travis-ci.org/jgraichen/acfs) [![Coverage Status](https://coveralls.io/repos/jgraichen/acfs/badge.png?branch=master)](https://coveralls.io/r/jgraichen/acfs) [![Code Climate](https://codeclimate.com/github/jgraichen/acfs.png)](https://codeclimate.com/github/jgraichen/acfs) [![Dependency Status](https://gemnasium.com/jgraichen/acfs.png)](https://gemnasium.com/jgraichen/acfs)
 
-Acfs is a library to develop API client libraries for single services within a
-larger service oriented application.
+Acfs is a library to develop API client libraries for single services within a larger service oriented application.
 
-Acfs covers model and service abstraction, convenient query and filter methods,
-full middleware stack for pre-processing requests and responses on a per service
-level and automatic request queuing and parallel processing. See Usage for more.
+Acfs covers model and service abstraction, convenient query and filter methods, full middleware stack for pre-processing requests and responses on a per service level and automatic request queuing and parallel processing. See Usage for more.
 
 ## Installation
 
@@ -15,8 +12,7 @@ Add this line to your application's Gemfile:
 
     gem 'acfs', '~> 0.14.0'
 
-**Note:** Acfs is under development. I'll try to avoid changes to the public
-API but internal APIs may change quite often.
+**Note:** Acfs is under development. I'll try to avoid changes to the public API but internal APIs may change quite often.
 
 And then execute:
 
@@ -42,8 +38,7 @@ class UserService < Acfs::Service
 end
 ```
 
-This specifies where the `UserService` is located. You can now create some
-models representing resources served by the `UserService`.
+This specifies where the `UserService` is located. You can now create some models representing resources served by the `UserService`.
 
 ```ruby
 class User
@@ -63,8 +58,7 @@ class User
 end
 ```
 
-The service and model classes can be shipped as a gem or git submodule to be
-included by the frontend application(s).
+The service and model classes can be shipped as a gem or git submodule to be included by the frontend application(s).
 
 You can use the model there:
 
@@ -87,8 +81,7 @@ Acfs.run # Will request `http://users.myapp.org/users`
 @users #=> [<User>, ...]
 ```
 
-If you need multiple resources or dependent resources first define a "plan"
-how they can be loaded:
+If you need multiple resources or dependent resources first define a "plan" how they can be loaded:
 
 ```ruby
 @user = User.find(5) do |user|
