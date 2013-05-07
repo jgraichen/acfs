@@ -1,19 +1,19 @@
 require 'spec_helper'
 
-describe "Acfs" do
+describe 'Acfs' do
 
   before do
     headers = {}
-    stub_request(:get, "http://users.example.org/users").to_return response([{ id: 1, name: "Anon", age: 12 }, { id: 2, name: "John", age: 26 }])
-    stub_request(:get, "http://users.example.org/users/2").to_return response({ id: 2, name: "John", age: 26 })
-    stub_request(:get, "http://users.example.org/users/3").to_return response({ id: 3, name: "Miraculix", age: 122 })
-    stub_request(:get, "http://users.example.org/users/100").to_return response({ id:100, name: "Jimmy", age: 45 })
-    stub_request(:get, "http://users.example.org/users/2/friends").to_return response([{ id: 1, name: "Anon", age: 12 }])
-    stub_request(:get, "http://comments.example.org/comments?user=2").to_return response([{ id: 1, text: "Comment #1"}, { id: 2, text: "Comment #2" }])
+    stub_request(:get, 'http://users.example.org/users').to_return response([{ id: 1, name: 'Anon', age: 12 }, { id: 2, name: 'John', age: 26 }])
+    stub_request(:get, 'http://users.example.org/users/2').to_return response({ id: 2, name: 'John', age: 26 })
+    stub_request(:get, 'http://users.example.org/users/3').to_return response({ id: 3, name: 'Miraculix', age: 122 })
+    stub_request(:get, 'http://users.example.org/users/100').to_return response({ id:100, name: 'Jimmy', age: 45 })
+    stub_request(:get, 'http://users.example.org/users/2/friends').to_return response([{ id: 1, name: 'Anon', age: 12 }])
+    stub_request(:get, 'http://comments.example.org/comments?user=2').to_return response([{ id: 1, text: 'Comment #1' }, { id: 2, text: 'Comment #2' }])
   end
 
   it 'should update single resource synchronously' do
-    stub = stub_request(:put, "http://users.example.org/users/2")
+    stub = stub_request(:put, 'http://users.example.org/users/2')
       .to_return { |request| { body: request.body, headers: {'Content-Type' => request.headers['Content-Type']}} }
 
     @user = MyUser.find 2
@@ -22,7 +22,7 @@ describe "Acfs" do
     expect(@user).to_not be_changed
     expect(@user).to be_persisted
 
-    @user.name = "Johnny"
+    @user.name = 'Johnny'
 
     expect(@user).to be_changed
     expect(@user).to_not be_persisted
@@ -35,7 +35,7 @@ describe "Acfs" do
   end
 
   it 'should create a single resource synchronously' do
-    stub = stub_request(:post, "http://users.example.org/sessions").to_return response({id: 'sessionhash', user: 1})
+    stub = stub_request(:post, 'http://users.example.org/sessions').to_return response({id: 'sessionhash', user: 1})
 
     session = Session.create ident: 'Anon'
 
@@ -104,7 +104,7 @@ describe "Acfs" do
   end
 
   it 'should load associated resources' do
-    pending "TODO: Implement high level feature"
+    pending 'TODO: Implement high level feature'
 
     @user = MyUser.find(2) do |user|
       @friends = user.friends.all
