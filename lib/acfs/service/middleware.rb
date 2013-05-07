@@ -40,7 +40,7 @@ module Acfs
         #
         def clear
           @middleware  = nil
-          @middlewares = nil
+          @middlewares = []
         end
       end
     end

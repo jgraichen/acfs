@@ -30,4 +30,20 @@ describe Acfs::Service::Middleware do
       srv_class.use middleware, options
     end
   end
+
+  describe '.clear' do
+    before { srv_class.use middleware }
+
+    it 'should clear middleware list' do
+      srv_class.clear
+
+      expect(srv_class.instance_variable_get(:@middlewares)).to be_empty
+    end
+
+    it 'should reset middleware stack' do
+      srv_class.clear
+
+      expect(srv_class.instance_variable_get(:@middleware)).to be_nil
+    end
+  end
 end
