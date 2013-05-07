@@ -1,3 +1,4 @@
+require 'json'
 
 def response(data = nil, opts = {})
   if data
