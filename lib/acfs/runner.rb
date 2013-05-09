@@ -69,7 +69,7 @@ module Acfs
     end
 
     def op_request(op)
-      return if Acfs::Stub.stubbed(op)
+      return if Acfs::Stub.enabled? and Acfs::Stub.stubbed(op)
       yield prepare op.service.prepare op.request
     end
   end

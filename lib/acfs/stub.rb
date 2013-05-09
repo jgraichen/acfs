@@ -7,8 +7,6 @@ module Acfs
   class Stub
     ACTIONS = [ :read, :create, :update, :delete, :list ]
 
-    class RealRequestNotAllowedError < StandardError; end
-
     class << self
 
       # Stub a resource with given handler block. An already created handler
@@ -30,6 +28,13 @@ module Acfs
       def allow_requests?
         @allow_requests ||= false
       end
+
+      def enabled?
+        @enabled ||= false
+      end
+
+      def enable; @enabled = true end
+      def disable; @enabled = false end
 
       # Clear all stubs.
       #

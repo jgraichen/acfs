@@ -5,6 +5,9 @@ class SpecialCustomError < StandardError; end
 describe Acfs::Stub do
   let(:stub) { Class.new(Acfs::Stub) }
 
+  before(:all) { Acfs::Stub.enable }
+  after(:all) { Acfs::Stub.disable }
+
   before do
     Acfs::Stub.allow_requests = false
 
@@ -62,6 +65,31 @@ describe Acfs::Stub do
         expect {
           Session.create! ident: 'john@exmaple.org', password: 'wrong'
         }.to raise_error(::Acfs::InvalidResource)
+      end
+    end
+  end
+
+  describe '.allow_requests=' do
+    context 'when enabled' do
+      before do
+        Acfs::Stub.allow_requests = true
+        stub_request(:get, 'http://users.example.org/users/2').to_return response({ id: 2, name: 'John', age: 26 })
+      end
+
+      it 'should allow real requests' do
+        @user = MyUser.find 2
+        expect { Acfs.run }.to_not raise_error
+      end
+    end
+
+    context 'when disabled' do
+      before do
+        Acfs::Stub.allow_requests = false
+      end
+
+      it 'should allow real requests' do
+        @user = MyUser.find 2
+        expect { Acfs.run }.to raise_error(Acfs::RealRequestNotAllowedError)
       end
     end
   end
