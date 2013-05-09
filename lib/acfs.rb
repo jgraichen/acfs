@@ -1,6 +1,7 @@
 require 'active_support'
 require 'active_support/core_ext/class'
 require 'active_support/core_ext/hash'
+require 'active_support/core_ext/module'
 
 require 'acfs/version'
 require 'acfs/errors'
@@ -13,6 +14,7 @@ module Acfs
   autoload :Request
   autoload :Response
   autoload :Service
+  autoload :Stub
 
   module Middleware
     extend ActiveSupport::Autoload
