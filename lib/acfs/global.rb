@@ -4,16 +4,14 @@ module Acfs
   #
   module Global
 
-    # Return request adapter
-    #
-    def adapter
-      @adapter ||= Adapter::Typhoeus.new
+    def runner
+      @runner ||= Runner.new Adapter::Typhoeus.new
     end
 
     # Run all queued operations.
     #
     def run
-      adapter.start
+      runner.start
     end
   end
 end

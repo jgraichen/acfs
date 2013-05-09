@@ -18,6 +18,7 @@ module Acfs
   autoload :Service
   autoload :Stub
   autoload :Operation
+  autoload :Runner
 
   module Middleware
     extend ActiveSupport::Autoload

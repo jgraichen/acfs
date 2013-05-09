@@ -5,45 +5,24 @@ module Acfs::Adapter
   #
   class Base
 
-    # Process an operation. Synchronous operations will be run
-    # and parallel operations will be queued.
-    #
-    def process(op)
-      op.synchronous? ? run(op) : enqueue(op)
-    end
-
-    # Return true when adapter is executing queued operations.
-    #
-    def running?
-      defined?(:@running) and @running
-    end
-
-    # Start processing queued operations.
+    # Start processing queued requests.
     #
     def start
     end
 
-    # Clear list of queued operations.
+    # Abort running and queued requests.
     #
-    def clear
-      queue.clear
+    def abort
     end
 
-    # Run operation right now skipping queue.
+    # Run request right now skipping queue.
     #
     def run(_)
     end
 
-    # Enqueue operation to be run later.
+    # Enqueue request to be run later.
     #
-    def enqueue(op)
-      queue << op
-    end
-
-    # Return queue.
-    #
-    def queue
-      @queue ||= []
+    def queue(_)
     end
   end
 end

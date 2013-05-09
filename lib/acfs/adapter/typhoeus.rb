@@ -7,40 +7,21 @@ module Acfs
     #
     class Typhoeus < Base
 
-      # Start processing queued operations.
-      #
       def start
-        while (op = queue.shift) do
-          hydra.queue convert_request op.request
-        end
-
-        @running = true
         hydra.run
-      ensure
-        @running = false
       end
 
-      # Clear list of queued operations.
-      #
-      def clear
-        super
+      def abort
         hydra.abort
       end
 
-      # Run operation right now skipping queue.
-      #
-      def run(op)
-        convert_request(op.request).run
+      def run(request)
+        convert_request(request).run
       end
 
-      # Queue operation to be run later.
-      #
-      def enqueue(op)
-        if running?
-          hydra.queue convert_request op.request
-        else
-          super
-        end
+      def queue(request)
+        puts request.inspect
+        hydra.queue convert_request request
       end
 
     protected

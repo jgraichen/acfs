@@ -43,7 +43,7 @@ module Acfs
         handle_failure response unless response.success?
         callback.call response.data
       end
-      resource.service.prepare request
+      request
     end
 
     def handle_failure(response)

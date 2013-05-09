@@ -12,7 +12,7 @@ module Acfs::Model
 
     module ClassMethods
       def operation(action, opts = {}, &block)
-        Acfs.adapter.process ::Acfs::Operation.new self, action, opts, &block
+        Acfs.runner.process ::Acfs::Operation.new self, action, opts, &block
       end
     end
   end

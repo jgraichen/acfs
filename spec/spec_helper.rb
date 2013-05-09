@@ -29,6 +29,6 @@ RSpec.configure do |config|
   end
 
   config.before :each do
-    Acfs.adapter.clear
+    Acfs.runner.clear
   end
 end
