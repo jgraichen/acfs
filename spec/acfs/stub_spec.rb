@@ -16,9 +16,9 @@ describe Acfs::Stub do
   describe '.resource' do
     context 'with read action' do
       before do
-        Acfs::Stub.resource MyUser, action: :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
-        Acfs::Stub.resource MyUser, action: :read, with: { id: 2 }, raise: SpecialCustomError
-        Acfs::Stub.resource MyUser, action: :read, with: { id: 3 }, raise: :not_found
+        Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
+        Acfs::Stub.resource MyUser, :read, with: { id: 2 }, raise: SpecialCustomError
+        Acfs::Stub.resource MyUser, :read, with: { id: 3 }, raise: :not_found
       end
 
       it 'should allow to stub resource reads' do
@@ -47,8 +47,8 @@ describe Acfs::Stub do
 
     context 'with create action' do
       before do
-        Acfs::Stub.resource Session, action: :create, with: { ident: 'john@exmaple.org', password: 's3cr3t' }, return: { id: 'longhash', user: 1 }
-        Acfs::Stub.resource Session, action: :create, with: { ident: 'john@exmaple.org', password: 'wrong' }, raise: 422
+        Acfs::Stub.resource Session, :create, with: { ident: 'john@exmaple.org', password: 's3cr3t' }, return: { id: 'longhash', user: 1 }
+        Acfs::Stub.resource Session, :create, with: { ident: 'john@exmaple.org', password: 'wrong' }, raise: 422
       end
 
       it 'should allow stub resource creation' do
