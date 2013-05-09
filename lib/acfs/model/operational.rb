@@ -8,7 +8,7 @@ module Acfs::Model
   #
   module Operational
     extend ActiveSupport::Concern
-    delegate :operation, to: :class
+    delegate :operation, to: :'self.class'
 
     module ClassMethods
       def operation(action, opts = {}, &block)
