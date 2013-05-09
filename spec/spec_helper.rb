@@ -30,5 +30,7 @@ RSpec.configure do |config|
 
   config.before :each do
     Acfs.runner.clear
+    Acfs::Stub.clear
+    Acfs::Stub.allow_requests = true
   end
 end

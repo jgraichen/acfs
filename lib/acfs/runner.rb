@@ -21,7 +21,7 @@ module Acfs
     # Run operation right now skipping queue.
     #
     def run(op)
-      adapter.run op_request op
+      op_request(op) { |req| adapter.run req }
     end
 
     # List of current queued operations.
@@ -34,7 +34,7 @@ module Acfs
     #
     def enqueue(op)
       if running?
-        adapter.queue op_request op
+        op_request(op) { |req| adapter.queue req }
       else
         queue << op
       end
@@ -64,13 +64,13 @@ module Acfs
     private
     def enqueue_operations
       while (op = queue.shift)
-        adapter.queue op_request op
+        op_request(op) { |req| adapter.queue req }
       end
     end
 
     def op_request(op)
       return if Acfs::Stub.stubbed(op)
-      prepare op.service.prepare op.request
+      yield prepare op.service.prepare op.request
     end
   end
 end

@@ -51,7 +51,7 @@ module Acfs
         when 404
           raise ::Acfs::ResourceNotFound.new response: response
         when 422
-          raise ::Acfs::InvalidResource.new response: response, errors: response.data['errors']
+          raise ::Acfs::InvalidResource.new response: response, errors: response.data.try(:[], 'errors')
         else
           raise ::Acfs::ErroneousResponse.new response: response
       end

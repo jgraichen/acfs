@@ -1,11 +1,13 @@
+require 'rack/utils'
 
 module Acfs
 
   # Global handler for stubbing resources.
   #
   class Stub
-
     ACTIONS = [ :read, :create, :update, :delete, :list ]
+
+    class RealRequestNotAllowedError < StandardError; end
 
     class << self
 
@@ -18,7 +20,15 @@ module Acfs
 
         stubs[klass] ||= {}
         stubs[klass][action] ||= []
-        stubs[klass][action] << { args: opts[:with], opts: opts }
+        stubs[klass][action] << opts
+      end
+
+      def allow_requests=(allow)
+        @allow_requests = allow ? true : false
+      end
+
+      def allow_requests?
+        @allow_requests ||= false
       end
 
       # Clear all stubs.
@@ -29,6 +39,41 @@ module Acfs
 
       def stubs
         @stubs ||= {}
+      end
+
+      def stub_for(op)
+        return false unless (classes = stubs[op.resource])
+        return false unless (actions = classes[op.action])
+
+        params = op.params
+        params.merge! id: op.id unless op.id.nil?
+        actions.select! { |stub| stub[:with] == params || stub[:with] == op.data }
+        actions.first
+      end
+
+      def stubbed(op)
+        stub = stub_for op
+        unless stub
+          return false if allow_requests?
+          raise RealRequestNotAllowedError, "No stub found for `#{op.resource.name}` with params `#{op.params}`"
+        end
+
+        if (data = stub[:return])
+          op.callback.call data
+        elsif (err = stub[:raise])
+          raise_error op, err, stub[:return]
+        else
+          raise ArgumentError, 'Unsupported stub.'
+        end
+
+        true
+      end
+
+      private
+      def raise_error(op, name, data)
+        raise name if name.is_a? Class
+
+        op.handle_failure ::Acfs::Response.new nil, status: Rack::Utils.status_code(name), data: data
       end
     end
   end
