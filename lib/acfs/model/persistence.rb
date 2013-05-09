@@ -52,16 +52,9 @@ module Acfs
 
         opts[:data] = attributes unless opts[:data]
 
-        request = new? ? create_request(opts) : put_request(opts)
-        request.on_complete do |response|
-          if response.success?
-            update_with response.data
-          else
-            self.class.raise! response
-          end
+        operation (new? ? :create : :update), opts do |data|
+          update_with data
         end
-
-        self.class.service.run request
       end
 
       module ClassMethods
@@ -95,14 +88,6 @@ module Acfs
       def update_with(data)
         self.attributes = data
         loaded!
-      end
-
-      def create_request(opts = {})
-        Acfs::Request.new self.class.url, method: :post, data: opts[:data]
-      end
-
-      def put_request(opts = {})
-        Acfs::Request.new url, method: :put, data: opts[:data]
       end
     end
   end

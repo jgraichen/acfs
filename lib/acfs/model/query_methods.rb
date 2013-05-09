@@ -37,8 +37,8 @@ module Acfs::Model
       def all(params = {}, &block)
         collection = ::Acfs::Collection.new
 
-        request = Acfs::Request.new(url, params: params) do |response|
-          response.data.each do |obj|
+        operation :list, params: params do |data|
+          data.each do |obj|
             collection << self.new.tap do |m|
               m.attributes = obj
               m.loaded!
@@ -47,37 +47,20 @@ module Acfs::Model
           collection.loaded!
           block.call collection unless block.nil?
         end
-        service.queue request
 
         collection
       end
       alias :where :all
 
-      def raise!(response)
-        case response.code
-          when 404
-            raise ::Acfs::ResourceNotFound.new response: response
-          when 422
-            raise ::Acfs::InvalidResource.new response: response, errors: response.data['errors']
-          else
-            raise ::Acfs::ErroneousResponse.new response: response
-        end
-      end
-
       private
       def find_single(id, opts, &block)
         model = self.new
 
-        request = Acfs::Request.new url(id.to_s) do |response|
-          if response.success?
-            model.attributes = response.data
-            model.loaded!
-            block.call model unless block.nil?
-          else
-            raise! response
-          end
+        operation :read, params: { id: id } do |data|
+          model.attributes = data
+          model.loaded!
+          block.call model unless block.nil?
         end
-        service.queue request
 
         model
       end

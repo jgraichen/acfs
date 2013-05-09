@@ -5,6 +5,7 @@ require 'acfs/model/dirty'
 require 'acfs/model/loadable'
 require 'acfs/model/locatable'
 require 'acfs/model/persistence'
+require 'acfs/model/operational'
 require 'acfs/model/query_methods'
 require 'acfs/model/relations'
 require 'acfs/model/service'
@@ -30,6 +31,7 @@ module Acfs
       include Model::Loadable
       include Model::Persistence
       include Model::Locatable
+      include Model::Operational
       include Model::QueryMethods
       include Model::Relations
       include Model::Service
