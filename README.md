@@ -134,6 +134,57 @@ Acfs has basic update support using `PUT` requests:
 @user.persisted? # => true
 ```
 
+## Stubbing
+
+You can stub resources in applications using an Acfs service client:
+
+```ruby
+# Enable stubs in spec helper
+Acfs::Stub.enable
+
+before do
+  Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
+  Acfs::Stub.resource MyUser, :read, with: { id: 2 }, raise: :not_found
+  Acfs::Stub.resource Session, :create, with: { ident: 'john@exmaple.org', password: 's3cr3t' }, return: { id: 'longhash', user: 1 }
+end
+
+it 'should find user number one' do
+  user = MyUser.find 1
+  Acfs.run
+
+  expect(user.id).to be == 1
+  expect(user.name).to be == 'John Smith'
+  expect(user.age).to be == 32
+end
+
+it 'should not find user number two' do
+  MyUser.find 3
+
+  expect { Acfs.run }.to raise_error(Acfs::ResourceNotFound)
+end
+
+it 'should allow stub resource creation' do
+  session = Session.create! ident: 'john@exmaple.org', password: 's3cr3t'
+
+  expect(session.id).to be == 'longhash'
+  expect(session.user).to be == 1
+end
+```
+
+By default Acfs raises an error when a non stubbed resource should be requested. You can switch of the behavior:
+
+```ruby
+before do
+  Acfs::Stub.allow_requests = true
+end
+
+it 'should find user number one' do
+  user = MyUser.find 1
+  Acfs.run             # Would have raised Acfs::RealRequestNotAllowedError
+                       # Will run real request to user service instead.
+end
+```
+
 ## Roadmap
 
 * Update
@@ -150,7 +201,6 @@ Acfs has basic update support using `PUT` requests:
           Modified Headers, conflict detection, ...
     * Pagination? Filtering? (If service API provides such features.)
     * Messaging Queue support for services and models
-    * Allow stubbing of resources as objects for testing services.
 * Documentation
 
 ## Contributing
