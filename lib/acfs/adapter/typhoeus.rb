@@ -20,7 +20,6 @@ module Acfs
       end
 
       def queue(request)
-        puts request.inspect
         hydra.queue convert_request request
       end
 
