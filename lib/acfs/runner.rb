@@ -36,9 +36,7 @@ module Acfs
       if running?
         adapter.queue op_request op
       else
-        queue.append op
-        op
-        op
+        queue << op
       end
     end
 
@@ -71,6 +69,7 @@ module Acfs
     end
 
     def op_request(op)
+      return if Acfs::Stub.stubbed(op)
       prepare op.service.prepare op.request
     end
   end
