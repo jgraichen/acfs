@@ -5,9 +5,11 @@ require 'active_support/core_ext/module'
 
 require 'acfs/version'
 require 'acfs/errors'
+require 'acfs/global'
 
 module Acfs
   extend ActiveSupport::Autoload
+  extend Global
 
   autoload :Collection
   autoload :Model
@@ -32,18 +34,6 @@ module Acfs
     extend ActiveSupport::Autoload
 
     autoload :Typhoeus
-  end
-
-  class << self
-
-    # Run all queued
-    def run
-      adapter.run
-    end
-
-    def adapter
-      @adapter ||= Adapter::Typhoeus.new
-    end
   end
 end
 
