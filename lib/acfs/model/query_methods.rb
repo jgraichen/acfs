@@ -56,7 +56,10 @@ module Acfs::Model
       def find_single(id, opts, &block)
         model = self.new
 
-        operation :read, params: { id: id } do |data|
+        opts[:params] ||= {}
+        opts[:params].merge!({ id: id })
+
+        operation :read, opts do |data|
           model.attributes = data
           model.loaded!
           block.call model unless block.nil?

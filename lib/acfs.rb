@@ -17,6 +17,7 @@ module Acfs
   autoload :Response
   autoload :Service
   autoload :Stub
+  autoload :Operation
 
   module Middleware
     extend ActiveSupport::Autoload
@@ -33,6 +34,7 @@ module Acfs
   module Adapter
     extend ActiveSupport::Autoload
 
+    autoload :Base
     autoload :Typhoeus
   end
 end

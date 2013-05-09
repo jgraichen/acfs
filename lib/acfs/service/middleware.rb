@@ -8,8 +8,8 @@ module Acfs
     module Middleware
       extend ActiveSupport::Concern
 
-      def prepare(_) # :nodoc:
-        self.class.middleware.call super
+      def prepare(request) # :nodoc:
+        self.class.middleware.call request
       end
 
       module ClassMethods

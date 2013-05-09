@@ -13,7 +13,7 @@ module Acfs
     # Run all queued operations.
     #
     def run
-      adapter.run
+      adapter.start
     end
   end
 end

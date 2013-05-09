@@ -5,26 +5,42 @@ module Acfs
 
     # Adapter for Typhoeus.
     #
-    class Typhoeus
+    class Typhoeus < Base
 
-      # Run all queued requests.
+      # Start processing queued operations.
       #
-      def run(request = nil)
-        return hydra.run unless request
+      def start
+        while (op = queue.shift) do
+          hydra.queue convert_request op.request
+        end
 
-        convert_request(request).run
+        @running = true
+        hydra.run
+      ensure
+        @running = false
       end
 
-      # Add a new request or URL to the queue.
-      #
-      def queue(req)
-        hydra.queue convert_request(req)
-      end
-
-      # Remove all requests from queue.
+      # Clear list of queued operations.
       #
       def clear
+        super
         hydra.abort
+      end
+
+      # Run operation right now skipping queue.
+      #
+      def run(op)
+        convert_request(op.request).run
+      end
+
+      # Queue operation to be run later.
+      #
+      def enqueue(op)
+        if running?
+          hydra.queue convert_request op.request
+        else
+          super
+        end
       end
 
     protected

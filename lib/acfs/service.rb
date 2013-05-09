@@ -1,4 +1,3 @@
-require 'acfs/service/request_handler'
 require 'acfs/service/middleware'
 
 module Acfs
@@ -9,7 +8,6 @@ module Acfs
     attr_accessor :options
     class_attribute :base_url
 
-    include Service::RequestHandler
     include Service::Middleware
 
     def initialize(options = {})
