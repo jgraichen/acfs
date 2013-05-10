@@ -29,5 +29,5 @@ module Acfs
     end
   end
 
-  class RealRequestNotAllowedError < StandardError; end
+  class RealRequestsNotAllowedError < StandardError; end
 end
