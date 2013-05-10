@@ -1,14 +1,18 @@
 require 'spec_helper'
 
 describe Acfs::Service do
-  let(:srv_class) { Class.new(Acfs::Service) }
+  let(:srv_class) { Class.new(Acfs::Service) { identity :test } }
   let(:options) { {} }
   let(:service) { srv_class.new options }
+
+  before do
+    Acfs::Configuration.current.locate :test, ''
+  end
 
   describe '#initialize' do
     let(:options) { { path: 'abc', key: 'value' } }
 
-    it "should set options" do
+    it 'should set options' do
       expect(service.options).to eq(options)
     end
   end
@@ -28,8 +32,12 @@ describe Acfs::Service do
   end
 
   describe '.base_url' do
-    it "should have a static base_url configuration option" do
-      srv_class.base_url = 'http://abc.de/api/v1'
+
+    before do
+      Acfs::Configuration.current.locate :test, 'http://abc.de/api/v1'
+    end
+
+    it 'should return configured URI for service' do
 
       expect(srv_class.base_url).to eq('http://abc.de/api/v1')
     end

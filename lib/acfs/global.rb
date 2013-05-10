@@ -13,5 +13,9 @@ module Acfs
     def run
       runner.start
     end
+
+    def configure(&block)
+      Configuration.current.configure &block
+    end
   end
 end

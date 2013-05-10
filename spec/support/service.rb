@@ -1,13 +1,16 @@
 
+Acfs.configure do
+  locate :user_service, 'http://users.example.org'
+  locate :comment_service, 'http://comments.example.org'
+end
+
 class UserService < Acfs::Service
-  self.base_url = 'http://users.example.org'
   use Acfs::Middleware::MessagePackDecoder
   use Acfs::Middleware::JsonDecoder
   use Acfs::Middleware::JsonEncoder
 end
 
 class CommentService < Acfs::Service
-  self.base_url = 'http://comments.example.org'
   use Acfs::Middleware::JsonDecoder
 end
 

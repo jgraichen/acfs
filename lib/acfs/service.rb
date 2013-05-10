@@ -6,7 +6,6 @@ module Acfs
   #
   class Service
     attr_accessor :options
-    class_attribute :base_url
 
     include Service::Middleware
 
@@ -25,6 +24,22 @@ module Acfs
       url += "/#{(options[:path] || resource_class.name.pluralize.underscore).to_s}"
       url += "/#{options[:suffix].to_s}" if options[:suffix]
       url
+    end
+
+    class << self
+
+      def identity(identity = nil)
+        @identity = identity.to_s.to_sym unless identity.nil?
+        @identity ||= name.to_sym
+      end
+
+      def base_url
+        unless (base = Acfs::Configuration.current.locate identity)
+          raise ArgumentError, "#{identity} not configured. Add `locate '#{identity.to_s.underscore}', 'http://service.url/'` to your configuration."
+        end
+
+        base.to_s
+      end
     end
   end
 end
