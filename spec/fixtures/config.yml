@@ -1,0 +1,14 @@
+development: &dev
+  services:
+    user_service: http://localhost:3001/
+    comment_service:
+      locate: http://localhost:3002/
+
+production:
+  services:
+    user_service:
+      locate: http://user.example.org/
+    comment_service: http://comment.example.org/
+
+test:
+  <<: *dev
