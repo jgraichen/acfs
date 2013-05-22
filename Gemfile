@@ -14,7 +14,7 @@ gem 'coveralls'
 
 # Doc
 gem 'yard', '~> 0.8.6'
-gem 'redcarpet'
+gem 'redcarpet', platform: :ruby
 
 # Platform specific development dependencies
 #
