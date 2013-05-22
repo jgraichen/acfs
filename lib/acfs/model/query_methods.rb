@@ -27,6 +27,13 @@ module Acfs::Model
       #     user = User.find(5) # Will query `http://base.url/users/5`
       #
       #   @param [ Fixnum  ] id Resource IDs to fetch from remote service.
+      #   @param [ Hash ] opts Additional options.
+      #   @option opts [ Hash ] :params Additional parameters added to request. `:id` will be overridden
+      #     with given ID.
+      #
+      #   @yield [ resource ] Callback block to be executed after resource was fetched successfully.
+      #   @yieldparam resource [ self ] Fetched resources.
+      #
       #   @return [ self ] Resource object if only one ID was given.
       #
       # @overload find(*ids, opts = {})
@@ -38,12 +45,14 @@ module Acfs::Model
       #                        # and `http://base.url/users/5` parallel
       #
       #   @param [ Fixnum, ... ] ids One or more resource IDs to fetch from remote service.
+      #   @param [ Hash ] opts Additional options.
+      #   @option opts [ Hash ] :params Additional parameters added to request. `:id` will be overridden
+      #     with individual resource ID.
+      #
+      #   @yield [ collection ] Callback block to be executed after collection was fetched successfully.
+      #   @yieldparam resource [ Collection ] Collection with fetched resources.
+      #
       #   @return [ Collection ] Collection of requested resources if multiple IDs were given.
-      #
-      # @option opts [ Hash ] :params Additional parameters added to request.
-      #
-      # @yield [ resource ] Callback block to be executed after resource or collection was fetched successfully.
-      # @yieldparam resource [ self ] Fetched resource object.
       #
       def find(*attrs, &block)
         opts  = attrs.extract_options!
