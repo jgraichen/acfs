@@ -12,6 +12,9 @@ gem 'rspec'
 gem 'guard-rspec'
 gem 'coveralls'
 
+# Doc
+gem 'yard', '~> 0.8.6'
+gem 'redcarpet'
 
 # Platform specific development dependencies
 #
