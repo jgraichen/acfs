@@ -1,5 +1,7 @@
 module Acfs::Model
 
+  # @api private
+  #
   # Provide methods for creating and processing CRUD operations and
   # handling responses. That includes error handling as well as
   # handling stubbed resources.
@@ -11,6 +13,8 @@ module Acfs::Model
     delegate :operation, to: :'self.class'
 
     module ClassMethods
+
+      # Invoke CRUD operation.
       def operation(action, opts = {}, &block)
         Acfs.runner.process ::Acfs::Operation.new self, action, opts, &block
       end

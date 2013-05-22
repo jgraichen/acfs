@@ -7,7 +7,6 @@ describe Acfs::Configuration do
   after { Acfs::Configuration.set @configuration }
 
   describe 'Acfs.configure' do
-
     it 'should invoke configure on current configuration' do
       Acfs::Configuration.current.should_receive(:configure).once.and_call_original
 

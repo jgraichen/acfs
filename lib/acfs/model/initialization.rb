@@ -4,8 +4,11 @@ module Acfs::Model
   #
   module Initialization
 
-    # Initializes a new model with the given +params+.
+    # @api public
     #
+    # Initializes a new model with the given `params`.
+    #
+    # @example
     #   class User
     #     include Acfs::Model
     #     attribute :name
@@ -18,7 +21,9 @@ module Acfs::Model
     #   user.email # => "bob@dom.tld"
     #   user.age   # => 18
     #
-    def initialize(params={})
+    # @param [ Hash{ Symbol => Object } ] params Attributes to set on resource.
+    #
+    def initialize(params = {})
       params.each do |attr, value|
         self.public_send("#{attr}=", value)
       end if params
