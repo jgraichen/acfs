@@ -1,9 +1,10 @@
 module Acfs::Model
 
-  # == Acfs Attributes
+  # = Acfs Attributes
   #
   # Allows to specify attributes of a class with default values and type safety.
   #
+  # @example
   #   class User
   #     include Acfs::Model
   #     attribute :name, :string, default: 'Anon'
@@ -18,13 +19,23 @@ module Acfs::Model
     extend ActiveSupport::Concern
     include ActiveModel::AttributeMethods
 
-    def initialize(*attrs) # :nodoc:
+    # @api private
+    #
+    # Write default attributes defined in resource class.
+    #
+    # @see #write_attributes
+    # @see ClassMethods#attributes
+    #
+    def initialize(*attrs)
       self.write_attributes self.class.attributes, change: false
       super
     end
 
+    # @api public
+    #
     # Returns ActiveModel compatible list of attributes and values.
     #
+    # @example
     #   class User
     #     include Acfs::Model
     #     attribute :name, type: String, default: 'Anon'
@@ -32,23 +43,57 @@ module Acfs::Model
     #   user = User.new(name: 'John')
     #   user.attributes # => { "name" => "John" }
     #
+    # @return [ HashWithIndifferentAccess{ Symbol => Object } ] Attributes and their values.
+    #
     def attributes
       HashWithIndifferentAccess.new self.class.attributes.keys.inject({}) { |h, k| h[k.to_sym] = public_send k; h }
     end
 
-    # Update all attributes with given hash.
+    # @api public
+    #
+    # Update all attributes with given hash. Attribute values will be casted
+    # to defined attribute type.
+    #
+    # @example
+    #   user.attributes = { :name => 'Adam' }
+    #   user.name # => 'Adam'
+    #
+    # @param [ Hash{ String, Symbol => Object }, #each{|key, value|} ] attributes to set in resource.
+    # @see #write_attributes Delegates attributes hash to `#write_attributes`.
     #
     def attributes=(attributes)
       write_attributes attributes
     end
 
-    # Read an attribute.
+    # @api public
+    #
+    # Read an attribute from instance variable.
+    #
+    # @param [ Symbol, String ] name Attribute name.
+    # @return [ Object ] Attribute value.
     #
     def read_attribute(name)
       instance_variable_get :"@#{name}"
     end
 
+    # @api public
+    #
     # Write a hash of attributes and values.
+    #
+    # If attribute value is a `Proc` it will be evaluated in the context
+    # of the resource after all non-proc attribute values are set. Values
+    # will be casted to defined attribute type.
+    #
+    # The behavior is used to apply default attributes from resource
+    # class definition.
+    #
+    # @example
+    #   user.write_attributes { :name => 'john', :email => lambda{ "#{name}@example.org" } }
+    #   user.name  # => 'john'
+    #   user.email # => 'john@example.org'
+    #
+    # @param [ Hash{ String, Symbol => Object, Proc }, #each{|key, value|} ] attributes to write.
+    # @see #write_attribute Delegates attribute values to `#write_attribute`.
     #
     def write_attributes(attributes, opts = {})
       return false unless attributes.respond_to? :each
@@ -56,6 +101,7 @@ module Acfs::Model
       procs = {}
 
       attributes.each do |key, _|
+        key = key.to_sym
         if attributes[key].is_a? Proc
           procs[key] = attributes[key]
         else
@@ -66,37 +112,58 @@ module Acfs::Model
       procs.each do |key, proc|
         write_attribute key, instance_exec(&proc), opts
       end
+
       true
     end
 
-    # Write an attribute.
+    # @api public
+    #
+    # Write single attribute with given value. Value will be casted
+    # to defined attribute type.
+    #
+    # @param [ String, Symbol ] name Attribute name.
+    # @param [ Object ] value Value to write.
+    # @raise [ ArgumentError ] If no attribute with given name is defined.
     #
     def write_attribute(name, value, opts = {})
       if (type = self.class.attribute_types[name.to_sym]).nil?
-        raise "Unknown attribute `#{name}`."
+        raise ArgumentError.new "Unknown attribute `#{name}`."
       end
 
       write_raw_attribute name, value.nil? ? nil : type.cast(value), opts
     end
 
-    # Write an attribute without checking type and existence or casting
-    # value to attributes type.
+    # @api private
+    #
+    # Write an attribute without checking type or existence or casting
+    # value to attributes type. Value be stored in an instance variable
+    # named after attribute name.
+    #
+    # @param [ String, Symbol ] name Attribute name.
+    # @param [ Object ] value Attribute value.
     #
     def write_raw_attribute(name, value, _ = {})
       instance_variable_set :"@#{name}", value
     end
 
-    module ClassMethods # :nodoc:
+    module ClassMethods
 
+      # @api public
+      #
       # Define a model attribute by name and type. Will create getter and
       # setter for given attribute name. Existing methods will be overridden.
       #
+      # Available types can be found in `Acfs::Model::Attributes::*`.
+      #
+      # @example
       #   class User
       #     include Acfs::Model
       #     attribute :name, :string, default: 'Anon'
+      #     attribute :email, :string, default: lambda{ "#{name}@example.org"}
       #   end
       #
-      # Available types can be found in `Acfs::Model::Attributes::*`.
+      # @param [ #to_sym ] name Attribute name.
+      # @param [ Symbol, String, Class ] type Attribute type identifier or type class.
       #
       def attribute(name, type, opts = {})
         if type.is_a? Symbol or type.is_a? String
@@ -106,8 +173,11 @@ module Acfs::Model
         define_attribute name.to_sym, type, opts
       end
 
+      # @api public
+      #
       # Return list of possible attributes and default values for this model class.
       #
+      # @example
       #   class User
       #     include Acfs::Model
       #     attribute :name, :string
@@ -115,20 +185,36 @@ module Acfs::Model
       #   end
       #   User.attributes # => { "name": nil, "age": 25 }
       #
+      # @return [ Hash{ String => Object, Proc } ] Attributes with default values.
+      #
       def attributes
         @attributes ||= {}
       end
 
+      # @api public
+      #
       # Return hash of attributes and there types.
+      #
+      # @example
+      #   class User
+      #     include Acfs::Model
+      #     attribute :name, :string
+      #     attribute :age, :integer, default: 25
+      #   end
+      #   User.attributes # => { "name": Acfs::Model::Attributes::String, "age": Acfs::Model::Attributes::Integer }
+      #
+      # @return [ Hash{ Symbol => Class } ] Attributes and their types.
       #
       def attribute_types
         @attribute_types ||= {}
       end
 
       private
-      def define_attribute(name, type, opts = {}) # :nodoc:
+      def define_attribute(name, type, opts = {})
+        name             = name.to_s
         default_value    = opts.has_key?(:default) ? opts[:default] : nil
         default_value    = type.cast default_value unless default_value.is_a? Proc or default_value.nil?
+
         attributes[name] = default_value
         attribute_types[name.to_sym] = type
         define_attribute_method name
@@ -147,7 +233,7 @@ end
 
 # Load attribute type classes.
 #
-Dir[File.dirname(__FILE__) + "/attributes/*.rb"].sort.each do |path|
+Dir[File.dirname(__FILE__) + '/attributes/*.rb'].sort.each do |path|
   filename = File.basename(path)
   require "acfs/model/attributes/#{filename}"
 end
