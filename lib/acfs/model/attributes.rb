@@ -101,7 +101,6 @@ module Acfs::Model
       procs = {}
 
       attributes.each do |key, _|
-        key = key.to_sym
         if attributes[key].is_a? Proc
           procs[key] = attributes[key]
         else

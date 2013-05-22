@@ -119,25 +119,25 @@ describe Acfs::Model::Attributes do
     it 'should add an attribute to model attribute list' do
       model.send :attribute, :name, :string
 
-      expect(model.attributes).to be == { :name => nil }
+      expect(model.attributes).to be == { :name => nil }.stringify_keys
     end
 
     it 'should accept a default value' do
       model.send :attribute, :name, :string, default: 'John'
 
-      expect(model.attributes).to be == { :name => 'John' }
+      expect(model.attributes).to be == { :name => 'John' }.stringify_keys
     end
 
     it 'should accept an symbolic type' do
       model.send :attribute, :age, :integer, default: '12'
 
-      expect(model.attributes).to be == { :age => 12 }
+      expect(model.attributes).to be == { :age => 12 }.stringify_keys
     end
 
     it 'should accept an class type' do
       model.send :attribute, :age, Acfs::Model::Attributes::Integer, default: '12'
 
-      expect(model.attributes).to be == { :age => 12 }
+      expect(model.attributes).to be == { :age => 12 }.stringify_keys
     end
   end
 end
