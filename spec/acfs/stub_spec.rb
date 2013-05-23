@@ -87,7 +87,7 @@ describe Acfs::Stub do
         Acfs::Stub.allow_requests = false
       end
 
-      it 'should allow real requests' do
+      it 'should not allow real requests' do
         @user = MyUser.find 2
         expect { Acfs.run }.to raise_error(Acfs::RealRequestsNotAllowedError)
       end

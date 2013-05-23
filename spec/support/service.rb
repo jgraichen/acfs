@@ -1,7 +1,7 @@
 
 Acfs.configure do
   locate :user_service, 'http://users.example.org'
-  locate :comment_service, 'http://comments.example.org'
+  locate :comments, 'http://comments.example.org'
 end
 
 class UserService < Acfs::Service
@@ -11,6 +11,8 @@ class UserService < Acfs::Service
 end
 
 class CommentService < Acfs::Service
+  identity :comments
+
   use Acfs::Middleware::JsonDecoder
 end
 
@@ -37,4 +39,12 @@ class Comment
 
   attribute :id, :integer
   attribute :text, :string
+end
+
+class UserMessageReceiver
+  include Acfs::Messaging::Receiver
+
+  def receive(delivery_info, metadata, payload)
+
+  end
 end

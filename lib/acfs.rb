@@ -22,6 +22,13 @@ module Acfs
   autoload :Runner
   autoload :Configuration
 
+  module Messaging
+    extend ActiveSupport::Autoload
+
+    autoload :Client
+    autoload :Receiver
+  end
+
   module Middleware
     extend ActiveSupport::Autoload
 
