@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'actionpack'
   spec.add_runtime_dependency 'multi_json'
   spec.add_runtime_dependency 'typhoeus'
-  spec.add_runtime_dependency 'bunny'#, '~> 0.9.0.pre12'
+  spec.add_runtime_dependency 'bunny', '~> 0.9.0.pre12'
   spec.add_runtime_dependency 'rack'
 
   spec.add_development_dependency 'bundler', '~> 1.3'
