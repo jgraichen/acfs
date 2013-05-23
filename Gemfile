@@ -13,8 +13,13 @@ gem 'guard-rspec'
 gem 'coveralls'
 
 # Doc
-gem 'yard', '~> 0.8.6'
-gem 'redcarpet', platform: :ruby
+group :development do
+  gem 'yard', '~> 0.8.6'
+  gem 'listen'
+  gem 'guard-yard'
+  gem 'guard-rspec'
+  gem 'redcarpet', platform: :ruby
+end
 
 # Platform specific development dependencies
 #
