@@ -2,6 +2,8 @@ require 'acfs/service/middleware'
 
 module Acfs
 
+  # @api private
+  #
   class Runner
     include Service::Middleware
     attr_reader :adapter

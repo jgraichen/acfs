@@ -1,5 +1,7 @@
 module Acfs
 
+  # @api private
+  #
   # Describes a CRUD operation. Handle request creation and response
   # processing as well as error handling and stubbing.
   #

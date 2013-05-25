@@ -19,7 +19,7 @@ module Acfs::Model
     extend ActiveSupport::Concern
     include ActiveModel::AttributeMethods
 
-    # @api private
+    # @api public
     #
     # Write default attributes defined in resource class.
     #

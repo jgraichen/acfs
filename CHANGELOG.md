@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.17.0
+
+* Basic messaging
+* Extensible YARD documentation
+
 ## 0.16.0
 
 * Add YAML configuration

@@ -11,6 +11,9 @@ require 'acfs/model/relations'
 require 'acfs/model/service'
 
 module Acfs
+
+  # @api public
+  #
   module Model
     extend ActiveSupport::Concern
 
