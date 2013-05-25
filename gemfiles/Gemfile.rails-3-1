@@ -1,0 +1,8 @@
+source 'https://rubygems.org'
+
+# Load root Gemfile
+self.instance_eval Bundler.read_file 'Gemfile'
+
+gem 'activesupport', '~> 3.1.0'
+gem 'activemodel', '~> 3.1.0'
+gem 'actionpack', '~> 3.1.0'
