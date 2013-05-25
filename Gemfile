@@ -5,7 +5,6 @@ source 'https://rubygems.org'
 gem 'webmock', '~> 1.7'
 gem 'rake'
 gem 'rspec'
-gem 'guard-rspec'
 gem 'coveralls'
 gem 'json', '~> 1.7.7'
 
