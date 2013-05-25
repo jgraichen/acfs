@@ -1,4 +1,3 @@
-require 'action_pack'
 require 'acfs'
 require 'coveralls'
 Coveralls.wear! do

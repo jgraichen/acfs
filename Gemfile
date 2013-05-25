@@ -7,6 +7,7 @@ gem 'rake'
 gem 'rspec'
 gem 'guard-rspec'
 gem 'coveralls'
+gem 'json', '~> 1.7.7'
 
 # Doc
 group :development do
