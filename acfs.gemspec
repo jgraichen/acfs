@@ -18,9 +18,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = %w(lib)
 
-  spec.add_runtime_dependency 'activesupport', '>= 3.2'
-  spec.add_runtime_dependency 'activemodel', '>= 3.2'
-  spec.add_runtime_dependency 'actionpack', '>= 3.2'
+  spec.add_runtime_dependency 'activesupport', '>= 3'
+  spec.add_runtime_dependency 'activemodel', '>= 3'
+  spec.add_runtime_dependency 'actionpack', '>= 3'
   spec.add_runtime_dependency 'multi_json'
   spec.add_runtime_dependency 'typhoeus'
   spec.add_runtime_dependency 'bunny', '~> 0.9.0.pre12'
