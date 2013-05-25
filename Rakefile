@@ -12,5 +12,5 @@ begin
     t.files = %w(lib/**/*.rb)
     t.options = %w(--output-dir doc/)
   end
-rescue
+rescue LoadError
 end
