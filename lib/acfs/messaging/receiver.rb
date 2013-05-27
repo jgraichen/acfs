@@ -20,6 +20,8 @@ module Acfs::Messaging
       exchange = channel.exchange 'acfs'
       bind = channel.queue(self.class.queue, options)#.bind(exchange, routing_key: self.class.routing_key)
       bind.subscribe do |delivery_info, metadata, payload|
+        payload = MessagePack.unpack payload
+        payload.symbolize_keys! if payload.is_a? Hash
         receive delivery_info, metadata, payload
       end
     end

@@ -24,13 +24,10 @@ describe Acfs::Messaging::Receiver do
 
   describe '.receive' do
     it 'should receive messages' do
-      rcv_class.instance.should_receive(:receive).with(anything, anything, 'Hello!')
+      rcv_class.instance.should_receive(:receive).with(anything, anything, { message: 'Hello!'})
 
-      ch = Acfs::Messaging::Client.instance.channel
-      ex = ch.default_exchange
-      ex.publish('Hello!', routing_key: 'my.custom_receiver')
-
-      sleep 1.0
+      Acfs::Messaging::Client.instance.publish('my.custom_receiver', { message: 'Hello!' })
+      Acfs::Messaging::Client.instance.wait
     end
   end
 end

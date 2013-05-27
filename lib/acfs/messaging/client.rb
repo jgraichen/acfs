@@ -16,6 +16,14 @@ module Acfs::Messaging
       @channel ||= @bunny.create_channel
     end
 
+    def publish(routing_key, message)
+      channel.default_exchange.publish MessagePack.pack(message), routing_key: routing_key
+    end
+
+    def wait
+      @bunny.queue.pop
+    end
+
     class << self
 
       def instance
