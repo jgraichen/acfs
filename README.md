@@ -190,6 +190,38 @@ it 'should find user number one' do
 end
 ```
 
+## Messaging (Experimental)
+
+Acfs 0.17.0 includes experimental messaging support using RabbitMQ. You can create receivers for messages as well as send custom messages. Messages can be high level structures (like hashes) and will be packed into MessagePack.
+
+Create your custom receivers e.g. in `app/receivers`:
+
+```ruby
+# app/receivers/my_receiver.rb
+
+class MyReceiver
+  include Acfs::Messaging::Receiver
+  route "my.#"       # Specify routing key for receiving messages
+
+  def receive(delivery_info, metadata, payload)
+    puts payload.inspect
+    # more foo...
+  end
+end
+```
+
+Make sure the receivers get loaded by placing an initializer in you app that require all receivers. You need to do this manually but it will be automated in some future release.
+
+You can now send messages by calling the `publish` method directly:
+
+```ruby
+Acfs::Messaging::Client.instance.publish "my.message", { message: "Hi!" }
+```
+
+This will invoke `#receive` on an instance of your receiver class.
+
+Be aware that messaging is still experimental and *will* change in future releases.
+
 ## Roadmap
 
 * Update
@@ -206,6 +238,9 @@ end
           Modified Headers, conflict detection, ...
     * Pagination? Filtering? (If service API provides such features.)
     * Messaging Queue support for services and models
+        * Allow triggering messages on resource events (CRUD)
+        * Abstract messages into objects
+        * Middleware stack for messages?
 * Documentation
 
 ## Contributing
