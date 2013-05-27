@@ -16,14 +16,21 @@ module Acfs::Messaging
     end
 
     def init(client)
-      channel  = client.channel
-      exchange = channel.exchange 'acfs'
-      bind = channel.queue(self.class.queue, options)#.bind(exchange, routing_key: self.class.routing_key)
-      bind.subscribe do |delivery_info, metadata, payload|
-        payload = MessagePack.unpack payload
-        payload.symbolize_keys! if payload.is_a? Hash
-        receive delivery_info, metadata, payload
+      @channel  = client.channel
+      @queue    = @channel.queue self.class.queue, options
+      @queue.bind client.exchange, routing_key: self.class.routing_key
+
+      @queue.subscribe do |delivery_info, metadata, payload|
+        process_received delivery_info, metadata, payload
       end
+    end
+
+    def process_received(delivery_info, metadata, payload)
+      return if delivery_info.nil?
+
+      payload = MessagePack.unpack payload
+      payload.symbolize_keys! if payload.is_a? Hash
+      receive delivery_info, metadata, payload
     end
 
     def options

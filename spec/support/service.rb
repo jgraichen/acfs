@@ -43,8 +43,9 @@ end
 
 class UserMessageReceiver
   include Acfs::Messaging::Receiver
+  route 'my.#'
 
   def receive(delivery_info, metadata, payload)
-
+    puts "UserMessageReceiver received : #{payload.inspect}"
   end
 end

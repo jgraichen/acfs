@@ -23,11 +23,33 @@ describe Acfs::Messaging::Receiver do
   end
 
   describe '.receive' do
-    it 'should receive messages' do
-      rcv_class.instance.should_receive(:receive).with(anything, anything, { message: 'Hello!'})
+    context 'with routed message' do
+      context 'with exact routing key match' do
+        it 'should receive messages' do
+          rcv_class.instance.should_receive(:receive).with(anything, anything, { message: 'Hello!'})
 
-      Acfs::Messaging::Client.instance.publish('my.custom_receiver', { message: 'Hello!' })
-      Acfs::Messaging::Client.instance.wait
+          Acfs::Messaging::Client.instance.publish('my.custom_receiver', { message: 'Hello!' })
+          sleep 1 # Nothing better?
+        end
+      end
+
+      context 'with partial routing key match' do
+        it 'should receive messages' do
+          rcv_class.instance.should_receive(:receive).with(anything, anything, { message: 'Hello!'})
+
+          Acfs::Messaging::Client.instance.publish('my.different', { message: 'Hello!' })
+          sleep 1 # Nothing better?
+        end
+      end
+    end
+
+    context 'with not routed message' do
+      it 'should not receive messages' do
+        rcv_class.instance.should_not_receive(:receive)
+
+        Acfs::Messaging::Client.instance.publish('abc.cde', { message: 'Hello!' })
+        sleep 1 # Nothing better?
+      end
     end
   end
 end
