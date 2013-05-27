@@ -61,6 +61,7 @@ module Acfs
     def clear
       queue.clear
       adapter.abort
+      @running = false
     end
 
     private
