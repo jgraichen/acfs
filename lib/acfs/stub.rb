@@ -60,7 +60,7 @@ module Acfs
         stub = stub_for op
         unless stub
           return false if allow_requests?
-          raise RealRequestsNotAllowedError, "No stub found for `#{op.resource.name}` with params `#{op.params}`"
+          raise RealRequestsNotAllowedError, "No stub found for `#{op.resource.name}` with params `#{op.params}` and id `#{op.id}`."
         end
 
         if (data = stub[:return])
