@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.18.0
+
+* Basic DELETE operations
+
 ## 0.17.0
 
 * Basic messaging
