@@ -3,28 +3,31 @@ require 'spec_helper'
 describe Acfs::Model::Persistence do
   let(:model_class) { MyUser }
   before do
-    @get_stub = stub_request(:get, "http://users.example.org/users/1").to_return response({ id: 1, name: "Anon", age: 12 })
+    @get_stub = stub_request(:get, 'http://users.example.org/users/1').to_return response({ id: 1, name: "Anon", age: 12 })
 
     @patch_stub = stub_request(:put, 'http://users.example.org/users/1')
-        .with(
-          body: '{"id":1,"name":"Idefix","age":12}')
-        .to_return response({ id: 1, name: 'Idefix', age: 12 })
+      .with(body: '{"id":1,"name":"Idefix","age":12}')
+      .to_return response({ id: 1, name: 'Idefix', age: 12 })
 
     @post_stub = stub_request(:post, 'http://users.example.org/users')
-    .with(body: '{"id":null,"name":"Idefix","age":12}')
-    .to_return response({ id: 5, name: 'Idefix', age: 12 })
+      .with(body: '{"id":null,"name":"Idefix","age":12}')
+      .to_return response({ id: 5, name: 'Idefix', age: 12 })
 
     stub_request(:post, 'http://users.example.org/users')
-    .with(body: '{"id":null,"name":"Anon","age":null}')
-    .to_return response({ id: 5, name: 'Anon', age: 12 })
+      .with(body: '{"id":null,"name":"Anon","age":null}')
+      .to_return response({ id: 5, name: 'Anon', age: 12 })
 
     stub_request(:post, 'http://users.example.org/users')
-    .with(body: '{"name":"Idefix","age":12}')
-    .to_return response({ id: 5, name: 'Idefix', age: 12 })
+      .with(body: '{"name":"Idefix","age":12}')
+      .to_return response({ id: 5, name: 'Idefix', age: 12 })
 
     stub_request(:post, 'http://users.example.org/users')
-    .with(body: '{"age":12}')
-    .to_return response({ errors: { name: [ 'required' ] }}, status: 422)
+      .with(body: '{"age":12}')
+      .to_return response({ errors: { name: [ 'required' ] }}, status: 422)
+
+    @del = stub_request(:delete, 'http://users.example.org/users/1')
+      .with(body: '{}')
+      .to_return response({ id: 1, name: 'Idefix', age: 12 }, status: 200)
   end
 
   context 'new model' do
@@ -79,10 +82,25 @@ describe Acfs::Model::Persistence do
 
     context 'with changes' do
       let(:model) { model_class.find 1 }
-      before { model; Acfs.run; model.name = "dhh" }
+      before { model; Acfs.run; model.name = 'dhh' }
 
       it { expect(model).to_not be_persisted }
       it { expect(model).to_not be_new }
+    end
+
+    describe '#delete!' do
+      let(:model) { model_class.find 1 }
+      before { model; Acfs.run }
+
+      it 'should trigger DELETE request' do
+        model.delete!
+        expect(@del).to have_been_requested
+      end
+
+      it 'should be frozen after DELETE' do
+        model.delete!
+        expect(model).to be_frozen
+      end
     end
   end
 

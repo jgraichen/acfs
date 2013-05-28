@@ -26,7 +26,7 @@ module Acfs
       #   user2.save
       #   user2.persisted? # => true
       #
-      # @return [ Boolean ] True if resource has no changes and is not newly created, false otherwise.
+      # @return [TrueClass, FalseClass] True if resource has no changes and is not newly created, false otherwise.
       #
       def persisted?
         !new? && !changed?
@@ -36,7 +36,7 @@ module Acfs
       #
       # Return true if model is a new record and was not saved yet.
       #
-      # @return [ Boolean ] True if resource is newly created, false otherwise.
+      # @return [TrueClass, FalseClass] True if resource is newly created, false otherwise.
       #
       def new?
         read_attribute(:id).nil?
@@ -52,7 +52,7 @@ module Acfs
       #
       # Saving a resource is a synchronous operation.
       #
-      # @return [ Boolean ] True if save operation was successful, false otherwise.
+      # @return [TrueClass, FalseClass] True if save operation was successful, false otherwise.
       # @see #save! See #save! for available options.
       #
       def save(*args)
@@ -68,12 +68,12 @@ module Acfs
       #
       # Saving a resource is a synchronous operation.
       #
-      # @param [ Hash ] opts Hash with additional options.
-      # @option opts [ Hash ] :data Data to send to remote service. Default will be resource attributes.
+      # @param [Hash] opts Hash with additional options.
+      # @option opts [Hash] :data Data to send to remote service. Default will be resource attributes.
       #
-      # @raise [ Acfs::InvalidResource ]
+      # @raise [Acfs::InvalidResource]
       #   If remote services respond with 422 response. Will fill errors with data from response
-      # @raise [ Acfs::ErroneousResponse ]
+      # @raise [Acfs::ErroneousResponse]
       #   If remote service respond with not successful response.
       #
       # @see #save
@@ -88,6 +88,44 @@ module Acfs
         end
       end
 
+      # @api public
+      #
+      # Destroy resource by sending a DELETE request.
+      #
+      # Deleting a resource is a synchronous operation.
+      #
+      # @return [TrueClass, FalseClass]
+      # @see #delete!
+      #
+      def delete(opts = {})
+        delete! opts
+        true
+      rescue Acfs::Error
+        false
+      end
+
+      # @api public
+      #
+      # Destroy resource by sending a DELETE request.
+      # Will raise an error in case something goes wrong.
+      #
+      # Deleting a resource is a synchronous operation.
+
+      # @raise [Acfs::ErroneousResponse]
+      #   If remote service respond with not successful response.
+      # @return [undefined]
+      # @see #delete
+      #
+      def delete!(opts = {})
+        opts[:params] ||= {}
+        opts[:params].merge! id: id
+
+        operation :delete, opts do |data|
+          update_with data
+          freeze
+        end
+      end
+
       module ClassMethods
 
         # @api public
@@ -97,12 +135,12 @@ module Acfs
         #
         # Saving a resource is a synchronous operation.
         #
-        # @param [ Hash{ Symbol, String => Object }] data Data to send in create request.
-        # @return [ self ] Newly resource object.
+        # @param [Hash{Symbol, String => Object}] data Data to send in create request.
+        # @return [self] Newly resource object.
         #
-        # @raise [ Acfs::InvalidResource ]
+        # @raise [Acfs::InvalidResource]
         #   If remote services respond with 422 response. Will fill errors with data from response
-        # @raise [ Acfs::ErroneousResponse ]
+        # @raise [Acfs::ErroneousResponse]
         #   If remote service respond with not successful response.
         #
         # @see Acfs::Model::Persistence#save! Available options. `:data` will be overridden with provided data hash.
@@ -122,10 +160,10 @@ module Acfs
         #
         # Saving a resource is a synchronous operation.
         #
-        # @param [ Hash{ Symbol, String => Object }] data Data to send in create request.
-        # @return [ self ] Newly resource object.
+        # @param [Hash{Symbol, String => Object}] data Data to send in create request.
+        # @return [self] Newly resource object.
         #
-        # @raise [ Acfs::ErroneousResponse ]
+        # @raise [Acfs::ErroneousResponse]
         #   If remote service respond with not successful response.
         #
         # @see Acfs::Model::Persistence#save! Available options. `:data` will be overridden with provided data hash.
