@@ -17,11 +17,11 @@ module Acfs::Messaging
     end
 
     def exchange
-      @exchange ||= @channel.topic 'acfs-0.17.0-2', auto_delete: true
+      @exchange ||= channel.topic 'acfs-0.17.0-2', auto_delete: true
     end
 
     def publish(routing_key, message)
-      exchange.publish MessagePack.pack(message), routing_key: routing_key.to_s
+      exchange.publish ::MessagePack.pack(message), routing_key: routing_key.to_s
     end
 
     class << self
