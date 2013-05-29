@@ -21,7 +21,7 @@ module Acfs::Messaging
     end
 
     def publish(routing_key, message)
-      exchange.publish MessagePack.pack(message), routing_key: routing_key
+      exchange.publish MessagePack.pack(message), routing_key: routing_key.to_s
     end
 
     class << self
