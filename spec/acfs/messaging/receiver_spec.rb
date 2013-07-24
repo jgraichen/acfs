@@ -26,8 +26,6 @@ describe Acfs::Messaging::Receiver do
     context 'with routed message' do
       context 'with exact routing key match' do
         it 'should receive messages' do
-          pending 'Not reliable.'
-
           rcv_class.instance.should_receive(:receive).with(anything, anything, { message: 'Hello!'})
 
           Acfs::Messaging::Client.instance.publish('my.custom_receiver', { message: 'Hello!' })
@@ -37,8 +35,6 @@ describe Acfs::Messaging::Receiver do
 
       context 'with partial routing key match' do
         it 'should receive messages' do
-          pending 'Not reliable.'
-
           rcv_class.instance.should_receive(:receive).with(anything, anything, { message: 'Hello!'})
 
           Acfs::Messaging::Client.instance.publish('my.different', { message: 'Hello!' })
@@ -49,8 +45,6 @@ describe Acfs::Messaging::Receiver do
 
     context 'with not routed message' do
       it 'should not receive messages' do
-        pending 'Not reliable.'
-
         rcv_class.instance.should_not_receive(:receive)
 
         Acfs::Messaging::Client.instance.publish('abc.cde', { message: 'Hello!' })
