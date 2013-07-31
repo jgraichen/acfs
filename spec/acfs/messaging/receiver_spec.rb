@@ -29,7 +29,7 @@ describe Acfs::Messaging::Receiver do
           rcv_class.instance.should_receive(:receive).with(anything, anything, { message: 'Hello!'})
 
           Acfs::Messaging::Client.instance.publish('my.custom_receiver', { message: 'Hello!' })
-          sleep 3 # Nothing better?
+          sleep 5 # Nothing better?
         end
       end
 
@@ -38,7 +38,7 @@ describe Acfs::Messaging::Receiver do
           rcv_class.instance.should_receive(:receive).with(anything, anything, { message: 'Hello!'})
 
           Acfs::Messaging::Client.instance.publish('my.different', { message: 'Hello!' })
-          sleep 3 # Nothing better?
+          sleep 5 # Nothing better?
         end
       end
     end
@@ -48,7 +48,7 @@ describe Acfs::Messaging::Receiver do
         rcv_class.instance.should_not_receive(:receive)
 
         Acfs::Messaging::Client.instance.publish('abc.cde', { message: 'Hello!' })
-        sleep 3 # Nothing better?
+        sleep 5 # Nothing better?
       end
     end
   end
