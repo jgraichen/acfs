@@ -78,7 +78,7 @@ module Acfs
       def raise_error(op, name, data)
         raise name if name.is_a? Class
 
-        op.handle_failure ::Acfs::Response.new nil, status: Rack::Utils.status_code(name), data: data
+        op.handle_failure ::Acfs::Response.new op.request, status: Rack::Utils.status_code(name), data: data
       end
     end
   end
