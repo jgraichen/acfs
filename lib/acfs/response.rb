@@ -20,9 +20,9 @@ module Acfs
 
     def initialize(request, data = {})
       @request  = request
-      @status   = data[:status]
-      @headers  = data[:headers]
-      @body     = data[:body]
+      @status   = data[:status]  || 0
+      @headers  = data[:headers] || {}
+      @body     = data[:body]    || ''
     end
   end
 end
