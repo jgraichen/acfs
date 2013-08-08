@@ -67,6 +67,36 @@ describe Acfs::Stub do
         }.to raise_error(::Acfs::InvalidResource)
       end
     end
+
+    context 'with update action' do
+      before do
+        Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
+        Acfs::Stub.resource MyUser, :update, with: { id: 1, name: 'John Smith', age: 22 }, return: { id: 1, name: 'John Smith', age: 23 }
+        Acfs::Stub.resource MyUser, :update, with: { id: 1, name: 'John Smith', age: 0 }, raise: 422
+      end
+
+      it 'should allow stub resource update' do
+        user = MyUser.find 1
+        Acfs.run
+
+        user.age = 22
+        user.save!
+
+        expect(user.age).to be == 23
+      end
+
+      it 'should allow to raise error' do
+        user = MyUser.find 1
+        Acfs.run
+
+        user.age = 0
+        user.save
+
+        expect {
+          user.save!
+        }.to raise_error(::Acfs::InvalidResource)
+      end
+    end
   end
 
   describe '.allow_requests=' do
