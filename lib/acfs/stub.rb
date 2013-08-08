@@ -16,6 +16,8 @@ module Acfs
         action = action.to_sym
         raise ArgumentError, "Unknown action `#{action}`." unless ACTIONS.include? action
 
+        opts[:with].stringify_keys! if opts[:with].respond_to? :stringify_keys!
+
         stubs[klass] ||= {}
         stubs[klass][action] ||= []
         stubs[klass][action] << opts
@@ -50,17 +52,23 @@ module Acfs
         return false unless (classes = stubs[op.resource])
         return false unless (actions = classes[op.action])
 
-        params = op.params
-        params.merge! id: op.id unless op.id.nil?
-        actions.select! { |stub| stub[:with] == params || stub[:with] == op.data }
-        actions.first
+        params = op.full_params.stringify_keys
+        data   = op.data.stringify_keys
+
+        actions.select do |stub|
+          if stub[:with].respond_to? :call
+            stub[:with].call op
+          else
+            stub[:with] == params || data == stub[:with]
+          end
+        end.first
       end
 
       def stubbed(op)
         stub = stub_for op
         unless stub
           return false if allow_requests?
-          raise RealRequestsNotAllowedError, "No stub found for `#{op.resource.name}` with params `#{op.params.inspect}`, data `#{op.data.inspect}` and id `#{op.id}`."
+          raise RealRequestsNotAllowedError, "No stub found for #{op.action} on #{op.resource.name} with params #{op.full_params.inspect}, data #{op.data.inspect} and id #{op.id}."
         end
 
         if (data = stub[:return])

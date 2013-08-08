@@ -31,6 +31,10 @@ module Acfs
       @id ||= params.delete(:id) || data[:id]
     end
 
+    def full_params
+      id ? params.merge(id: id) : params
+    end
+
     def url
       single? ? resource.url(id) : resource.url
     end
