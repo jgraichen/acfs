@@ -148,9 +148,10 @@ You can stub resources in applications using an Acfs service client:
 Acfs::Stub.enable
 
 before do
-  Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
+  @stub = Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
   Acfs::Stub.resource MyUser, :read, with: { id: 2 }, raise: :not_found
   Acfs::Stub.resource Session, :create, with: { ident: 'john@exmaple.org', password: 's3cr3t' }, return: { id: 'longhash', user: 1 }
+  Acfs::Stub.resource MyUser, :update, with: lambda { |op| op.data.include? :my_var }, raise: 400
 end
 
 it 'should find user number one' do
@@ -160,6 +161,9 @@ it 'should find user number one' do
   expect(user.id).to be == 1
   expect(user.name).to be == 'John Smith'
   expect(user.age).to be == 32
+
+  expect(@stub).to has_called
+  expect(@stub).to_not have_called 5.times
 end
 
 it 'should not find user number two' do

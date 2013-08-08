@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.19.0
+
+* Add support for DateTime and Float attribute types
+* Add experimental list attribute type
+* Allow block usage in stub `with` option
+* Allow to test if operation stubs were called and how often
+* Fix bug on operation stubs
+
 ## 0.18.0
 
 * Basic DELETE operations
