@@ -35,6 +35,18 @@ module Acfs
     end
   end
 
+  class AmbiguousStubError < Error
+    attr_reader :stubs, :operation
+
+    def initialize(stubs, operation)
+      @stubs     = stubs
+      @operation = operation
+
+      super 'Ambiguous stubs.'
+    end
+
+  end
+
   # Resource not found error raised on a 404 response
   #
   class ResourceNotFound < ErroneousResponse

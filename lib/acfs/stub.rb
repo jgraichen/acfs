@@ -98,7 +98,7 @@ module Acfs
 
         accepted_stubs = stubs.select { |stub| stub.accept? op }
 
-        raise AmbiguousStubError.new accepted_stubs if accepted_stubs.size > 1
+        raise AmbiguousStubError.new accepted_stubs, op if accepted_stubs.size > 1
 
         accepted_stubs.first
       end

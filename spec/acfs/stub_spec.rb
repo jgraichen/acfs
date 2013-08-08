@@ -40,6 +40,19 @@ describe Acfs::Stub do
   end
 
   describe '.resource' do
+    context 'with ambiguous stubs' do
+      before do
+        Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
+        Acfs::Stub.resource MyUser, :read, with: { id: 1 }, raise: :not_found
+      end
+
+      it 'should raise error' do
+        MyUser.find 1
+
+        expect { Acfs.run }.to raise_error(Acfs::AmbiguousStubError)
+      end
+    end
+
     context 'with read action' do
       before do
         Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
