@@ -16,6 +16,29 @@ describe Acfs::Stub do
     #Acfs::Stub.create(MyUser).with(name: '', age: 12).and_return(:invalid, errors: { name: [ 'must be present ']})
   end
 
+  describe '#called?' do
+    context 'without specified number' do
+      let!(:operation) { Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 } }
+
+      it 'should allow to test if stub was called' do
+        MyUser.find 1
+        Acfs.run
+
+        expect(operation).to be_called
+      end
+
+      it 'should allow to test if stub was called a specific number of times' do
+        MyUser.find 1
+        Acfs.run
+
+        MyUser.find 1
+        Acfs.run
+
+        expect(operation).to be_called 2.times
+      end
+    end
+  end
+
   describe '.resource' do
     context 'with read action' do
       before do
