@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.20.0
+
+* Remove messaging
+* Introduce `Acfs::Resource`
+
 ## 0.19.0
 
 * Add support for DateTime and Float attribute types

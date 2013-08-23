@@ -40,12 +40,3 @@ class Comment
   attribute :id, :integer
   attribute :text, :string
 end
-
-class UserMessageReceiver
-  include Acfs::Messaging::Receiver
-  route 'my.#'
-
-  def receive(delivery_info, metadata, payload)
-    puts "UserMessageReceiver received : #{payload.inspect}"
-  end
-end

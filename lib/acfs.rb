@@ -8,8 +8,6 @@ require 'acfs/version'
 require 'acfs/errors'
 require 'acfs/global'
 
-require 'acfs/messaging'
-
 module Acfs
   extend ActiveSupport::Autoload
   extend Global
