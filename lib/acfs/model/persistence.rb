@@ -79,8 +79,6 @@ module Acfs
       # @see #save
       #
       def save!(opts = {})
-        #raise ::Acfs::InvalidResource errors: errors.to_a unless valid?
-
         opts[:data] = attributes unless opts[:data]
 
         operation (new? ? :create : :update), opts do |data|

@@ -8,30 +8,32 @@ module Acfs
   # Response error containing the responsible response object.
   #
   class ErroneousResponse < Error
-    attr_accessor :response
+    attr_reader :response
 
     def initialize(data = {})
-      self.response = data[:response]
-      message = ''
-      message << "Received erroneous response: #{response.code}"
-      if response.data
-        message << "\n  with content:\n    "
-        message << response.data.map{|k,v| "#{k.inspect}: #{v.inspect}"}.join("\n    ")
+      @response = data[:response]
+      if response
+        message = ''
+        message << "Received erroneous response: #{response.code}"
+        if response.data
+          message << "\n  with content:\n    "
+          message << response.data.map{|k,v| "#{k.inspect}: #{v.inspect}"}.join("\n    ")
+        end
+        if response.headers.any?
+          message << "\n  with headers:\n    "
+          message << response.headers.map{|k,v| "#{k}: #{v}"}.join("\n    ")
+        end
+        message << "\nbased on request: #{response.request.method.upcase} #{response.request.url} #{response.request.format}"
+        if response.request.data
+          message << "\n  with content:\n    "
+          message << response.request.data.map{|k,v| "#{k.inspect}: #{v.inspect}"}.join("\n    ")
+        end
+        if response.request.headers.any?
+          message << "\n  with headers:\n    "
+          message << response.request.headers.map{|k,v| "#{k}: #{v}"}.join("\n    ")
+        end
+        super message
       end
-      if response.headers.any?
-        message << "\n  with headers:\n    "
-        message << response.headers.map{|k,v| "#{k}: #{v}"}.join("\n    ")
-      end
-      message << "\nbased on request: #{response.request.method.upcase} #{response.request.url} #{response.request.format}"
-      if response.request.data
-        message << "\n  with content:\n    "
-        message << response.request.data.map{|k,v| "#{k.inspect}: #{v.inspect}"}.join("\n    ")
-      end
-      if response.request.headers.any?
-        message << "\n  with headers:\n    "
-        message << response.request.headers.map{|k,v| "#{k}: #{v}"}.join("\n    ")
-      end
-      super message
     end
   end
 
@@ -53,10 +55,11 @@ module Acfs
   end
 
   class InvalidResource < ErroneousResponse
-    attr_accessor :errors
+    attr_reader :errors, :resource
 
     def initialize(data)
-      self.errors = data[:errors]
+      @errors   = data.delete :errors
+      @resource = data.delete :resource
       super
     end
   end

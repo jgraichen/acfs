@@ -16,8 +16,7 @@ class CommentService < Acfs::Service
   use Acfs::Middleware::JsonDecoder
 end
 
-class MyUser
-  include Acfs::Model
+class MyUser < Acfs::Resource
   service UserService, path: 'users'
 
   attribute :id, :integer
@@ -25,16 +24,23 @@ class MyUser
   attribute :age, :integer
 end
 
-class Session
-  include Acfs::Model
+class MyUserInherited < MyUser
+
+end
+
+class MyUserWithValidations < MyUser
+  validates_presence_of :name, :age
+  validates_format_of :name, with: /\A\w+\s+\w+.?\z/
+end
+
+class Session < Acfs::Resource
   service UserService
 
   attribute :id, :string
   attribute :user, :integer
 end
 
-class Comment
-  include Acfs::Model
+class Comment < Acfs::Resource
   service CommentService
 
   attribute :id, :integer
