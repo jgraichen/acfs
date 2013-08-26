@@ -1,5 +1,10 @@
 # Changelog
 
+## master
+
+* Add validation check to `save` method
+* Inherit attributes to subclasses
+
 ## 0.20.0
 
 * Remove messaging
