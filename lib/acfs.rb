@@ -4,35 +4,30 @@ require 'active_support/core_ext/class'
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/module'
 
-require 'acfs/version'
-require 'acfs/errors'
-require 'acfs/global'
-
 module Acfs
   extend ActiveSupport::Autoload
+  require 'acfs/version'
+  require 'acfs/errors'
+  require 'acfs/global'
+
+  require 'acfs/collection'
+  require 'acfs/configuration'
+  require 'acfs/model'
+  require 'acfs/operation'
+  require 'acfs/request'
+  require 'acfs/resource'
+  require 'acfs/response'
+  require 'acfs/runner'
+  require 'acfs/service'
+
   extend Global
 
-  autoload :Collection
-  autoload :Model
-  autoload :Request
-  autoload :Response
-  autoload :Service
   autoload :Stub
-  autoload :Operation
-  autoload :Runner
-  autoload :Configuration
-
-  module Messaging
-    extend ActiveSupport::Autoload
-
-    autoload :Client
-    autoload :Receiver
-  end
 
   module Middleware
     extend ActiveSupport::Autoload
+    require 'acfs/middleware/base'
 
-    autoload :Base
     autoload :Print
     autoload :Logger
     autoload :JsonDecoder
@@ -42,10 +37,8 @@ module Acfs
   end
 
   module Adapter
-    extend ActiveSupport::Autoload
-
-    autoload :Base
-    autoload :Typhoeus
+    require 'acfs/adapter/base'
+    require 'acfs/adapter/typhoeus'
   end
 end
 
