@@ -187,7 +187,7 @@ module Acfs::Model
       # @return [ Hash{ String => Object, Proc } ] Attributes with default values.
       #
       def attributes
-        @attributes ||= {}
+        @attributes ||= {}.merge superclass.respond_to?(:attributes) ? superclass.attributes : {}
       end
 
       # @api public
@@ -205,7 +205,7 @@ module Acfs::Model
       # @return [ Hash{ Symbol => Class } ] Attributes and their types.
       #
       def attribute_types
-        @attribute_types ||= {}
+        @attribute_types ||= {}.merge superclass.respond_to?(:attribute_types) ? superclass.attribute_types : {}
       end
 
       private
