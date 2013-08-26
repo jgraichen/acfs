@@ -109,7 +109,7 @@ describe Acfs::Model::Attributes do
 
     it 'should cast values' do
       o = model.new
-      o.age = "28"
+      o.age = '28'
 
       expect(o.age).to be == 28
     end
