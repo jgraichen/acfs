@@ -46,3 +46,10 @@ class Comment < Acfs::Resource
   attribute :id, :integer
   attribute :text, :string
 end
+
+# DRAFT: Singular resource
+#class Singular < Acfs::Resource
+#  service UserService, singular: true
+#
+#  attribute :name, :string
+#end
