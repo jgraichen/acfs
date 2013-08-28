@@ -26,7 +26,7 @@ module Acfs
       #   user2.save
       #   user2.persisted? # => true
       #
-      # @return [TrueClass, FalseClass] True if resource has no changes and is not newly created, false otherwise.
+      # @return [Boolean] True if resource has no changes and is not newly created, false otherwise.
       #
       def persisted?
         !new? && !changed?
@@ -36,7 +36,7 @@ module Acfs
       #
       # Return true if model is a new record and was not saved yet.
       #
-      # @return [TrueClass, FalseClass] True if resource is newly created, false otherwise.
+      # @return [Boolean] True if resource is newly created, false otherwise.
       #
       def new?
         read_attribute(:id).nil?
@@ -52,7 +52,7 @@ module Acfs
       #
       # Saving a resource is a synchronous operation.
       #
-      # @return [TrueClass, FalseClass] True if save operation was successful, false otherwise.
+      # @return [Boolean] True if save operation was successful, false otherwise.
       # @see #save! See #save! for available options.
       #
       def save(*args)
@@ -88,11 +88,58 @@ module Acfs
 
       # @api public
       #
+      # Update attributes with given data and save resource.
+      #
+      # Saving a resource is a synchronous operation.
+      #
+      # @param [Hash] attrs Hash with attributes to write.
+      # @param [Hash] opts Options passed to `save`.
+      #
+      # @return [Boolean] True if save operation was successful, false otherwise.
+      #
+      # @see #save
+      # @see #attributes=
+      # @see #update_attributes!
+      #
+      def update_attributes(attrs, opts = {})
+        check_loaded! opts
+
+        self.attributes = attrs
+        save opts
+      end
+
+      # @api public
+      #
+      # Update attributes with given data and save resource.
+      #
+      # Saving a resource is a synchronous operation.
+      #
+      # @param [Hash] attrs Hash with attributes to write.
+      # @param [Hash] opts Options passed to `save!`.
+      #
+      # @raise [Acfs::InvalidResource]
+      #   If remote services respond with 422 response. Will fill errors with data from response
+      # @raise [Acfs::ErroneousResponse]
+      #   If remote service respond with not successful response.
+      #
+      # @see #save!
+      # @see #attributes=
+      # @see #update_attributes
+      #
+      def update_attributes!(attrs, opts = {})
+        check_loaded! opts
+
+        self.attributes = attrs
+        save! opts
+      end
+
+      # @api public
+      #
       # Destroy resource by sending a DELETE request.
       #
       # Deleting a resource is a synchronous operation.
       #
-      # @return [TrueClass, FalseClass]
+      # @return [Boolean]
       # @see #delete!
       #
       def delete(opts = {})
@@ -183,6 +230,10 @@ module Acfs
       def update_with(data)
         self.attributes = data
         loaded!
+      end
+
+      def check_loaded!(opts = {})
+        raise ResourceNotLoaded, resource: self unless loaded? or opts[:force]
       end
     end
   end

@@ -2,6 +2,7 @@
 
 ## master
 
+* Add update_attributes
 * Add validation check to `save` method
 * Inherit attributes to subclasses
 

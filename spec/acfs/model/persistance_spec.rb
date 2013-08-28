@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Acfs::Model::Persistence do
   let(:model_class) { MyUser }
   before do
-    @get_stub = stub_request(:get, 'http://users.example.org/users/1').to_return response({ id: 1, name: "Anon", age: 12 })
+    @get_stub = stub_request(:get, 'http://users.example.org/users/1').to_return response({ id: 1, name: 'Anon', age: 12 })
 
     @patch_stub = stub_request(:put, 'http://users.example.org/users/1')
       .with(body: '{"id":1,"name":"Idefix","age":12}')
@@ -71,6 +71,20 @@ describe Acfs::Model::Persistence do
     end
   end
 
+  context 'unloaded model' do
+    let!(:model) { model_class.find 1 }
+
+    describe '#update_attributes' do
+      subject { -> { model.update_attributes name: 'John' } }
+      it { expect{ subject.call }.to raise_error Acfs::ResourceNotLoaded }
+    end
+
+    describe '#update_attributes!' do
+      subject { -> { model.update_attributes! name: 'John' } }
+      it { expect{ subject.call }.to raise_error Acfs::ResourceNotLoaded }
+    end
+  end
+
   context 'loaded model' do
     context 'without changes' do
       let(:model) { model_class.find 1 }
@@ -102,6 +116,46 @@ describe Acfs::Model::Persistence do
         expect(model).to be_frozen
       end
     end
+
+    describe '#update_atributes!' do
+      let(:model) { model_class.find 1 }
+      before { model; Acfs.run }
+
+      it 'should set attributes' do
+        model.update_attributes name: 'Idefix'
+        expect(model.attributes.symbolize_keys).to eq id: 1, name: 'Idefix', age: 12
+      end
+
+      it 'should save resource' do
+        expect(model).to receive(:save).with({})
+        model.update_attributes name: 'Idefix'
+      end
+
+      it 'should pass second hash to save' do
+        expect(model).to receive(:save).with({ bla: 'blub' })
+        model.update_attributes({ name: 'Idefix' }, { bla: 'blub' })
+      end
+    end
+
+    describe '#update_atributes' do
+      let(:model) { model_class.find 1 }
+      before { model; Acfs.run }
+
+      it 'should set attributes' do
+        model.update_attributes! name: 'Idefix'
+        expect(model.attributes.symbolize_keys).to eq id: 1, name: 'Idefix', age: 12
+      end
+
+      it 'should save resource' do
+        expect(model).to receive(:save!).with({})
+        model.update_attributes! name: 'Idefix'
+      end
+
+      it 'should pass second hash to save' do
+        expect(model).to receive(:save!).with({ bla: 'blub' })
+        model.update_attributes!({ name: 'Idefix' }, { bla: 'blub' })
+      end
+    end
   end
 
   describe '.create!' do
@@ -125,7 +179,7 @@ describe Acfs::Model::Persistence do
 
       it 'should raise an error' do
         expect { model_class.create! data }.to raise_error ::Acfs::InvalidResource do |error|
-          expect(error.errors).to be == { name: ['required'] }.stringify_keys
+          expect(error.errors).to be == { name: %w(required) }.stringify_keys
         end
       end
     end
@@ -157,7 +211,7 @@ describe Acfs::Model::Persistence do
 
       it 'should contain error hash' do
         model = model_class.create data
-        expect(model.errors.to_hash).to be == { name: [ "required" ]}.stringify_keys
+        expect(model.errors.to_hash).to be == { name: %w(required) }.stringify_keys
       end
     end
   end

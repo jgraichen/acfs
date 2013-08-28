@@ -3,6 +3,10 @@ module Acfs
   # Acfs base error.
   #
   class Error < StandardError
+    def initialize(opts = {}, message = nil)
+      opts.merge! message: message if message
+      super opts[:message]
+    end
   end
 
   # Response error containing the responsible response object.
@@ -10,11 +14,11 @@ module Acfs
   class ErroneousResponse < Error
     attr_reader :response
 
-    def initialize(data = {})
-      @response = data[:response]
+    def initialize(opts = {})
+      @response = opts[:response]
+      message = 'Received erroneous response'
       if response
-        message = ''
-        message << "Received erroneous response: #{response.code}"
+        message << ": #{response.code}"
         if response.data
           message << "\n  with content:\n    "
           message << response.data.map{|k,v| "#{k.inspect}: #{v.inspect}"}.join("\n    ")
@@ -32,19 +36,19 @@ module Acfs
           message << "\n  with headers:\n    "
           message << response.request.headers.map{|k,v| "#{k}: #{v}"}.join("\n    ")
         end
-        super message
       end
+      super opts, message
     end
   end
 
   class AmbiguousStubError < Error
     attr_reader :stubs, :operation
 
-    def initialize(stubs, operation)
-      @stubs     = stubs
-      @operation = operation
+    def initialize(opts = {})
+      @stubs     = opts.delete :stubs
+      @operation = opts.delete :operation
 
-      super 'Ambiguous stubs.'
+      super opts, 'Ambiguous stubs.'
     end
 
   end
@@ -57,9 +61,25 @@ module Acfs
   class InvalidResource < ErroneousResponse
     attr_reader :errors, :resource
 
-    def initialize(data)
-      @errors   = data.delete :errors
-      @resource = data.delete :resource
+    def initialize(opts = {})
+      @errors   = opts.delete :errors
+      @resource = opts.delete :resource
+      super
+    end
+  end
+
+  # A ResourceNotLoaded error will be thrown when calling some
+  # modifing methods on not loaded resources as it is usally
+  # unwanted to call e.g. `update_attributes` on a not loaded
+  # resource.
+  # Correct solution is to first run `Acfs.run` to fetch the
+  # resource and then update the resource.
+  #
+  class ResourceNotLoaded < Error
+    attr_reader :resource
+
+    def initialize(opts = {})
+      @resource = opts.delete :resource
       super
     end
   end
