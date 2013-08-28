@@ -15,7 +15,7 @@ Acfs covers model and service abstraction, convenient query and filter methods, 
 
 Add this line to your application's Gemfile:
 
-    gem 'acfs', '~> 0.16.0'
+    gem 'acfs', '~> 0.21.0'
 
 **Note:** Acfs is under development. I'll try to avoid changes to the public API but internal APIs may change quite often.
 
@@ -212,10 +212,6 @@ Removed in 0.20.0. See [jgraichen/msgr](https://github.com/jgraichen/msgr) for a
         * Rails responders providing REST operations with integrated ETag,
           Modified Headers, conflict detection, ...
     * Pagination? Filtering? (If service API provides such features.)
-    * Messaging Queue support for services and models
-        * Allow triggering messages on resource events (CRUD)
-        * Abstract messages into objects
-        * Middleware stack for messages?
 * Documentation
 
 ## Contributing
