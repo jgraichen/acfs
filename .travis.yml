@@ -20,4 +20,3 @@ deploy:
     branch: master
     repo: jgraichen/acfs
     rvm: 2.0.0
-    gemfiles: gemfiles/Gemfile.rails-4-0
