@@ -1,6 +1,6 @@
 # Changelog
 
-## master
+## 0.21.0.dev
 
 * Add update_attributes
 * Add validation check to `save` method
