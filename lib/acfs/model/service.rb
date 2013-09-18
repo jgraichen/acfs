@@ -33,8 +33,8 @@ module Acfs::Model
       #   @param [ Object ] options Option delegated to service class initializer.
       #
       def service(klass = nil, options = {})
-        return @service unless klass
-        @service = klass.new options
+        return (@service = klass.new options) if klass
+        @service || superclass.service
       end
     end
   end
