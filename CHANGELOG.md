@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.21.1
+
+* Fix wrong validation context
+
 ## 0.21.0
 
 * Add update_attributes

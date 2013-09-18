@@ -1,9 +1,9 @@
 module Acfs
   module VERSION
     MAJOR = 0
-    MINOR = 21
+    MINOR = 22
     PATCH = 0
-    STAGE = nil
+    STAGE = 'rc1'
 
     STRING = [MAJOR, MINOR, PATCH, STAGE].reject(&:nil?).join('.')
 
