@@ -16,7 +16,7 @@ module Acfs
 
     def initialize(opts = {})
       @response = opts[:response]
-      message = 'Received erroneous response'
+      message = opts[:message] || 'Received erroneous response'
       if response
         message << ": #{response.code}"
         if response.data
@@ -64,6 +64,8 @@ module Acfs
     def initialize(opts = {})
       @errors   = opts.delete :errors
       @resource = opts.delete :resource
+      opts[:message] ||= @errors.map{ |k,v| "#{k}: #{v.join ', '}" }.join ', ' if @errors.is_a? Hash
+      opts[:message] ||= @errors.join ', ' if @errors.is_a? Array
       super
     end
   end
