@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.22.0
+
+* Fill local resource errors hash also on 422 responses when saving resources
+
 ## 0.21.1
 
 * Fix wrong validation context
