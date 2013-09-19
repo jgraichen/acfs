@@ -86,7 +86,7 @@ module Acfs
         end
       rescue InvalidResource => err
         (err.errors || []).each do |field, errors|
-          self.errors.set field, errors
+          self.errors.set field.to_sym, errors
         end
         raise err
       end

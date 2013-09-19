@@ -172,7 +172,18 @@ describe Acfs::Model::Persistence do
       it 'should set local errors hash' do
         model.name = ''
         model.save! rescue nil
-        expect(model.errors.to_hash).to be == { name: %w(required) }.stringify_keys
+        expect(model.errors.to_hash).to be == { name: %w(required) }
+      end
+    end
+
+    context 'hash modification on iteration in ActiveModel when errors on field is nil' do
+      let(:model) { model_class.find 1 }
+      before { model; Acfs.run }
+
+      before do
+        stub_request(:put, 'http://users.example.org/users/1')
+        .with(body: '{"id":1,"name":"","age":12}')
+        .to_return response({ errors: { name: [ 'required' ] }}, status: 422)
       end
     end
   end
@@ -198,7 +209,7 @@ describe Acfs::Model::Persistence do
 
       it 'should raise an error' do
         expect { model_class.create! data }.to raise_error ::Acfs::InvalidResource do |error|
-          expect(error.errors).to be == { name: %w(required) }.stringify_keys
+          expect(error.errors).to be == { name: %w(required) }
         end
       end
     end
@@ -230,7 +241,7 @@ describe Acfs::Model::Persistence do
 
       it 'should contain error hash' do
         model = model_class.create data
-        expect(model.errors.to_hash).to be == { name: %w(required) }.stringify_keys
+        expect(model.errors.to_hash).to be == { name: %w(required) }
       end
     end
   end
