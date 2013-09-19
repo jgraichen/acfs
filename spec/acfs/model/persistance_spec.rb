@@ -158,6 +158,25 @@ describe Acfs::Model::Persistence do
     end
   end
 
+  describe '.save!' do
+    context 'with invalid data validated on server side' do
+      let(:model) { model_class.find 1 }
+      before { model; Acfs.run }
+
+      before do
+        stub_request(:put, 'http://users.example.org/users/1')
+          .with(body: '{"id":1,"name":"","age":12}')
+          .to_return response({ errors: { name: [ 'required' ] }}, status: 422)
+      end
+
+      it 'should set local errors hash' do
+        model.name = ''
+        model.save! rescue nil
+        expect(model.errors.to_hash).to be == { name: %w(required) }.stringify_keys
+      end
+    end
+  end
+
   describe '.create!' do
     context 'with valid data' do
       let(:data) { { name: 'Idefix', age: 12 } }

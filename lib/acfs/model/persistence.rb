@@ -84,6 +84,11 @@ module Acfs
         operation (new? ? :create : :update), opts do |data|
           update_with data
         end
+      rescue InvalidResource => err
+        (err.errors || []).each do |field, errors|
+          self.errors.set field, errors
+        end
+        raise err
       end
 
       # @api public
@@ -216,12 +221,7 @@ module Acfs
         #
         def create(data, opts = {})
           model = new
-          model.save! opts.merge data: data
-          model
-        rescue InvalidResource => err
-          (err.errors || []).each do |field, errors|
-            model.errors.set field, errors
-          end
+          model.save opts.merge data: data
           model
         end
       end
