@@ -23,6 +23,7 @@ module Acfs
       @status   = data[:status]  || 0
       @headers  = data[:headers] || {}
       @body     = data[:body]    || ''
+      @data     = data[:data]    || nil
     end
   end
 end

@@ -85,9 +85,7 @@ module Acfs
           update_with data
         end
       rescue InvalidResource => err
-        (err.errors || []).each do |field, errors|
-          self.errors.set field.to_sym, errors
-        end
+        self.remote_errors = err.errors
         raise err
       end
 

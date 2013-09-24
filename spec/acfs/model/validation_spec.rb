@@ -17,6 +17,26 @@ describe Acfs::Model::Validation do
 
       it { should_not be_valid }
     end
+
+    context 'on resource with service side errors' do
+      before { Acfs::Stub.enable }
+      after  { Acfs::Stub.disable }
+
+      before do
+        Acfs::Stub.resource MyUser, :create, with: {}, return: {errors: {name: ['can\'t be blank']}}, raise: 422
+      end
+
+      let(:params)   { {} }
+      let(:resource) { MyUser.create params }
+      subject { resource }
+
+      it { should_not be_valid }
+
+      it 'should not override errors' do
+        subject.valid?
+        expect(subject.errors.to_hash).to eq({name: ['can\'t be blank']})
+      end
+    end
   end
 
   describe '#errors' do
@@ -39,6 +59,21 @@ describe Acfs::Model::Validation do
       it 'should contain a list of error messages' do
         expect(subject.to_hash).to eq age: ["can't be blank"], name: ['is invalid']
       end
+    end
+
+    context 'server side errors' do
+      before { Acfs::Stub.enable }
+      after  { Acfs::Stub.disable }
+
+      before do
+        Acfs::Stub.resource MyUser, :create, with: {}, return: {errors: {name: ['can\'t be blank']}}, raise: 422
+      end
+
+      let(:params)   { {} }
+      let(:resource) { MyUser.create params }
+      subject { resource }
+
+      its(:errors) { expect(subject.errors.to_hash).to eq({name: ['can\'t be blank']}) }
     end
   end
 
