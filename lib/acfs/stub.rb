@@ -35,10 +35,10 @@ module Acfs
     def call(op)
       calls << op
 
-      if (data = opts[:return])
-        op.callback.call data
-      elsif (err = opts[:raise])
+      if (err = opts[:raise])
         raise_error op, err, opts[:return]
+      elsif (data = opts[:return])
+        op.callback.call data
       else
         raise ArgumentError, 'Unsupported stub.'
       end
@@ -47,6 +47,7 @@ module Acfs
     private
     def raise_error(op, name, data)
       raise name if name.is_a? Class
+      data.stringify_keys! if data.respond_to? :stringify_keys!
 
       op.handle_failure ::Acfs::Response.new op.request, status: Rack::Utils.status_code(name), data: data
     end
