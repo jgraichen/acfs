@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.22.2
+
+* Preserve errors received from service on revalidation (2f1fc178)
+* Fix parameter ordering bug on stubs (1dc78dc8)
+
+## 0.22.1
+
+* Fix hash modification on iteration bug on ActiveModel::Errors due to string keys in error hash
+
 ## 0.22.0
 
 * Fill local resource errors hash also on 422 responses when saving resources
