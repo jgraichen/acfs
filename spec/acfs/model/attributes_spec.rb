@@ -115,39 +115,41 @@ describe Acfs::Model::Attributes do
     end
   end
 
-  describe '.attribute' do
-    it 'should add an attribute to model attribute list' do
-      model.send :attribute, :name, :string
+  describe 'class' do
+    describe '#attribute' do
+      it 'should add an attribute to model attribute list' do
+        model.send :attribute, :name, :string
 
-      expect(model.attributes).to be == { :name => nil }.stringify_keys
-    end
+        expect(model.attributes).to be == { :name => nil }.stringify_keys
+      end
 
-    it 'should accept a default value' do
-      model.send :attribute, :name, :string, default: 'John'
+      it 'should accept a default value' do
+        model.send :attribute, :name, :string, default: 'John'
 
-      expect(model.attributes).to be == { :name => 'John' }.stringify_keys
-    end
+        expect(model.attributes).to be == { :name => 'John' }.stringify_keys
+      end
 
-    it 'should accept an symbolic type' do
-      model.send :attribute, :age, :integer, default: '12'
+      it 'should accept an symbolic type' do
+        model.send :attribute, :age, :integer, default: '12'
 
-      expect(model.attributes).to be == { :age => 12 }.stringify_keys
-    end
+        expect(model.attributes).to be == { :age => 12 }.stringify_keys
+      end
 
-    it 'should accept an class type' do
-      model.send :attribute, :age, Acfs::Model::Attributes::Integer, default: '12'
+      it 'should accept an class type' do
+        model.send :attribute, :age, Acfs::Model::Attributes::Integer, default: '12'
 
-      expect(model.attributes).to be == { :age => 12 }.stringify_keys
-    end
+        expect(model.attributes).to be == { :age => 12 }.stringify_keys
+      end
 
-    context 'allow nil option' do
-      it 'should allow nil as value' do
-        model.send :attribute, :updated_at, Acfs::Model::Attributes::DateTime, default: DateTime.new, allow_nil: true
-        resource = model.new
-        expect(resource.updated_at).to eq DateTime.new
+      context 'allow nil option' do
+        it 'should allow nil as value' do
+          model.send :attribute, :updated_at, Acfs::Model::Attributes::DateTime, default: DateTime.new, allow_nil: true
+          resource = model.new
+          expect(resource.updated_at).to eq DateTime.new
 
-        resource.updated_at = ''
-        expect(resource.updated_at).to eq nil
+          resource.updated_at = ''
+          expect(resource.updated_at).to eq nil
+        end
       end
     end
   end

@@ -5,15 +5,24 @@ module Acfs::Model::Attributes
 
     def initialize(opts = {})
       @options = opts
+      @options.reverse_merge! allow_nil: true
     end
 
-    def allow_nil?
+    def nil_allowed?
       !!options[:allow_nil]
     end
-    alias_method :nil_allowed?, :allow_nil?
 
     def default_value
-      options[:default]
+      options[:default].is_a?(Proc) ? options[:default] : cast(options[:default])
+    end
+
+    def cast(obj)
+      return nil if obj.nil? && nil_allowed?
+      cast_type obj
+    end
+
+    def cast_type(obj)
+      raise NotImplementedError
     end
   end
 end

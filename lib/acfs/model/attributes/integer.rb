@@ -19,7 +19,7 @@ module Acfs::Model::Attributes
     # @param [Object] obj Object to cast.
     # @return [Fixnum] Casted object as fixnum.
     #
-    def cast(obj)
+    def cast_type(obj)
       obj.to_i
     end
   end

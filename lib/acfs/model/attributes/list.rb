@@ -20,7 +20,7 @@ module Acfs::Model::Attributes
     # @return [Fixnum] Casted object as list.
     # @raise [TypeError] If object cannot be casted to a list.
     #
-    def cast(obj)
+    def cast_type(obj)
       return obj.to_a if obj.respond_to? :to_a
       raise TypeError.new "Cannot cast #{obj.inspect} to array."
     end

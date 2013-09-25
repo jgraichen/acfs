@@ -27,7 +27,7 @@ module Acfs::Model
       # @param [Object] obj Object to cast.
       # @return [TrueClass, FalseClass] Casted boolean.
       #
-      def cast(obj)
+      def cast_type(obj)
         return true if obj.is_a? TrueClass
         return false if obj.is_a? FalseClass
 

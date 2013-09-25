@@ -125,11 +125,11 @@ module Acfs::Model
     # @raise [ ArgumentError ] If no attribute with given name is defined.
     #
     def write_attribute(name, value, opts = {})
-      if (type = self.class.attribute_types[name.to_sym]).nil?
+      if (attr = self.class.defined_attributes[name.to_s]).nil?
         raise ArgumentError.new "Unknown attribute `#{name}`."
       end
 
-      write_raw_attribute name, value.nil? ? nil : type.cast(value), opts
+      write_raw_attribute name, attr.cast(value), opts
     end
 
     # @api private
@@ -187,7 +187,15 @@ module Acfs::Model
       # @return [ Hash{ String => Object, Proc } ] Attributes with default values.
       #
       def attributes
-        @attributes ||= {}.merge superclass.respond_to?(:attributes) ? superclass.attributes : {}
+        Hash.new.tap do |attrs|
+          defined_attributes.each do |key, attr|
+            attrs[key] = attr.default_value
+          end
+        end
+      end
+
+      def defined_attributes
+        @attributes ||= {}.merge superclass.respond_to?(:defined_attributes) ? superclass.defined_attributes : {}
       end
 
       # @api public
@@ -211,12 +219,9 @@ module Acfs::Model
       private
       def define_attribute(name, type, opts = {})
         name             = name.to_s
-        type             = type.new opts
-        default_value    = opts.has_key?(:default) ? opts[:default] : nil
-        default_value    = type.cast default_value unless default_value.is_a? Proc or default_value.nil?
+        attribute        = type.new opts
 
-        attributes[name] = default_value
-        attribute_types[name.to_sym] = type
+        defined_attributes[name] = attribute
         define_attribute_method name
 
         self.send :define_method, name do

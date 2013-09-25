@@ -19,7 +19,7 @@ module Acfs::Model::Attributes
     # @param [Object] obj Object to cast.
     # @return [String] Casted string.
     #
-    def cast(obj)
+    def cast_type(obj)
       obj.to_s
     end
   end

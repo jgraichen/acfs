@@ -20,7 +20,7 @@ module Acfs::Model::Attributes
     # @param [Object] obj Object to cast.
     # @return [DateTime] Casted object as DateTime.
     #
-    def cast(obj)
+    def cast_type(obj)
       return nil if nil_allowed? and obj.blank?
       return obj if obj.is_a? ::DateTime
       return ::DateTime.iso8601(obj.iso8601) if obj.is_a? Time or obj.is_a? Date

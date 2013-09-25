@@ -19,7 +19,7 @@ module Acfs::Model::Attributes
     # @param [Object] obj Object to cast.
     # @return [Float] Casted object as float.
     #
-    def cast(obj)
+    def cast_type(obj)
       obj.to_f
     end
   end
