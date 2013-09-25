@@ -16,7 +16,7 @@ module Acfs::Model
     #
     #  true, on, yes
     #
-    module Boolean
+    class Boolean < Base
 
       TRUE_VALUES = %w(true on yes)
 
@@ -27,7 +27,7 @@ module Acfs::Model
       # @param [Object] obj Object to cast.
       # @return [TrueClass, FalseClass] Casted boolean.
       #
-      def self.cast(obj)
+      def cast(obj)
         return true if obj.is_a? TrueClass
         return false if obj.is_a? FalseClass
 

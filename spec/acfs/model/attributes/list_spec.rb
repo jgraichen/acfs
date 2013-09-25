@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Acfs::Model::Attributes::List do
   let(:model) { Class.new.tap { |c| c.send :include, Acfs::Model }}
-  subject { Acfs::Model::Attributes::List }
+  subject { Acfs::Model::Attributes::List.new }
 
   describe '.cast' do
     context 'with array' do

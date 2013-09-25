@@ -211,6 +211,7 @@ module Acfs::Model
       private
       def define_attribute(name, type, opts = {})
         name             = name.to_s
+        type             = type.new opts
         default_value    = opts.has_key?(:default) ? opts[:default] : nil
         default_value    = type.cast default_value unless default_value.is_a? Proc or default_value.nil?
 
