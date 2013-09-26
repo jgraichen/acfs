@@ -113,7 +113,7 @@ describe Acfs::Model::Persistence do
 
       it 'should be frozen after DELETE' do
         model.delete!
-        expect(model).to be_frozen
+        expect(model.__getobj__).to be_frozen
       end
     end
 
@@ -127,12 +127,12 @@ describe Acfs::Model::Persistence do
       end
 
       it 'should save resource' do
-        expect(model).to receive(:save).with({})
+        expect(model.__getobj__).to receive(:save).with({})
         model.update_attributes name: 'Idefix'
       end
 
       it 'should pass second hash to save' do
-        expect(model).to receive(:save).with({ bla: 'blub' })
+        expect(model.__getobj__).to receive(:save).with({ bla: 'blub' })
         model.update_attributes({ name: 'Idefix' }, { bla: 'blub' })
       end
     end
@@ -147,12 +147,12 @@ describe Acfs::Model::Persistence do
       end
 
       it 'should save resource' do
-        expect(model).to receive(:save!).with({})
+        expect(model.__getobj__).to receive(:save!).with({})
         model.update_attributes! name: 'Idefix'
       end
 
       it 'should pass second hash to save' do
-        expect(model).to receive(:save!).with({ bla: 'blub' })
+        expect(model.__getobj__).to receive(:save!).with({ bla: 'blub' })
         model.update_attributes!({ name: 'Idefix' }, { bla: 'blub' })
       end
     end

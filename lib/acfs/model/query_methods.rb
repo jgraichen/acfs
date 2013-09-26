@@ -76,10 +76,7 @@ module Acfs::Model
 
         operation :list, params: params do |data|
           data.each do |obj|
-            collection << self.new.tap do |m|
-              m.attributes = obj
-              m.loaded!
-            end
+            collection << create_resource(obj)
           end
           collection.loaded!
           block.call collection unless block.nil?
@@ -91,14 +88,13 @@ module Acfs::Model
 
       private
       def find_single(id, opts, &block)
-        model = self.new
+        model = SimpleDelegator.new self.new
 
         opts[:params] ||= {}
         opts[:params].merge!({ id: id })
 
         operation :read, opts do |data|
-          model.attributes = data
-          model.loaded!
+          model.__setobj__ create_resource data, origin: model.__getobj__
           block.call model unless block.nil?
         end
 
@@ -119,6 +115,23 @@ module Acfs::Model
           end
         end
       end
+
+      def create_resource(data, opts = {})
+        type = data.delete 'type'
+        klass = resource_class_lookup(type)
+        (opts[:origin].is_a?(klass) ? opts[:origin] : klass.new).tap do |m|
+          m.attributes = data
+          m.loaded!
+        end
+      end
+
+      def resource_class_lookup(type)
+        return self if type.nil?
+        klass = type.camelize.constantize
+        raise Acfs::RessourceTypeError, type_name: type, base_class: self unless klass <= self
+        klass
+      end
+
     end
   end
 end
