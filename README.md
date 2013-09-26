@@ -138,6 +138,42 @@ Acfs has basic update support using `PUT` requests:
 @user.persisted? # => true
 ```
 
+## Resource Inheritance
+
+Acfs provides a resource inheritance similar to ActiveRecord Single Table Inheritance. If a
+`type` attribute exists and is a valid subclass of your resource they will be converted
+to you subclassed resources:
+
+```ruby
+class Computer < Acfs::Resource
+  ...
+end
+
+class Pc < Computer end
+class Mac < Computer end
+```
+
+With the following response on `GET /computers` the collection will contain the appropriate
+subclass resources:
+
+```json
+[
+    { "id": 5, "type": "Computer"},
+    { "id": 6, "type": "Mac"},
+    { "id": 8, "type": "Pc"}
+]
+```
+
+```ruby
+@computers = Computer.all
+
+Acfs.run
+
+@computer[0].class # => Computer
+@computer[1].class # => Mac
+@computer[2].class # => Pc
+```
+
 ## Stubbing
 
 You can stub resources in applications using an Acfs service client:
@@ -193,10 +229,6 @@ it 'should find user number one' do
 end
 ```
 
-## Messaging (Experimental) [Depricated] {Removed}
-
-Removed in 0.20.0. See [jgraichen/msgr](https://github.com/jgraichen/msgr) for a Rails-like messaging solution.
-
 ## Roadmap
 
 * Update
@@ -223,6 +255,11 @@ Removed in 0.20.0. See [jgraichen/msgr](https://github.com/jgraichen/msgr) for a
 6. Commit your changes (`git commit -am 'Add some feature'`)
 7. Push to the branch (`git push origin my-new-feature`)
 8. Create new Pull Request
+
+## Contributors
+
+* [Nicolas Fricke](https://github.com/nicolas-fricke)
+* [Tino Junge](https://github.com/tino-junge)
 
 ## License
 
