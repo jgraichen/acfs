@@ -20,7 +20,7 @@ describe Acfs::Model::QueryMethods do
         it 'should invoke callback after model is loaded' do
           proc = Proc.new { }
           proc.should_receive(:call) do |user|
-            expect(user.__getobj__).to be === @user.__getobj__
+            expect(user.__getobj__).to equal @user.__getobj__
             expect(user).to be_loaded
           end
 
