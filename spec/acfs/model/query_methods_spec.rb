@@ -123,6 +123,17 @@ describe Acfs::Model::QueryMethods do
         expect(@computers[1]).to be_a Computer
         expect(@computers[2]).to be_a Mac
       end
+
+      context 'with invalid type set' do
+        before do
+          stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'MyUser' }, { id: 2, type: 'Computer' }, { id: 3, type: 'Mac' }])
+        end
+
+        it 'should raise error if type is no subclass' do
+          Computer.all
+          expect { Acfs.run }.to raise_error(Acfs::RessourceTypeError)
+        end
+      end
     end
   end
 end

@@ -86,5 +86,20 @@ module Acfs
     end
   end
 
+  # Gets raised if ressource type is no valid subclass of
+  # parent resource. Check if the type is set to the correct
+  # Acfs::Resource Name
+  class RessourceTypeError < Error
+    attr_reader :base_class
+    attr_reader :type_name
+
+    def initialize(opts = {})
+      @base_class    = opts.delete :base_class
+      @type_name     = opts.delete :type_name
+      opts[:message] = "Recieved ressource type #{type_name} is no subclass of #{base_class}"
+      super
+    end
+  end
+
   class RealRequestsNotAllowedError < StandardError; end
 end

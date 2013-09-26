@@ -127,7 +127,9 @@ module Acfs::Model
 
       def resource_class_lookup(type)
         return self if type.nil?
-        type.camelize.constantize
+        klass = type.camelize.constantize
+        raise Acfs::RessourceTypeError, type_name: type, base_class: self unless klass <= self
+        klass
       end
 
     end
