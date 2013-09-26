@@ -100,4 +100,29 @@ describe Acfs::Model::QueryMethods do
       end
     end
   end
+
+  describe '.all' do
+    let(:computer) { Computer }
+    let(:pc) { PC }
+    let(:mac) { Mac }
+    before do
+      stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'PC' }, { id: 2, type: 'Computer' }, { id: 3, type: 'Mac' }])
+    end
+
+    context 'with resource type inheritance' do
+      it 'should create appropriate subclass resources' do
+        @computers = Computer.all
+
+        expect(@computers).to_not be_loaded
+
+        Acfs.run
+
+        expect(@computers).to be_loaded
+        expect(@computers).to have(3).items
+        expect(@computers[0]).to be_a PC
+        expect(@computers[1]).to be_a Computer
+        expect(@computers[2]).to be_a Mac
+      end
+    end
+  end
 end

@@ -76,10 +76,7 @@ module Acfs::Model
 
         operation :list, params: params do |data|
           data.each do |obj|
-            collection << self.new.tap do |m|
-              m.attributes = obj
-              m.loaded!
-            end
+            collection << create_resource(obj)
           end
           collection.loaded!
           block.call collection unless block.nil?
@@ -119,6 +116,20 @@ module Acfs::Model
           end
         end
       end
+
+      def create_resource(obj)
+        type = obj.delete 'type'
+        resource_class_lookup(type).new.tap do |m|
+          m.attributes = obj
+          m.loaded!
+        end
+      end
+
+      def resource_class_lookup(type)
+        return self if type.nil?
+        type.camelize.constantize
+      end
+
     end
   end
 end

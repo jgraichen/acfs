@@ -1,6 +1,7 @@
 
 Acfs.configure do
   locate :user_service, 'http://users.example.org'
+  locate :computer_service, 'http://computers.example.org'
   locate :comments, 'http://comments.example.org'
 end
 
@@ -45,6 +46,26 @@ class Comment < Acfs::Resource
 
   attribute :id, :integer
   attribute :text, :string
+end
+
+class ComputerService < Acfs::Service
+  use Acfs::Middleware::MessagePackDecoder
+  use Acfs::Middleware::JsonDecoder
+  use Acfs::Middleware::JsonEncoder
+end
+
+class Computer < Acfs::Resource
+  service ComputerService, path: 'computers'
+
+  attribute :id, :integer
+end
+
+class PC < Computer
+
+end
+
+class Mac < Computer
+
 end
 
 # DRAFT: Singular resource
