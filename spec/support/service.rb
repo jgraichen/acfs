@@ -25,7 +25,7 @@ class MyUser < Acfs::Resource
   attribute :age, :integer
 end
 
-class MyUserInherited < MyUser
+class Customer < MyUser
 
 end
 
