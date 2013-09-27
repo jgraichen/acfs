@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.23.2
+
+* Fix regression in delegator usage by #find due to resource type inheritance.
+
+## 0.23.1
+
+* Fix error class name typo
+
+## 0.23.0
+
+* Add Resource Type Inheritance
+
 ## 0.22.2
 
 * Preserve errors received from service on revalidation (2f1fc178)
