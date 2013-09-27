@@ -89,7 +89,7 @@ module Acfs
   # Gets raised if ressource type is no valid subclass of
   # parent resource. Check if the type is set to the correct
   # Acfs::Resource Name
-  class RessourceTypeError < Error
+  class ResourceTypeError < Error
     attr_reader :base_class
     attr_reader :type_name
 

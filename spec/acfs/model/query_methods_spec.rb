@@ -131,7 +131,7 @@ describe Acfs::Model::QueryMethods do
 
         it 'should raise error if type is no subclass' do
           Computer.all
-          expect { Acfs.run }.to raise_error(Acfs::RessourceTypeError)
+          expect { Acfs.run }.to raise_error(Acfs::ResourceTypeError)
         end
       end
     end
