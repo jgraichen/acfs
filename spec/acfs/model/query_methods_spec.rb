@@ -8,6 +8,7 @@ describe Acfs::Model::QueryMethods do
       context 'with successful response' do
         before do
           stub_request(:get, 'http://users.example.org/users/1').to_return response({ id: 1, name: 'Anon', age: 12 })
+          stub_request(:get, 'http://users.example.org/users/2').to_return response({ id: 2, type: 'Customer', name: 'Clare Customer', age: 24 })
         end
 
         it 'should load a single remote resource' do
@@ -20,12 +21,27 @@ describe Acfs::Model::QueryMethods do
         it 'should invoke callback after model is loaded' do
           proc = Proc.new { }
           proc.should_receive(:call) do |user|
-            expect(user.__getobj__).to equal @user.__getobj__
+            expect(user).to equal @user
             expect(user).to be_loaded
           end
 
           @user = model.find 1, &proc
           Acfs.run
+        end
+
+        context 'with resource type inheritance' do
+          let!(:user) { MyUser.find 2 }
+          subject { user }
+          before { Acfs.run }
+
+          it 'should respect resource type inheritance' do
+            expect(subject).to be_a Customer
+          end
+
+          it 'should implement ActiveModel class interface' do
+            expect(subject.class).to be_a ActiveModel::Naming
+            expect(subject.class).to be_a ActiveModel::Translation
+          end
         end
       end
 
@@ -62,6 +78,8 @@ describe Acfs::Model::QueryMethods do
       before do
         stub_request(:get, 'http://users.example.org/users/1').to_return response({ id: 1, name: 'Anon', age: 12 })
         stub_request(:get, 'http://users.example.org/users/2').to_return response({ id: 2, name: 'Johnny', age: 42 })
+        stub_request(:get, 'http://users.example.org/users/3').to_return response({ id: 3, type: 'Customer', name: 'Anon', age: 12 })
+        stub_request(:get, 'http://users.example.org/users/4').to_return response({ id: 4, name: 'Johnny', age: 42 })
       end
 
       context 'with successful response' do
@@ -84,6 +102,14 @@ describe Acfs::Model::QueryMethods do
 
           @users = model.find 1, 2, &proc
           Acfs.run
+        end
+
+        it 'should respect resource type inheritance' do
+          customers = MyUser.find 3, 4
+          Acfs.run
+
+          expect(customers[0]).to be_a Customer
+          expect(customers[1]).to be_a MyUser
         end
       end
 

@@ -86,9 +86,14 @@ module Acfs::Model
       end
       alias :where :all
 
+      # TODO: Replace delegator with promise or future for the long run.
+      class ResourceDelegator < SimpleDelegator
+        delegate :class, :is_a?, :kind_of?, to: :__getobj__
+      end
+
       private
       def find_single(id, opts, &block)
-        model = SimpleDelegator.new self.new
+        model = ResourceDelegator.new self.new
 
         opts[:params] ||= {}
         opts[:params].merge!({ id: id })
