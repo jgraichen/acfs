@@ -18,7 +18,7 @@ module Acfs::Model
     #
     class Boolean < Base
 
-      TRUE_VALUES = %w(true on yes)
+      TRUE_VALUES = %w(true on yes 1)
 
       # @api public
       #
