@@ -117,6 +117,7 @@ module Acfs::Model
       end
 
       def create_resource(data, opts = {})
+        data = data.with_indifferent_access
         type = data.delete 'type'
         klass = resource_class_lookup(type)
         (opts[:origin].is_a?(klass) ? opts[:origin] : klass.new).tap do |m|
