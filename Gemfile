@@ -19,6 +19,7 @@ end
 
 # Platform specific development dependencies
 #
+gem 'rubysl', '~> 2.0', platform: :rbx
 gem 'msgpack', platform: :ruby
 gem 'msgpack-jruby', require: 'msgpack', platform: :jruby
 
