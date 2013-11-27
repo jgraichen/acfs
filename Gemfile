@@ -6,7 +6,7 @@ gem 'webmock', '~> 1.7'
 gem 'rake'
 gem 'rspec'
 gem 'coveralls'
-gem 'json', '~> 1.7.7'
+gem 'json', '~> 1.8.1'
 
 # Doc
 group :development do
@@ -19,7 +19,10 @@ end
 
 # Platform specific development dependencies
 #
-gem 'rubysl', '~> 2.0', platform: :rbx
+platform :rbx do
+  gem 'rubysl', '~> 2.0'
+  gem 'rubinius-coverage'
+end
 gem 'msgpack', platform: :ruby
 gem 'msgpack-jruby', require: 'msgpack', platform: :jruby
 
