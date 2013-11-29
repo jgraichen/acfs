@@ -132,6 +132,20 @@ describe Acfs::Stub do
       end
     end
 
+    context 'with list action' do
+      before do
+        Acfs::Stub.resource MyUser, :list,
+          return: [{ id: 1, name: 'John Smith', age: 32 }, { id: 2, name: 'Anon', age: 12 }]
+      end
+
+      it 'should return collection' do
+        users = MyUser.all
+        Acfs.run
+
+        expect(users).to have(2).items
+      end
+    end
+
     context 'with update action' do
       before do
         Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
