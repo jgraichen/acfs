@@ -11,7 +11,7 @@ module Acfs
 
     def initialize(opts)
       @opts = opts
-      @opts[:with].stringify_keys! if @opts[:with].respond_to? :stringify_keys
+      @opts[:with].stringify_keys! if @opts[:with].respond_to? :stringify_keys!
     end
 
     def accept?(op)
@@ -38,7 +38,7 @@ module Acfs
       if (err = opts[:raise])
         raise_error op, err, opts[:return]
       elsif (data = opts[:return])
-        op.callback.call data
+        op.call data
       else
         raise ArgumentError, 'Unsupported stub.'
       end

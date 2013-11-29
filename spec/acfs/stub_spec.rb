@@ -16,6 +16,34 @@ describe Acfs::Stub do
     #Acfs::Stub.create(MyUser).with(name: '', age: 12).and_return(:invalid, errors: { name: [ 'must be present ']})
   end
 
+  describe '#call' do
+    context 'with return values' do
+      let(:stb) { Acfs::Stub.new return: return_values }
+
+      context 'as single resource' do
+        let(:return_values) { {id: 5, val: 'ue'} }
+
+        it 'should invoke operation callback with stringified hash' do
+          op = double("op")
+          expect(op).to receive(:call).with({'id' => 5, 'val' => 'ue'})
+
+          stb.call op
+        end
+      end
+
+      context 'as list of resources' do
+        let(:return_values) { [{id: 5}, {id: 6}] }
+
+        it 'should invoke operation callback with list of stringified hash' do
+          op = double("op")
+          expect(op).to receive(:call).with([{'id' => 5}, {'id' => 6}])
+
+          stb.call op
+        end
+      end
+    end
+  end
+
   describe '#called?' do
     context 'without specified number' do
       let!(:operation) { Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 } }
