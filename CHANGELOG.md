@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.24.0
+
+* Fix issues with stubs using type inheritance
+* Allow '1' as true value for bool attributes (Tino Junge)
+
 ## 0.23.2
 
 * Fix regression in delegator usage by #find due to resource type inheritance.
