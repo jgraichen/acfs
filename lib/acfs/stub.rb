@@ -21,6 +21,7 @@ module Acfs
       data   = op.data.stringify_keys
 
       opts[:with] == params || data == opts[:with]
+      opts[:with] == params || data == opts[:with] || (opts[:with].nil? && params.empty? && data.empty?)
     end
 
     def calls
