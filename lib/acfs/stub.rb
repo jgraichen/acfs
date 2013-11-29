@@ -11,7 +11,10 @@ module Acfs
 
     def initialize(opts)
       @opts = opts
-      @opts[:with].stringify_keys! if @opts[:with].respond_to? :stringify_keys!
+
+      @opts[:with].stringify_keys! if @opts[:with].is_a? Hash
+      @opts[:return].stringify_keys! if @opts[:return].is_a? Hash
+      @opts[:return].map! { |h| h.stringify_keys! if h.is_a? Hash } if @opts[:return].is_a? Array
     end
 
     def accept?(op)
@@ -20,7 +23,6 @@ module Acfs
       params = op.full_params.stringify_keys
       data   = op.data.stringify_keys
 
-      opts[:with] == params || data == opts[:with]
       opts[:with] == params || data == opts[:with] || (opts[:with].nil? && params.empty? && data.empty?)
     end
 

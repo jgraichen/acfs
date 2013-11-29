@@ -10,38 +10,6 @@ describe Acfs::Stub do
 
   before do
     Acfs::Stub.allow_requests = false
-
-    #Acfs::Stub.read(MyUser).with(id: 5).and_return({ id: 5, name: 'John', age: 32 })
-    #Acfs::Stub.read(MyUser).with(id: 6).and_raise(:not_found)
-    #Acfs::Stub.create(MyUser).with(name: '', age: 12).and_return(:invalid, errors: { name: [ 'must be present ']})
-  end
-
-  describe '#call' do
-    context 'with return values' do
-      let(:stb) { Acfs::Stub.new return: return_values }
-
-      context 'as single resource' do
-        let(:return_values) { {id: 5, val: 'ue'} }
-
-        it 'should invoke operation callback with stringified hash' do
-          op = double("op")
-          expect(op).to receive(:call).with({'id' => 5, 'val' => 'ue'})
-
-          stb.call op
-        end
-      end
-
-      context 'as list of resources' do
-        let(:return_values) { [{id: 5}, {id: 6}] }
-
-        it 'should invoke operation callback with list of stringified hash' do
-          op = double("op")
-          expect(op).to receive(:call).with([{'id' => 5}, {'id' => 6}])
-
-          stb.call op
-        end
-      end
-    end
   end
 
   describe '#called?' do
@@ -110,6 +78,23 @@ describe Acfs::Stub do
           expect { Acfs.run }.to raise_error(Acfs::ResourceNotFound)
         end
       end
+
+      context 'with type parameter' do
+        before do
+          Acfs::Stub.resource Computer, :read, with: { id: 1 }, return: { id: 1, type: 'PC' }
+          Acfs::Stub.resource Computer, :read, with: { id: 2 }, return: { id: 2, type: 'Mac' }
+        end
+
+        it 'should create inherited type' do
+          pc = Computer.find 1
+          mac = Computer.find 2
+
+          Acfs.run
+
+          expect(pc).to be_a PC
+          expect(mac).to be_a Mac
+        end
+      end
     end
 
     context 'with create action' do
@@ -143,6 +128,31 @@ describe Acfs::Stub do
         Acfs.run
 
         expect(users).to have(2).items
+      end
+
+      it 'should return defined resources' do
+        users = MyUser.all
+        Acfs.run
+
+        expect(users[0].id).to eq 1
+        expect(users[1].id).to eq 2
+        expect(users[0].name).to eq 'John Smith'
+        expect(users[1].name).to eq 'Anon'
+      end
+
+      context 'with type parameter' do
+        before do
+          Acfs::Stub.resource Computer, :list,
+            return: [{id: 1, type: 'PC'}, {id: 2, type: 'Mac'}]
+        end
+
+        it 'should create inherited type' do
+          computers = Computer.all
+          Acfs.run
+
+          expect(computers.first).to be_a PC
+          expect(computers.last).to be_a Mac
+        end
       end
     end
 
