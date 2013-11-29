@@ -8,6 +8,7 @@ module Acfs
   class Operation
     attr_reader :action, :params, :resource, :data, :callback
     delegate :service, to: :resource
+    delegate :call, to: :callback
 
     def initialize(resource, action, opts = {}, &block)
       @resource = resource
