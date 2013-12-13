@@ -12,12 +12,16 @@ module Acfs::Model::Attributes
       !!options[:allow_nil]
     end
 
+    def blank_allowed?
+      !!options[:allow_blank]
+    end
+
     def default_value
       options[:default].is_a?(Proc) ? options[:default] : cast(options[:default])
     end
 
     def cast(obj)
-      return nil if obj.nil? && nil_allowed?
+      return nil if obj.nil? && nil_allowed? || (obj == '' && blank_allowed?)
       cast_type obj
     end
 
