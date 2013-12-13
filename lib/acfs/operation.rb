@@ -20,8 +20,6 @@ module Acfs
       @data     = (opts[:data]   || {}).dup
 
       @callback = block
-
-      raise ArgumentError, 'ID parameter required for READ, UPDATE and DELETE operation.' if single? and id.nil?
     end
 
     def single?

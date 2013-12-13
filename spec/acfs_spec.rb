@@ -8,6 +8,7 @@ describe 'Acfs' do
     stub_request(:get, 'http://users.example.org/users/3').to_return response({ id: 3, name: 'Miraculix', age: 122 })
     stub_request(:get, 'http://users.example.org/users/100').to_return response({ id:100, name: 'Jimmy', age: 45 })
     stub_request(:get, 'http://users.example.org/users/2/friends').to_return response([{ id: 1, name: 'Anon', age: 12 }])
+    stub_request(:get, 'http://users.example.org/singles?user_id=5').to_return response({ score: 250, user_id: 5 })
     stub_request(:get, 'http://comments.example.org/comments?user=2').to_return response([{ id: 1, text: 'Comment #1' }, { id: 2, text: 'Comment #2' }])
   end
 
@@ -54,6 +55,13 @@ describe 'Acfs' do
     expect(@user.id).to be == 2
     expect(@user.name).to be == 'John'
     expect(@user.age).to be == 26
+  end
+
+  it 'should load singleton resource' do
+    @single = Single.find params: {user_id: 5}
+    Acfs.run
+
+    expect(@single.score).to eq 250
   end
 
   it 'should load multiple single resources' do
