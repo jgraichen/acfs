@@ -151,6 +151,17 @@ describe Acfs::Model::Attributes do
           expect(resource.updated_at).to eq nil
         end
       end
+
+      context 'allow blank option' do
+        it 'should allow blank as value' do
+          model.send :attribute, :updated_at, Acfs::Model::Attributes::DateTime, default: DateTime.new, allow_blank: true
+          resource = model.new
+          expect(resource.updated_at).to eq DateTime.new
+
+          resource.updated_at = ''
+          expect(resource.updated_at).to eq nil
+        end
+      end
     end
   end
 end
