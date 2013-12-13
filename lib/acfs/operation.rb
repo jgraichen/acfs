@@ -13,8 +13,12 @@ module Acfs
     def initialize(resource, action, opts = {}, &block)
       @resource = resource
       @action   = action.to_sym
-      @params   = opts[:params] || {}
-      @data     = opts[:data]   || {}
+
+      # Operations can be delayed so dup params and data to avoid
+      # later in-place changes by modifying passed hash
+      @params   = (opts[:params] || {}).dup
+      @data     = (opts[:data]   || {}).dup
+
       @callback = block
 
       raise ArgumentError, 'ID parameter required for READ, UPDATE and DELETE operation.' if single? and id.nil?
@@ -29,6 +33,7 @@ module Acfs
     end
 
     def id
+      # TODO
       @id ||= params.delete(:id) || data[:id]
     end
 

@@ -1,3 +1,6 @@
+require 'bundler'
+Bundler.require
+
 require 'coveralls'
 Coveralls.wear! do
   add_filter 'spec'
