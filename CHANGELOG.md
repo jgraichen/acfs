@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.25.0
+
+* Add option to allow blank attribute values (Johannes Jasper)
+* Internal changes
+
 ## 0.24.0
 
 * Fix issues with stubs using type inheritance
