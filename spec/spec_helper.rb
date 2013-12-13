@@ -1,10 +1,10 @@
-require 'bundler'
-Bundler.require
-
 require 'coveralls'
 Coveralls.wear! do
   add_filter 'spec'
 end
+
+require 'bundler'
+Bundler.require
 
 require 'acfs'
 require 'webmock/rspec'
