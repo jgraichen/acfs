@@ -138,6 +138,44 @@ Acfs has basic update support using `PUT` requests:
 @user.persisted? # => true
 ```
 
+## Singleton resources
+
+Singletons can be used in Acfs by creating a new resource which inherits from `SingletonResource`:
+
+```ruby
+class Single < Acfs::SingletonResource
+  service UserService # Associate `Single` model with `UserService`.
+
+  # Define model attributes and types as with regular resources
+  
+  attribute :name, :string, default: 'Anonymous'
+  attribute :age, :integer
+  
+end
+```
+
+The following code explains the routing for singleton resource requests:
+
+```ruby
+my_single = Single.new
+mysingle.save # sends POST request to /single
+
+my_single = Single.find
+Acfs.run # sends GET request to /single
+
+my_single.age = 28
+my_single.save # sends PUT request to /single
+
+my_single.delete # sends DELETE request to /single
+```
+
+You also can pass parameters to the find call, these will sent as GET params to the index action:
+
+```ruby
+my_single = Single.find name: 'Max'
+Acfs.run # sends GET request with param to /single?name=Max
+```
+
 ## Resource Inheritance
 
 Acfs provides a resource inheritance similar to ActiveRecord Single Table Inheritance. If a
