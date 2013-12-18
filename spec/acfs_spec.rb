@@ -8,7 +8,6 @@ describe 'Acfs' do
     stub_request(:get, 'http://users.example.org/users/3').to_return response({ id: 3, name: 'Miraculix', age: 122 })
     stub_request(:get, 'http://users.example.org/users/100').to_return response({ id:100, name: 'Jimmy', age: 45 })
     stub_request(:get, 'http://users.example.org/users/2/friends').to_return response([{ id: 1, name: 'Anon', age: 12 }])
-    stub_request(:get, 'http://users.example.org/singles?user_id=5').to_return response({ score: 250, user_id: 5 })
     stub_request(:get, 'http://comments.example.org/comments?user=2').to_return response([{ id: 1, text: 'Comment #1' }, { id: 2, text: 'Comment #2' }])
   end
 
@@ -57,11 +56,70 @@ describe 'Acfs' do
     expect(@user.age).to be == 26
   end
 
-  it 'should load singleton resource' do
-    @single = Single.find params: {user_id: 5}
-    Acfs.run
+  describe 'singleton' do
+    before do
+      stub_request(:get, 'http://users.example.org/singles?user_id=5').to_return response({ score: 250, user_id: 5 })
+    end
 
-    expect(@single.score).to eq 250
+    it 'should create a singleton resource' do
+      stub = stub_request(:post, 'http://users.example.org/singles').to_return response({ score: 250, user_id: 5 })
+
+      @single = Single.new user_id: 5, score: 250
+      expect(@single.new?).to be_true
+
+      @single.save
+      expect(stub).to have_been_requested
+
+      expect(@single.new?).to be_false
+      expect(@single.user_id).to eq 5
+      expect(@single.score).to eq 250
+    end
+
+    it 'should load singleton resource' do
+      @single = Single.find user_id: 5
+      Acfs.run
+
+      expect(@single.score).to eq 250
+    end
+
+    it 'should update singleton resource' do
+      stub = stub_request(:put, 'http://users.example.org/singles').to_return { |request| {
+          body: request.body,
+          headers: { 'Content-Type' => request.headers['Content-Type'] }
+      } }
+
+      @single = Single.find user_id: 5
+      Acfs.run
+
+      expect(@single.score).to eq 250
+
+      @single.score = 300
+      @single.save
+
+      expect(stub).to have_been_requested
+
+      expect(@single.score).to eq 300
+    end
+
+    it 'should delete singleton resource' do
+      stub = stub_request(:delete, 'http://users.example.org/singles').to_return { |request| {
+          body: request.body,
+          headers: { 'Content-Type' => request.headers['Content-Type'] }
+      } }
+
+      @single = Single.find user_id: 5
+      Acfs.run
+
+      expect(@single.new?).to be_false
+
+      @single.delete
+
+      expect(stub).to have_been_requested
+    end
+
+    it 'should raise error when calling `all\'' do
+      expect {Single.all}.to raise_error(NoMethodError)
+    end
   end
 
   it 'should load multiple single resources' do

@@ -101,5 +101,22 @@ module Acfs
     end
   end
 
+  # Gets raised if a Resource-method gets called on a
+  # SingletonResource on which it is not defined.
+  # This might be encountered when calling
+  #   Singleton.all
+  # Use Singleton.find instead, since only one object
+  # will be returned
+  class NoMethodOnSingletonResourceError < Error
+    attr_reader :singleton_class, :method_name
+
+    def initialize(opts = {})
+      @singleton_class    = opts.delete :singleton_class
+      @method_name     = opts.delete :method_name
+      opts[:message] = "Method #{method_name} is not defined on the SingletonResource #{singleton_class}"
+      super
+    end
+  end
+
   class RealRequestsNotAllowedError < StandardError; end
 end
