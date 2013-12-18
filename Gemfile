@@ -23,7 +23,7 @@ platform :rbx do
   gem 'rubysl', '~> 2.0'
   gem 'rubinius-coverage'
 end
-gem 'msgpack', platform: :ruby
+gem 'msgpack', '< 0.5.8', platform: :ruby
 gem 'msgpack-jruby', require: 'msgpack', platform: :jruby
 
 # Specify your gem's dependencies in acfs.gemspec
