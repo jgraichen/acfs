@@ -24,7 +24,7 @@ module Acfs
     # @return [Boolean] True if resource is newly created, false otherwise.
     #
     def new?
-      ! (@loaded.present? && @loaded)
+      !loaded?
     end
     alias :new_record? :new?
 
