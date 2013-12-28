@@ -21,3 +21,5 @@ deploy:
     branch: master
     repo: jgraichen/acfs
     rvm: 2.0.0
+before_install:
+  - gem install minitest -v '4.7.5'
