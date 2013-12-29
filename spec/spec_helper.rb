@@ -26,10 +26,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
-  config.expect_with :rspec do |c|
-    # Only allow expect syntax
-    c.syntax = :expect
-  end
+  # Raise error when using old :should expectation syntax.
+  config.raise_errors_for_deprecations!
 
   config.before :each do
     Acfs.runner.clear

@@ -8,7 +8,7 @@ describe Acfs::Configuration do
 
   describe 'Acfs.configure' do
     it 'should invoke configure on current configuration' do
-      Acfs::Configuration.current.should_receive(:configure).once.and_call_original
+      expect(Acfs::Configuration.current).to receive(:configure).once.and_call_original
 
       Acfs.configure do |c|
         expect(c).to be_a Acfs::Configuration

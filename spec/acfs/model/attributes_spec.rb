@@ -53,7 +53,7 @@ describe Acfs::Model::Attributes do
     it 'should do nothing on non-array types' do
       ret = m.write_attributes 'James'
 
-      expect(ret).to be_false
+      expect(ret).to be false
       expect(m.attributes).to be == { name: 'John', age: 25 }.stringify_keys
     end
   end
