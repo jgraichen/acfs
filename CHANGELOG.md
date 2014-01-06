@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.26.0
+
+* Add support for singleton resources (Nicolas Fricke)
+
 ## 0.25.0
 
 * Add option to allow blank attribute values (Johannes Jasper)
