@@ -231,7 +231,7 @@ module Acfs
       end
 
       def check_loaded!(opts = {})
-        raise ResourceNotLoaded, resource: self unless loaded? or opts[:force]
+        raise ResourceNotLoaded.new resource: self unless loaded? or opts[:force]
       end
     end
   end
