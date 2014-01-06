@@ -24,7 +24,7 @@ describe 'Acfs::Model::Initialization' do
 
   describe '#persisted?' do
     it 'should be false' do
-      expect(model.new.persisted?).to be_false
+      expect(model.new.persisted?).to be false
     end
   end
 end

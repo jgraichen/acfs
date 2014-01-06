@@ -25,7 +25,7 @@ describe Acfs::Service::Middleware do
     end
 
     it 'should instantiate middleware object' do
-      middleware.should_receive(:new).with(anything, options)
+      expect(middleware).to receive(:new).with(anything, options)
 
       srv_class.use middleware, options
     end

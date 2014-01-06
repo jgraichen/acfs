@@ -1,6 +1,7 @@
 language: ruby
 bundler_args: --without development
 rvm:
+- 2.1.0
 - 2.0.0
 - 1.9.3
 - jruby
@@ -20,3 +21,9 @@ deploy:
     branch: master
     repo: jgraichen/acfs
     rvm: 2.0.0
+matrix:
+  allow_failures:
+    - rvm: 2.1.0
+before_install:
+  - gem install minitest -v '4.7.5'
+  - gem install json -v '1.8.1'

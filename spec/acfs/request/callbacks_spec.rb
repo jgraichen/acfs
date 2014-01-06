@@ -25,7 +25,7 @@ describe Acfs::Request::Callbacks do
     let(:response) { Acfs::Response.new(request) }
 
     it 'should trigger registered callbacks with given response' do
-      callback.should_receive(:call).with(response, kind_of(Proc))
+      expect(callback).to receive(:call).with(response, kind_of(Proc))
 
       request.on_complete &callback
       request.complete! response

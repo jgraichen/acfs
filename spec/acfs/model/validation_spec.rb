@@ -79,7 +79,7 @@ describe Acfs::Model::Validation do
 
   describe '#save!' do
     subject { -> { model.save! } }
-    before { model.stub(:operation) }
+    before { allow(model).to receive(:operation) }
 
     context 'with invalid attributes' do
       let(:params) { {name: 'john'} }

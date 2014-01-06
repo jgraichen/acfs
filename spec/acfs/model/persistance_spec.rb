@@ -208,8 +208,8 @@ describe Acfs::Model::Persistence do
       let(:data) { { age: 12 } }
 
       it 'should raise an error' do
-        expect { model_class.create! data }.to raise_error ::Acfs::InvalidResource do |error|
-          expect(error.errors).to be == { name: %w(required) }
+        expect { model_class.create! data }.to raise_error(::Acfs::InvalidResource) do |error|
+          expect(error.errors).to be == { 'name' => %w(required) }
         end
       end
     end
