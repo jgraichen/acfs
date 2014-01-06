@@ -19,6 +19,7 @@ module Acfs
   require 'acfs/response'
   require 'acfs/runner'
   require 'acfs/service'
+  require 'acfs/singleton_resource'
 
   extend Global
 

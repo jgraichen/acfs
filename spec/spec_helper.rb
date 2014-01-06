@@ -10,6 +10,9 @@ if ENV['CI'] || (defined?(:RUBY_ENGINE) && RUBY_ENGINE != 'rbx')
   end
 end
 
+require 'bundler'
+Bundler.require
+
 require 'acfs'
 
 Dir[File.expand_path('spec/support/**/*.rb')].each {|f| require f}

@@ -68,6 +68,13 @@ class Mac < Computer
 
 end
 
+class Single < Acfs::SingletonResource
+  service UserService
+
+  attribute :score, :integer
+  attribute :user_id, :integer
+end
+
 # DRAFT: Singular resource
 #class Singular < Acfs::Resource
 #  service UserService, singular: true
