@@ -31,5 +31,14 @@ module Acfs
     def configure(&block)
       Configuration.current.configure &block
     end
+
+    # @api public
+    #
+    # Reset all queues, stubs and internal state.
+    #
+    def reset
+      self.runner.clear
+      Acfs::Stub.clear
+    end
   end
 end
