@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.27.0
+
+* Reset method to clear stubs, request queues, internal state
+* Add RSpec helper to enable stubs and clear state after each spec
+
 ## 0.26.0
 
 * Add support for singleton resources (Nicolas Fricke)

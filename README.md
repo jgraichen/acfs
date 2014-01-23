@@ -147,10 +147,10 @@ class Single < Acfs::SingletonResource
   service UserService # Associate `Single` model with `UserService`.
 
   # Define model attributes and types as with regular resources
-  
+
   attribute :name, :string, default: 'Anonymous'
   attribute :age, :integer
-  
+
 end
 ```
 
@@ -217,9 +217,14 @@ Acfs.run
 You can stub resources in applications using an Acfs service client:
 
 ```ruby
-# Enable stubs in spec helper
-Acfs::Stub.enable
+# spec_helper.rb
 
+# This will enable stabs before each spec and clear internal state
+# after each spec.
+require 'acfs/rspec'
+```
+
+```ruby
 before do
   @stub = Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
   Acfs::Stub.resource MyUser, :read, with: { id: 2 }, raise: :not_found
