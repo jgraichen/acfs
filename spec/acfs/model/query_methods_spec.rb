@@ -199,7 +199,7 @@ describe Acfs::Model::QueryMethods do
           proc = Proc.new { }
 
           expect(proc).to receive(:call) do |user|
-            expect(user).to be === @user
+            expect(user).to eql @user.__getobj__
             expect(user).to be_a MyUser
             expect(user).to be_loaded
           end
@@ -208,8 +208,8 @@ describe Acfs::Model::QueryMethods do
           Acfs.run
         end
 
-        it 'should load a single object' do
-          expect(subject).to have 1.item
+        it 'should load a single MyUser object' do
+          expect(subject).to be_a MyUser
         end
       end
 
@@ -224,9 +224,8 @@ describe Acfs::Model::QueryMethods do
           proc = Proc.new { }
 
           expect(proc).to receive(:call) do |user|
-            expect(user).to be === @user
-            expect(user).to be_a MyUser
-            expect(user).to be_loaded
+            expect(user).to eql @user.__getobj__
+            expect(user).to be_a NilClass
           end
 
           @user = model.find_by age: 24, &proc
