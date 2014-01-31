@@ -122,6 +122,15 @@ Acfs.run # This call will fire all request as parallel as possible.
 @friends[0].name # => "Miraculix"
 ```
 
+Use `.find_by` to get first element only. `.find_by` will call the `index`-Action and return the first resource. Optionally passed params will be sent as `GET` parameters and can be used for filtering in the service's controller.
+```ruby
+@user = User.find_by age: 24
+
+Acfs.run # Will request `http://users.myapp.org/users?age=24`
+
+@user # Contains the first user object returned by the index action
+```
+
 Acfs has basic update support using `PUT` requests:
 
 ```ruby
