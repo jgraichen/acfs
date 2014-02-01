@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.28.0
+
+* Add find_by (Nicolas Fricke)
+
 ## 0.27.0
 
 * Reset method to clear stubs, request queues, internal state
