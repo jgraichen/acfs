@@ -86,9 +86,35 @@ module Acfs::Model
       end
       alias :where :all
 
+      # @api public
+      #
+      # Try to load first resource.
+      #
+      # @param [ Hash  ] params Request parameters that will be send to remote service.
+      #
+      # @yield [ resource ] Callback block to be executed after resource was fetched successfully.
+      # @yieldparam resource [ self ] Fetched resource, nil if empty list is returned
+      #
+      # @return [ self ] Resource object, nil if empty list is returned
+      #
+      def find_by(params, &block)
+        model = ResourceDelegator.new self.new
+
+        operation :list, params: params do |data|
+          unless data.empty?
+            model.__setobj__ create_resource data.first, origin: model.__getobj__
+          else
+            model.__setobj__ nil
+          end
+          block.call model unless block.nil?
+        end
+
+        model
+      end
+
       # TODO: Replace delegator with promise or future for the long run.
       class ResourceDelegator < SimpleDelegator
-        delegate :class, :is_a?, :kind_of?, to: :__getobj__
+        delegate :class, :is_a?, :kind_of?, :nil?, to: :__getobj__
       end
 
       private

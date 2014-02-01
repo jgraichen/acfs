@@ -84,9 +84,11 @@ module Acfs
       # Undefined, raises NoMethodError.
       # A singleton always only returns one object, therefore the
       # methods :all and :where are not defined.
+      # :find_by is not defined on singletons, use :find instead
       #
       undef_method :all
       undef_method :where
+      undef_method :find_by
     end
   end
 end
