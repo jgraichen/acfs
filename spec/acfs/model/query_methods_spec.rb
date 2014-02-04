@@ -163,37 +163,30 @@ describe Acfs::Model::QueryMethods do
     end
   end
 
-  describe '.find_by' do
+  shared_examples 'find_by' do
     context 'standard resource' do
-      let(:model){ MyUser }
-
-      subject do
-        user = model.find_by age: 24
-        Acfs.run
-        user
-      end
+      let(:model) { MyUser }
+      let!(:user) { model.send described_method, age: 24 }
+      subject { Acfs.run; user }
 
       context 'return value' do
-        subject { model.find_by age: 24 }
+        subject { user }
 
         it { should be_a MyUser }
-
         it { should_not be_loaded }
       end
 
-      it 'should query the index action with params set' do
-        stub_request(:get, 'http://users.example.org/users?age=24').to_return response([])
+      context 'with params' do
+        let!(:request) { stub_request(:get, 'http://users.example.org/users?age=24').to_return response([{id: 1, name: 'Mike', age: 24}]) }
 
-        model.find_by age: 24
-        Acfs.run
-
-        assert_requested :get, 'http://users.example.org/users?age=24'
+        it 'should include params in URI to index action' do
+          subject
+          expect(request).to have_been_requested
+        end
       end
 
       context 'with non-empty response' do
-        before do
-          stub_request(:get, 'http://users.example.org/users?age=24').to_return response([{ id: 1, name: 'Mike', age: 24 }, { id: 4, type: 'Maria', age: 24 }, { id: 7, type: 'James', age: 24 }])
-        end
+        before { stub_request(:get, 'http://users.example.org/users?age=24').to_return response([{id: 1, name: 'Mike', age: 24}, {id: 4, type: 'Maria', age: 24}, {id: 7, type: 'James', age: 24}]) }
 
         it 'should invoke callback after model is loaded' do
           proc = Proc.new { }
@@ -204,7 +197,7 @@ describe Acfs::Model::QueryMethods do
             expect(user).to be_loaded
           end
 
-          @user = model.find_by age: 24, &proc
+          @user = model.send described_method, age: 24, &proc
           Acfs.run
         end
 
@@ -212,11 +205,28 @@ describe Acfs::Model::QueryMethods do
           expect(subject).to be_a MyUser
         end
       end
+    end
+
+    context 'singleton resource' do
+      let(:model) { Single }
+
+      it '.find_by should not be defined' do
+        expect{ model.find_by }.to raise_error NoMethodError
+      end
+    end
+  end
+
+  describe '.find_by' do
+    let(:described_method) { :find_by }
+    it_behaves_like 'find_by'
+
+    context 'standard resource' do
+      let(:model){ MyUser }
+      let!(:user) { model.send described_method, age: 24 }
+      subject { Acfs.run; user }
 
       context 'with empty response' do
-        before do
-          stub_request(:get, 'http://users.example.org/users?age=24').to_return response([])
-        end
+        before { stub_request(:get, 'http://users.example.org/users?age=24').to_return response([]) }
 
         it { should be_nil }
 
@@ -233,12 +243,33 @@ describe Acfs::Model::QueryMethods do
         end
       end
     end
+  end
 
-    context 'singleton resource' do
-      let(:model) { Single }
+  describe '.find_by!' do
+    let(:described_method) { :find_by! }
+    it_behaves_like 'find_by'
 
-      it '.find_by should not be defined' do
-        expect{ model.find_by }.to raise_error NoMethodError
+    context 'standard resource' do
+      let(:model){ MyUser }
+      let!(:user) { model.send described_method, age: 24 }
+      subject { Acfs.run; user }
+
+      context 'with empty response' do
+        before { stub_request(:get, 'http://users.example.org/users?age=24').to_return response([]) }
+
+        it 'should raise an ResourceNotFound error' do
+          model.find_by! age: 24
+          expect{ Acfs.run }.to raise_error Acfs::ResourceNotFound
+        end
+
+        it 'should not invoke callback after model could not be loaded' do
+          proc = Proc.new { }
+
+          expect(proc).not_to receive(:call)
+
+          model.find_by! age: 24, &proc
+          expect{ Acfs.run }.to raise_error
+        end
       end
     end
   end

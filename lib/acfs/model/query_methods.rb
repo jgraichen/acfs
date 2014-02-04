@@ -88,11 +88,11 @@ module Acfs::Model
 
       # @api public
       #
-      # Try to load first resource.
+      # Try to load first resource. Return nil if no object can be loaded.
       #
       # @param [ Hash  ] params Request parameters that will be send to remote service.
       #
-      # @yield [ resource ] Callback block to be executed after resource was fetched successfully.
+      # @yield [ resource ] Callback block to be executed after resource was fetched (even if nil).
       # @yieldparam resource [ self ] Fetched resource, nil if empty list is returned
       #
       # @return [ self ] Resource object, nil if empty list is returned
@@ -110,6 +110,24 @@ module Acfs::Model
         end
 
         model
+      end
+
+      # @api public
+      #
+      # Try to load first resource. Raise Acfs::ResourceNotFound exception if no object can be loaded.
+      #
+      # @param [ Hash  ] params Request parameters that will be send to remote service.
+      #
+      # @yield [ resource ] Callback block to be executed after resource was fetched successfully.
+      # @yieldparam resource [ self ] Fetched resource, nil if empty list is returned
+      #
+      # @return [ self ] Resource object, nil if empty list is returned
+      #
+      def find_by!(params, &block)
+        find_by params do |m|
+          raise Acfs::ResourceNotFound.new message: "Recieved erronious response: no `#{self.name}` with params #{params.to_s} found" if m.nil?
+          block.call m unless block.nil?
+        end
       end
 
       # TODO: Replace delegator with promise or future for the long run.

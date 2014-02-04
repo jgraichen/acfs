@@ -89,6 +89,7 @@ module Acfs
       undef_method :all
       undef_method :where
       undef_method :find_by
+      undef_method :find_by!
     end
   end
 end
