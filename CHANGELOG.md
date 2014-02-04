@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.29.0
+
+* Add find_by!
+
 ## 0.28.0
 
 * Add find_by (Nicolas Fricke)
