@@ -181,7 +181,7 @@ describe Acfs::Model::QueryMethods do
 
         it 'should include params in URI to index action' do
           subject
-          assert_requested :get, 'http://users.example.org/users?age=24'
+          expect(request).to have_been_requested
         end
       end
 
