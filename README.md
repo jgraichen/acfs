@@ -123,7 +123,6 @@ Acfs.run # This call will fire all request as parallel as possible.
 ```
 
 Use `.find_by` to get first element only. `.find_by` will call the `index`-Action and return the first resource. Optionally passed params will be sent as `GET` parameters and can be used for filtering in the service's controller.
-`.find_by` will return `nil` if no object can be found and call optional callback on `nil`. Use `.find_by!` to raise an `Acfs::ResourceNotFound` exception if no object can be found. `.find_by!` will only invoke the optional callback if an object was successfully loaded.
 ```ruby
 @user = User.find_by age: 24
 
@@ -131,6 +130,7 @@ Acfs.run # Will request `http://users.myapp.org/users?age=24`
 
 @user # Contains the first user object returned by the index action
 ```
+If no object can be found, `.find_by` will return `nil`. The optional callback will then be called with `nil` as parameter. Use `.find_by!` to raise an `Acfs::ResourceNotFound` exception if no object can be found. `.find_by!` will only invoke the optional callback if an object was successfully loaded.
 
 Acfs has basic update support using `PUT` requests:
 
