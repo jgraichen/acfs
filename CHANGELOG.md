@@ -1,12 +1,16 @@
 # Changelog
 
+## 0.29.1
+
+* Fix: rescue NameError and NoMethodError on invalid type
+
 ## 0.29.0
 
 * Add find_by!
 
 ## 0.28.0
 
-* Add find_by (Nicolas Fricke)
+* Add find_by
 
 ## 0.27.0
 
@@ -15,7 +19,7 @@
 
 ## 0.26.0
 
-* Add support for singleton resources (Nicolas Fricke)
+* Add support for singleton resources
 
 ## 0.25.0
 
