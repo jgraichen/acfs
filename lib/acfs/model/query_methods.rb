@@ -179,6 +179,8 @@ module Acfs::Model
         klass = type.camelize.constantize
         raise Acfs::ResourceTypeError.new type_name: type, base_class: self unless klass <= self
         klass
+      rescue NameError, NoMethodError
+        raise Acfs::ResourceTypeError.new type_name: type, base_class: self
       end
 
     end

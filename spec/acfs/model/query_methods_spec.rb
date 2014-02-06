@@ -151,13 +151,32 @@ describe Acfs::Model::QueryMethods do
       end
 
       context 'with invalid type set' do
-        before do
-          stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'MyUser' }, { id: 2, type: 'Computer' }, { id: 3, type: 'Mac' }])
+        shared_examples 'with invalid type' do
+          it 'should raise error if type is no subclass' do
+            Computer.all
+            expect { Acfs.run }.to raise_error(Acfs::ResourceTypeError)
+          end
         end
 
-        it 'should raise error if type is no subclass' do
-          Computer.all
-          expect { Acfs.run }.to raise_error(Acfs::ResourceTypeError)
+        context 'with another resource as type instead' do
+          before do
+            stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'MyUser' }, { id: 2, type: 'Computer' }, { id: 3, type: 'Mac' }])
+          end
+          it_behaves_like 'with invalid type'
+        end
+
+        context 'with a random string as type instead' do
+          before do
+            stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'PC' }, { id: 2, type: 'noValidType' }, { id: 3, type: 'Mac' }])
+          end
+          it_behaves_like 'with invalid type'
+        end
+
+        context 'with a non-string as type instead' do
+          before do
+            stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'PC' }, { id: 2, type: 'Computer' }, { id: 3, type: 42 }])
+          end
+          it_behaves_like 'with invalid type'
         end
       end
     end
