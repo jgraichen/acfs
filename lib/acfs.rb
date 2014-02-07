@@ -9,6 +9,7 @@ module Acfs
   require 'acfs/version'
   require 'acfs/errors'
   require 'acfs/global'
+  require 'acfs/util'
 
   require 'acfs/collection'
   require 'acfs/configuration'

@@ -29,6 +29,23 @@ describe Acfs::Model::QueryMethods do
           Acfs.run
         end
 
+        it 'should invoke multiple callback after model is loaded' do
+          proc1 = Proc.new { }
+          proc2 = Proc.new { }
+          expect(proc1).to receive(:call) do |user|
+            expect(user).to equal @user
+            expect(user).to be_loaded
+          end
+          expect(proc2).to receive(:call) do |user|
+            expect(user).to equal @user
+            expect(user).to be_loaded
+          end
+
+          @user = model.find 1, &proc1
+          Acfs.add_callback(@user, &proc2)
+          Acfs.run
+        end
+
         context 'with resource type inheritance' do
           let!(:user) { MyUser.find 2 }
           subject { user }
@@ -101,6 +118,25 @@ describe Acfs::Model::QueryMethods do
           end
 
           @users = model.find 1, 2, &proc
+          Acfs.run
+        end
+
+        it 'should invoke multiple callback after all models are loaded' do
+          proc1 = Proc.new { }
+          proc2 = Proc.new { }
+          expect(proc1).to receive(:call) do |users|
+            expect(users).to be === @users
+            expect(users.size).to be == 2
+            expect(users).to be_loaded
+          end
+          expect(proc2).to receive(:call) do |users|
+            expect(users).to be === @users
+            expect(users.size).to be == 2
+            expect(users).to be_loaded
+          end
+
+          @users = model.find 1, 2, &proc1
+          Acfs.add_callback(@users, &proc2)
           Acfs.run
         end
 
@@ -220,6 +256,27 @@ describe Acfs::Model::QueryMethods do
           Acfs.run
         end
 
+        it 'should invoke multiple callbacks after model is loaded' do
+          proc1 = Proc.new { }
+          proc2 = Proc.new { }
+
+          expect(proc1).to receive(:call) do |user|
+            expect(user).to eql @user.__getobj__
+            expect(user).to be_a MyUser
+            expect(user).to be_loaded
+          end
+
+          expect(proc2).to receive(:call) do |user|
+            expect(user).to eql @user.__getobj__
+            expect(user).to be_a MyUser
+            expect(user).to be_loaded
+          end
+
+          @user = model.send described_method, age: 24, &proc1
+          Acfs.add_callback @user, &proc2
+          Acfs.run
+        end
+
         it 'should load a single MyUser object' do
           expect(subject).to be_a MyUser
         end
@@ -258,6 +315,24 @@ describe Acfs::Model::QueryMethods do
           end
 
           @user = model.find_by age: 24, &proc
+          Acfs.run
+        end
+
+        it 'should invoke multiple callbacks after model is loaded' do
+          proc1 = Proc.new { }
+          proc2 = Proc.new { }
+
+          expect(proc1).to receive(:call) do |user|
+            expect(user).to eql @user.__getobj__
+            expect(user).to be_a NilClass
+          end
+          expect(proc2).to receive(:call) do |user|
+            expect(user).to eql @user.__getobj__
+            expect(user).to be_a NilClass
+          end
+
+          @user = model.find_by age: 24, &proc1
+          Acfs.add_callback @user, &proc2
           Acfs.run
         end
       end

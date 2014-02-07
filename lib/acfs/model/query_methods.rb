@@ -98,15 +98,16 @@ module Acfs::Model
       # @return [ self ] Resource object, nil if empty list is returned
       #
       def find_by(params, &block)
-        model = ResourceDelegator.new self.new
+        model = Acfs::Util::ResourceDelegator.new self.new
+        model.__callbacks__ << block unless block.nil?
 
         operation :list, params: params do |data|
-          unless data.empty?
-            model.__setobj__ create_resource data.first, origin: model.__getobj__
-          else
+          if data.empty?
             model.__setobj__ nil
+          else
+            model.__setobj__ create_resource data.first, origin: model.__getobj__
           end
-          block.call model unless block.nil?
+          model.__invoke__
         end
 
         model
@@ -130,21 +131,18 @@ module Acfs::Model
         end
       end
 
-      # TODO: Replace delegator with promise or future for the long run.
-      class ResourceDelegator < SimpleDelegator
-        delegate :class, :is_a?, :kind_of?, :nil?, to: :__getobj__
-      end
-
       private
       def find_single(id, opts, &block)
-        model = ResourceDelegator.new self.new
+        model = Acfs::Util::ResourceDelegator.new self.new
 
         opts[:params] ||= {}
         opts[:params].merge!({ id: id })
 
+        model.__callbacks__ << block unless block.nil?
+
         operation :read, opts do |data|
           model.__setobj__ create_resource data, origin: model.__getobj__
-          block.call model unless block.nil?
+          model.__invoke__
         end
 
         model
@@ -152,13 +150,15 @@ module Acfs::Model
 
       def find_multiple(ids, opts, &block)
         ::Acfs::Collection.new.tap do |collection|
+          collection.__callbacks__ << block unless block.nil?
+
           counter = 0
           ids.each do |id|
             find_single id, opts do |resource|
               collection << resource
               if (counter += 1) == ids.size
                 collection.loaded!
-                block.call collection unless block.nil?
+                collection.__invoke__
               end
             end
           end

@@ -6,6 +6,7 @@ module Acfs
 
   class Collection < ::Delegator
     include Model::Loadable
+    include Acfs::Util::Callbacks
 
     def initialize
       super([])
