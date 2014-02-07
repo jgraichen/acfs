@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Acfs::Model::Locatable do
   let(:model) { MyUser }
   before do
-    stub_request(:get, "http://users.example.org/users/1").to_return response({ id: 1, name: "Anon", age: 12 })
+    stub_request(:get, 'http://users.example.org/users/1').to_return response({ id: 1, name: 'Anon', age: 12 })
   end
 
   describe '.url' do
@@ -20,14 +20,14 @@ describe Acfs::Model::Locatable do
     context 'new resource' do
       let(:m) { model.new }
 
-      it "should return nil" do
+      it 'should return nil' do
         expect(m.url).to be == nil
       end
 
       context 'new resource with id' do
         let(:m) { model.new id: 475 }
 
-        it "should return resource URL" do
+        it 'should return resource URL' do
           expect(m.url).to be == 'http://users.example.org/users/475'
         end
       end
