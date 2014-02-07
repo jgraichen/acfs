@@ -4,6 +4,10 @@
 
 * Fix: rescue NameError and NoMethodError on invalid type
 
+## 0.30.0
+
+* Add experimental support for multiple operation callbacks (Acfs.add_callback)
+
 ## 0.29.0
 
 * Add find_by!
