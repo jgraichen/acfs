@@ -19,7 +19,7 @@ describe Acfs::Service do
 
   describe '#location' do
     let(:resource) { Class.new }
-    before { allow(resource).to receive(:path_defaults).and_return({}) }
+    before { allow(resource).to receive(:location_default_path, &proc{|a, p| p}) }
 
     it 'should extract resource path name from given class' do
       expect(service.location(resource).to_s).to eq('/classes')

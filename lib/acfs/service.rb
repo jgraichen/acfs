@@ -37,13 +37,25 @@ module Acfs
     def location(resource_class, opts = {})
       opts.reverse_merge! self.options
 
-      url  = self.class.base_url.to_s
-      url += resource_class.path_defaults[opts[:action] || :list] || '/:path'
+      action = opts[:action] || :list
 
-      path = opts[:path]
-      path ||= (resource_class.name || 'class').pluralize.underscore
+      path = if Hash === opts[:path] && opts[:path].has_key?(action)
+               opts[:path].fetch(action)
+             else
+               path = if Hash === opts[:path]
+                        opts[:path][:all].to_s
+                      else
+                        opts[:path].to_s
+                      end
 
-      Location.new Location.new(url).build(raise: false, path: path).str
+               path = (resource_class.name || 'class').pluralize.underscore if path.blank?
+
+               resource_class.location_default_path(action, path.strip)
+             end
+
+      raise ArgumentError.new "Location for `#{action}' explicit disabled by set to nil." if path.nil?
+
+      Location.new [self.class.base_url.to_s, path.to_s].join('/')
     end
 
     class << self

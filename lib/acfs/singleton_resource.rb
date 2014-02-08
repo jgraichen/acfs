@@ -97,14 +97,8 @@ module Acfs
       undef_method :find_by!
 
       # @api private
-      def path_defaults
-        {
-            list: '/:path',
-            create: '/:path',
-            read: '/:path',
-            update: '/:path',
-            delete: '/:path'
-        }
+      def location_default_path(_, path)
+        path
       end
     end
   end

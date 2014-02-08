@@ -34,19 +34,22 @@ module Acfs
 
     def str
       uri = raw.dup
-      uri.path = '/' + struct.map{|s| lookup_arg(s, args) }.join('/')
+      uri.path = URI.escape '/' + struct.map{|s| lookup_arg(s, args) }.join('/')
       uri.to_s
     end
 
-    def to_s
+    def raw_uri
       raw.to_s
     end
+    alias_method :to_s, :raw_uri
 
     private
     def extract_arg(key, hashes)
       hashes.each_with_index do |hash, index|
         return (index == 0 ? hash.delete(key) : hash.fetch(key)) if hash.has_key?(key)
       end
+
+      nil
     end
 
     def lookup_arg(arg, args)

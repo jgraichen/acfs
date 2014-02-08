@@ -42,7 +42,11 @@ class MyUserWithValidations < MyUser
 end
 
 class Session < Acfs::Resource
-  service UserService
+  service UserService, path: {
+      list: 'users/:user_id/sessions',
+      delete: 'users/:user_id/sessions/del/:id',
+      update: nil
+  }
 
   attribute :id, :string
   attribute :user, :integer

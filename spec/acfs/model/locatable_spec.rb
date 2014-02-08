@@ -29,6 +29,37 @@ describe Acfs::Model::Locatable do
         end
       end
     end
+
+    describe 'custom paths' do
+      let(:model) { Session }
+      let(:location) { Session.location action: action }
+      subject { location }
+
+      context ':list location' do
+        let(:action) { :list }
+        its(:raw_uri) { should eq 'http://users.example.org/users/:user_id/sessions' }
+      end
+
+      context ':create location' do
+        let(:action) { :create }
+        its(:raw_uri) { should eq 'http://users.example.org/sessions' }
+      end
+
+      context ':read location' do
+        let(:action) { :read }
+        its(:raw_uri) { should eq 'http://users.example.org/sessions/:id' }
+      end
+
+      context ':update location' do
+        let(:action) { :update }
+        its(:raw_uri) { expect{ subject }.to raise_error(ArgumentError, /update.*disabled/)}
+      end
+
+      context ':delete location' do
+        let(:action) { :delete }
+        its(:raw_uri) { should eq 'http://users.example.org/users/:user_id/sessions/del/:id' }
+      end
+    end
   end
 
   describe '#url' do

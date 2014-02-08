@@ -83,14 +83,15 @@ module Acfs::Model
       end
 
       # @api private
-      def path_defaults
-        {
-            list: '/:path',
-            create: '/:path',
-            read: '/:path/:id',
-            update: '/:path/:id',
-            delete: '/:path/:id'
-        }
+      def location_default_path(action, path)
+        case action
+          when :list, :create
+            return path
+          when :read, :update, :delete
+            return "#{path}/:id"
+          else
+            nil
+        end
       end
     end
 
