@@ -25,6 +25,13 @@ class MyUser < Acfs::Resource
   attribute :age, :integer
 end
 
+class Profile < Acfs::SingletonResource
+  service UserService, path: 'users/:user_id/profile'
+
+  attribute :user_id, :integer
+  attribute :twitter_handle, :string
+end
+
 class Customer < MyUser
 
 end

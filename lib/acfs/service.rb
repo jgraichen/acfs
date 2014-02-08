@@ -32,15 +32,18 @@ module Acfs
     end
 
     # @api private
-    # @return [String]
+    # @return [Location]
     #
-    def url_for(resource_class, options = {})
-      options.reverse_merge! self.options
+    def location(resource_class, opts = {})
+      opts.reverse_merge! self.options
 
       url  = self.class.base_url.to_s
-      url += "/#{(options[:path] || resource_class.name.pluralize.underscore).to_s}"
-      url += "/#{options[:suffix].to_s}" if options[:suffix]
-      url
+      url += resource_class.path_defaults[opts[:action] || :list] || '/:path'
+
+      path = opts[:path]
+      path ||= (resource_class.name || 'class').pluralize.underscore
+
+      Location.new Location.new(url).build(raise: false, path: path).str
     end
 
     class << self

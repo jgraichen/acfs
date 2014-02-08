@@ -14,18 +14,83 @@ module Acfs::Model
 
     module ClassMethods
 
-      # Return URL for this class of resource. Given suffix will be appended.
+      # @overload url(suffix)
+      #   @deprecated
+      #   Return URL for this class of resource. Given suffix will be appended.
+      #
+      #   @example
+      #     User.url    # => "http://users.srv.org/users"
+      #     User.url(5) # => "http://users.srv.org/users/5"
+      #
+      #   @param [ String ] suffix Suffix to append to URL.
+      #   @return [ String ] Generated URL.
+      #
+      # @overload url(opts = {})
+      #   Return URL for this class of resources. Given options will be used to replace
+      #   URL path arguments and to determine the operation action.
+      #
+      #   @example
+      #     User.url(id: 5, action: :read) # => "http://users.srv.org/users/5"
+      #     User.url(action: :list) # => "http://users.srv.org/users"
+      #
+      #   @param opts [Hash] Options.
+      #   @option opts [Symbol] :action Operation action, usually `:list`, `:create`, `:read`,
+      #     `:update` or`:delete`.
+      #   @return [ String ] Generated URL.
+      #
+      def url(suffix = nil, opts = {})
+        if Hash === suffix
+          opts, suffix = suffix, nil
+        end
+
+        opts[:action] = :list if suffix
+
+        url  = location(opts).build(opts).str
+        url += "/#{suffix}" if suffix.to_s.present?
+        url
+      end
+
+      # Return a location object able to build the URL for this resource and
+      # given action.
       #
       # @example
-      #   User.url    # => "http://users.srv.org/users"
-      #   User.url(5) # => "http://users.srv.org/users/5"
+      #   class Identity < ::Acfs::Resource
+      #     service MyService, path: 'users/:user_id/identities'
+      #   end
       #
-      # @param [ String ] suffix Suffix to append to URL.
-      # @return [ String ] Generated URL.
-      # @see Acfs::Service#url_for Delegates to Service#url_for with `suffix` option.
+      #   location = Identity.location(action: :read)
+      #   location.arguments
+      #   => [:user_id, :id]
       #
-      def url(suffix = nil)
-        service.url_for(self, suffix: suffix)
+      #   location.raw_url
+      #   => 'http://service/users/:user_id/identities/:id'
+      #
+      #   location = Identity.location(action: :list)
+      #   location.arguments
+      #   => [:user_id]
+      #
+      #   location.build(user_id: 42)
+      #   => 'http://service/users/42/identities'
+      #
+      # @param opts [Hash] Options.
+      # @option opts [Symbol] :action Operation action, usually `:list`, `:create`, `:read`,
+      #   `:update` or`:delete`.
+      #
+      # @return [Location] Location object.
+      #
+      def location(opts = {})
+        service.location(self, opts)
+      end
+
+      # @api private
+      def path_defaults
+        {
+            list: '/:path',
+            create: '/:path',
+            read: '/:path/:id',
+            update: '/:path/:id',
+            delete: '/:path/:id'
+        }
       end
     end
 
@@ -42,9 +107,22 @@ module Acfs::Model
     # @return [ String ] Generated URL.
     # @see ClassMethods#url
     #
-    def url
-      return nil if id.nil?
-      self.class.service.url_for self, suffix: read_attribute(:id)
+    def url(opts = {})
+      return nil if need_primary_key? && !has_primary_key?
+
+      self.class.service.location(self.class, opts.reverse_merge(action: :read)).build(attributes).str
+    end
+
+    # @api private
+    # Return true if resource needs a primary key (id) for singular actions.
+    def need_primary_key?
+      true
+    end
+
+    # @api private
+    # Return true if resource has a primary key (id) set.
+    def has_primary_key?
+      respond_to?(:id) && !id.nil?
     end
   end
 end

@@ -13,6 +13,7 @@ module Acfs
 
   require 'acfs/collection'
   require 'acfs/configuration'
+  require 'acfs/location'
   require 'acfs/model'
   require 'acfs/operation'
   require 'acfs/request'

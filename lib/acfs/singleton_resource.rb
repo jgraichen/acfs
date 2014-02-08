@@ -49,6 +49,11 @@ module Acfs
       end
     end
 
+    # @api private
+    def need_primary_key?
+      false
+    end
+
     class << self
       # @api public
       #
@@ -90,6 +95,17 @@ module Acfs
       undef_method :where
       undef_method :find_by
       undef_method :find_by!
+
+      # @api private
+      def path_defaults
+        {
+            list: '/:path',
+            create: '/:path',
+            read: '/:path',
+            update: '/:path',
+            delete: '/:path'
+        }
+      end
     end
   end
 end

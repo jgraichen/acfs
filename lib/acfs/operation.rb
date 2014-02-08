@@ -6,7 +6,7 @@ module Acfs
   # processing as well as error handling and stubbing.
   #
   class Operation
-    attr_reader :action, :params, :resource, :data, :callback
+    attr_reader :action, :params, :resource, :data, :callback, :location
     delegate :service, to: :resource
     delegate :call, to: :callback
 
@@ -18,6 +18,8 @@ module Acfs
       # later in-place changes by modifying passed hash
       @params   = (opts[:params] || {}).dup
       @data     = (opts[:data]   || {}).dup
+
+      @location = resource.location(action: @action).extract_from(@params, @data)
 
       @callback = block
     end
@@ -36,11 +38,7 @@ module Acfs
     end
 
     def full_params
-      id ? params.merge(id: id) : params
-    end
-
-    def url
-      single? ? resource.url(id) : resource.url
+      (id ? params.merge(id: id) : params).merge location.args
     end
 
     def method
@@ -48,7 +46,7 @@ module Acfs
     end
 
     def request
-      request = ::Acfs::Request.new url, method: method, params: params, data: data
+      request = ::Acfs::Request.new location.str, method: method, params: params, data: data
       request.on_complete do |response|
         handle_failure response unless response.success?
         callback.call response.data

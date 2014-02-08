@@ -17,16 +17,19 @@ describe Acfs::Service do
     end
   end
 
-  describe '#url_for' do
+  describe '#location' do
+    let(:resource) { Class.new }
+    before { allow(resource).to receive(:path_defaults).and_return({}) }
+
     it 'should extract resource path name from given class' do
-      expect(service.url_for(Class)).to eq('/classes')
+      expect(service.location(resource).to_s).to eq('/classes')
     end
 
     context 'with path options' do
       let(:options) { { path: 'abc' } }
 
       it 'should have custom resource path' do
-        expect(service.url_for(Class)).to eq('/abc')
+        expect(service.location(resource).to_s).to eq('/abc')
       end
     end
   end
