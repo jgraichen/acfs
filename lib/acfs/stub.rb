@@ -111,11 +111,34 @@ module Acfs
         stub = stub_for op
         unless stub
           return false if allow_requests?
-          raise RealRequestsNotAllowedError, "No stub found for #{op.action} on #{op.resource.name} with params #{op.full_params.inspect}, data #{op.data.inspect} and id #{op.id}."
+          raise RealRequestsNotAllowedError.new <<-MSG.strip.gsub(/^[ ]{12}/, '')
+            No stub found for `#{op.action}' on `#{op.resource.name}' with params `#{op.full_params.inspect}', data `#{op.data.inspect}' and id `#{op.id}'.
+
+            Available stubs:
+            #{pretty_print}
+          MSG
         end
 
         stub.call op
         true
+      end
+
+      private
+      def pretty_print
+        out = String.new
+        stubs.each do |klass, actions|
+          out << '  ' << klass.name << ":\n"
+          actions.each do |action, stubs|
+            stubs.each do |stub|
+              out << "    #{action}"
+              out << " with #{stub.opts[:with].inspect}" if stub.opts[:with]
+              out << " and return #{stub.opts[:return].inspect}" if stub.opts[:return]
+              out << " and raise #{stub.opts[:raise].inspect}" if stub.opts[:raise]
+              out << "\n"
+            end
+          end
+        end
+        out
       end
     end
   end
