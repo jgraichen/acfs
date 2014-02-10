@@ -1,9 +1,12 @@
 # Changelog
 
+## 0.31.0
+
+* Add experimental support for multiple and chained paths with placeholders
+
 ## 0.30.0
 
 * Add experimental support for multiple operation callbacks (Acfs.add_callback)
-* Add experimental support for multiple and chained paths with placeholders
 
 ## 0.29.1
 
