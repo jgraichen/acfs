@@ -85,10 +85,3 @@ class Single < Acfs::SingletonResource
   attribute :score, :integer
   attribute :user_id, :integer
 end
-
-# DRAFT: Singular resource
-#class Singular < Acfs::Resource
-#  service UserService, singular: true
-#
-#  attribute :name, :string
-#end
