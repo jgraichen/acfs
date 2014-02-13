@@ -23,12 +23,12 @@ describe Acfs::Model::Attributes::UUID do
 
         context 'with random non-empty string' do
           let(:param) { 'invalid string' }
-          it { should raise_error }
+          it { should raise_error ArgumentError }
         end
 
         context 'with string in UUID format but containing invalid characters' do
           let(:param) { 'xxxxxxxx-yyyy-11e3-baa8-0800200c9a66' }
-          it { should raise_error }
+          it { should raise_error ArgumentError }
         end
 
         context 'with empty string' do
@@ -42,7 +42,7 @@ describe Acfs::Model::Attributes::UUID do
 
           context 'without allow_nil option' do
             let(:params) { {allow_nil: false} }
-            it { should raise_error }
+            it { should raise_error ArgumentError }
           end
         end
       end
@@ -55,7 +55,7 @@ describe Acfs::Model::Attributes::UUID do
       invalid_params.each do |klass, incorrect_param|
         context "with #{klass.to_s} as param" do
           let(:param) { incorrect_param }
-          it { should raise_error }
+          it { should raise_error ArgumentError }
         end
       end
     end
