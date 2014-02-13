@@ -76,7 +76,7 @@ module Acfs::Model
         collection.__callbacks__ << block if block
 
         operation :list, params: params do |data|
-          data.each do |obj|2
+          data.each do |obj|
             collection << create_resource(obj)
           end
           collection.loaded!
