@@ -73,13 +73,14 @@ module Acfs::Model
       #
       def all(params = {}, &block)
         collection = ::Acfs::Collection.new
+        collection.__callbacks__ << block if block
 
         operation :list, params: params do |data|
-          data.each do |obj|
+          data.each do |obj|2
             collection << create_resource(obj)
           end
           collection.loaded!
-          block.call collection unless block.nil?
+          collection.__invoke__
         end
 
         collection

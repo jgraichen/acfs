@@ -171,6 +171,25 @@ describe Acfs::Model::QueryMethods do
       stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'PC' }, { id: 2, type: 'Computer' }, { id: 3, type: 'Mac' }])
     end
 
+    it 'should invoke multiple callback after all models are loaded' do
+      proc1 = Proc.new { }
+      proc2 = Proc.new { }
+      expect(proc1).to receive(:call) do |computers|
+        expect(computers).to be === @computers
+        expect(computers.size).to be == 3
+        expect(computers).to be_loaded
+      end
+      expect(proc2).to receive(:call) do |computers|
+        expect(computers).to be === @computers
+        expect(computers.size).to be == 3
+        expect(computers).to be_loaded
+      end
+
+      @computers = computer.all &proc1
+      Acfs.add_callback(@computers, &proc2)
+      Acfs.run
+    end
+
     context 'with resource type inheritance' do
       it 'should create appropriate subclass resources' do
         @computers = Computer.all
