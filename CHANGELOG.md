@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.32.1
+
+* Fix multiple callbacks on `QueryMethods#all`
+
 ## 0.32.0
 
 * Add new attribute type `UUID`
