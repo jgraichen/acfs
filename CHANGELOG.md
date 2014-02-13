@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.32.0
+
+* Add new attribute type `UUID`
+
 ## 0.31.0
 
 * Add experimental support for multiple and chained paths with placeholders
