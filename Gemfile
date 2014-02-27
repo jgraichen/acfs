@@ -12,7 +12,7 @@ gem 'json', '~> 1.8.1'
 
 # Doc
 group :development do
-  gem 'yard', '~> 0.8.6'
+  gem 'yard'
   gem 'listen'
   gem 'guard-yard'
   gem 'guard-rspec'

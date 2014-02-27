@@ -195,8 +195,8 @@ module Acfs
         # @see #create
         #
         def create!(data, opts = {})
-          new.tap do |model|
-            model.save! opts.merge data: data
+          new(data).tap do |model|
+            model.save!
           end
         end
 
@@ -218,8 +218,8 @@ module Acfs
         # @see #create!
         #
         def create(data, opts = {})
-          model = new
-          model.save opts.merge data: data
+          model = new data
+          model.save
           model
         end
       end

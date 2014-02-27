@@ -3,6 +3,7 @@
 ## Next
 
 * Do not raise errors on unknown attributes by default, add :unknown option.
+* Add support to store unknown attributes
 
 ## 0.32.1
 

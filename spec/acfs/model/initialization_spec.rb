@@ -13,7 +13,7 @@ describe 'Acfs::Model::Initialization' do
 
   describe '#initialize' do
     it 'should allow to set attributes with initializer' do
-      m = model.new(name: "John")
+      m = model.new name: "John"
       expect(m.name).to be == "John"
     end
 

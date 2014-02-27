@@ -3,6 +3,7 @@ require 'active_model'
 # @api public
 #
 module Acfs::Model
+  require 'acfs/model/initialization'
   require 'acfs/model/attributes'
   require 'acfs/model/dirty'
   require 'acfs/model/loadable'
@@ -24,10 +25,9 @@ module Acfs::Model
       extend  ActiveModel::Translation
       include ActiveModel::Conversion
       include ActiveModel::Validations
-
-      require 'acfs/model/initialization'
-      include Initialization
     end
+
+    include Initialization
 
     include Attributes
     include Loadable

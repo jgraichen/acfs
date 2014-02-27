@@ -27,7 +27,8 @@ module Acfs::Model
     # @see ClassMethods#attributes
     #
     def initialize(*attrs)
-      self.write_attributes self.class.attributes, change: false
+      self.write_attributes self.class.attributes
+      reset_changes
       super
     end
 
@@ -46,7 +47,7 @@ module Acfs::Model
     # @return [ HashWithIndifferentAccess{ Symbol => Object } ] Attributes and their values.
     #
     def attributes
-      HashWithIndifferentAccess.new self.class.attributes.keys.inject({}) { |h, k| h[k.to_sym] = public_send k; h }
+      @attributes ||= HashWithIndifferentAccess.new
     end
 
     # @api public
@@ -73,7 +74,7 @@ module Acfs::Model
     # @return [ Object ] Attribute value.
     #
     def read_attribute(name)
-      instance_variable_get :"@#{name}"
+      self.attributes[name.to_s]
     end
 
     # @api public
@@ -96,16 +97,14 @@ module Acfs::Model
     # @see #write_attribute Delegates attribute values to `#write_attribute`.
     #
     def write_attributes(attributes, opts = {})
-      return false unless attributes.respond_to? :each
+      unless attributes.respond_to?(:each) && attributes.respond_to?(:keys)
+        return false
+      end
 
       if opts.fetch(:unknown,:ignore) == :raise
         if (attributes.keys.map(&:to_s) - self.class.attributes.keys).any?
           raise ArgumentError.new "Unknown attributes: #{(attributes.keys - self.class.attributes.keys).map(&:inspect).join(', ')}"
         end
-      end
-
-      attributes = attributes.select do |k, v|
-        self.class.attributes.keys.include? k.to_s
       end
 
       procs = {}
@@ -114,15 +113,31 @@ module Acfs::Model
         if attributes[key].is_a? Proc
           procs[key] = attributes[key]
         else
-          write_attribute key, attributes[key], opts
+          write_local_attribute key, attributes[key], opts
         end
       end
 
       procs.each do |key, proc|
-        write_attribute key, instance_exec(&proc), opts
+        write_local_attribute key, instance_exec(&proc), opts
       end
 
       true
+    end
+
+    # @api private
+    #
+    # Check if a public getter for attribute exists that should be called to
+    # write it or of {#write_attribute} should be called directly. This is
+    # necessary as {#write_attribute} should go though setters but can also
+    # handle unknown attribute that will not have a generated setter method.
+    #
+    def write_local_attribute(name, value, opts = {})
+      method = "#{name}="
+      if respond_to? method, true
+        public_send method, value
+      else
+        write_attribute name, value, opts
+      end
     end
 
     # @api public
@@ -135,11 +150,12 @@ module Acfs::Model
     # @raise [ ArgumentError ] If no attribute with given name is defined.
     #
     def write_attribute(name, value, opts = {})
-      if (attr = self.class.defined_attributes[name.to_s]).nil?
-        raise ArgumentError.new "Unknown attribute `#{name}`."
+      attr_type = self.class.defined_attributes[name.to_s]
+      if attr_type
+        write_raw_attribute name, attr_type.cast(value), opts
+      else
+        write_raw_attribute name, value, opts
       end
-
-      write_raw_attribute name, attr.cast(value), opts
     end
 
     # @api private
@@ -152,7 +168,7 @@ module Acfs::Model
     # @param [ Object ] value Attribute value.
     #
     def write_raw_attribute(name, value, _ = {})
-      instance_variable_set :"@#{name}", value
+      self.attributes[name.to_s] = value
     end
 
     module ClassMethods

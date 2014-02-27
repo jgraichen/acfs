@@ -18,11 +18,11 @@ describe Acfs::Model::Persistence do
       .to_return response({ id: 5, name: 'Anon', age: 12 })
 
     stub_request(:post, 'http://users.example.org/users')
-      .with(body: '{"name":"Idefix","age":12}')
+      .with(body: '{id:null,"name":"Idefix","age":12}')
       .to_return response({ id: 5, name: 'Idefix', age: 12 })
 
     stub_request(:post, 'http://users.example.org/users')
-      .with(body: '{"age":12}')
+      .with(body: '{"id":null,"name":null,"age":12}')
       .to_return response({ errors: { name: [ 'required' ] }}, status: 422)
 
     @del = stub_request(:delete, 'http://users.example.org/users/1')
@@ -59,6 +59,30 @@ describe Acfs::Model::Persistence do
           model.save!
 
           expect(@post_stub).to have_been_requested
+        end
+
+        context 'with unknown attributes' do
+          let!(:req) do
+            stub_request(:post, 'http://users.example.org/users')
+              .with(body: '{"id":null,"name":"Idefix","age":null,"born_at":"Berlin"}')
+              .to_return response({id: 5, name: 'Idefix', age: 12, wuff: 'woa'})
+          end
+          let(:model) { model_class.new name: 'Idefix', born_at: 'Berlin' }
+
+          it 'should POST to collection URL' do
+            model.save!
+            expect(req).to have_been_requested
+          end
+
+          it 'should still have unknown attribute' do
+            model.save!
+            expect(model.attributes).to include 'born_at' => 'Berlin'
+          end
+
+          it 'should include server send unknown attribute' do
+            model.save!
+            expect(model.attributes).to include 'wuff' => 'woa'
+          end
         end
       end
     end
@@ -205,43 +229,56 @@ describe Acfs::Model::Persistence do
     end
 
     context 'with invalid data' do
-      let(:data) { { age: 12 } }
+      let(:data) { {name: nil, age: 12} }
 
       it 'should raise an error' do
-        expect { model_class.create! data }.to raise_error(::Acfs::InvalidResource) do |error|
-          expect(error.errors).to be == { 'name' => %w(required) }
-        end
+        expect{ model_class.create! data }.to \
+          raise_error(::Acfs::InvalidResource) do |error|
+            expect(error.errors).to be == { 'name' => %w(required) }
+          end
       end
     end
   end
 
   describe '.create' do
+    subject { model_class.create data }
+
     context 'with valid data' do
-      let(:data) { { name: 'Idefix', age: 12 } }
+      let(:data) { {name: 'Idefix', age: 12} }
 
       it 'should create new resource' do
-        model = model_class.create! data
-        expect(model.name).to be == 'Idefix'
-        expect(model.age).to be == 12
+        expect(subject.name).to be == 'Idefix'
+        expect(subject.age).to be == 12
       end
 
       it 'should be persisted' do
-        model = model_class.create! data
-        expect(model).to be_persisted
+        expect(subject).to be_persisted
       end
     end
 
     context 'with invalid data' do
-      let(:data) { { age: 12 } }
+      let(:data) { {name: nil, age: 12} }
 
       it 'should return not persisted resource' do
-        model = model_class.create data
-        expect(model).to_not be_persisted
+        expect(subject).to_not be_persisted
       end
 
       it 'should contain error hash' do
-        model = model_class.create data
-        expect(model.errors.to_hash).to be == { name: %w(required) }
+        expect(subject.errors.to_hash).to eq name: %w(required)
+      end
+    end
+
+    context 'with additional data' do
+      let!(:req) do
+        stub_request(:post, 'http://users.example.org/users')
+          .with(body: '{"id":null,"name":"Anon","age":9,"born_at":"today"}')
+          .to_return response({id: 5, name: 'Anon', age: 9})
+      end
+      let(:data) { {age: 9, born_at: 'today'} }
+
+      it 'should store them in attributes' do
+        expect(subject.attributes).to eq 'id' => 5, 'name' => 'Anon',
+          'age' => 9, 'born_at' => 'today'
       end
     end
   end

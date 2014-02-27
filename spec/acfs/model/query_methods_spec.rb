@@ -7,15 +7,16 @@ describe Acfs::Model::QueryMethods do
     context 'with single id' do
       context 'with successful response' do
         before do
-          stub_request(:get, 'http://users.example.org/users/1').to_return response({ id: 1, name: 'Anon', age: 12 })
-          stub_request(:get, 'http://users.example.org/users/2').to_return response({ id: 2, type: 'Customer', name: 'Clare Customer', age: 24 })
+          stub_request(:get, 'http://users.example.org/users/1').to_return response({id: 1, name: 'Anon', age: 12, born_at: 'Berlin'})
+          stub_request(:get, 'http://users.example.org/users/2').to_return response({id: 2, type: 'Customer', name: 'Clare Customer', age: 24 })
         end
 
         it 'should load a single remote resource' do
           user = model.find 1
           Acfs.run
 
-          expect(user.attributes).to be == { id: 1, name: 'Anon', age: 12 }.stringify_keys
+          expect(user.attributes).to eq(
+            {id: 1, name: 'Anon', age: 12, born_at: 'Berlin'}.stringify_keys)
         end
 
         it 'should invoke callback after model is loaded' do

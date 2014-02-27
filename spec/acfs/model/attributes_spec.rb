@@ -41,6 +41,9 @@ describe Acfs::Model::Attributes do
     before do
       model.attribute :name, :string, default: 'John'
       model.attribute :age, :integer, default: 25
+      model.send :define_method, :name= do |name|
+        write_attribute :name, "The Great #{name}"
+      end
     end
     let(:args) { [params] }
     let(:params){ {name: 'James'} }
@@ -50,8 +53,8 @@ describe Acfs::Model::Attributes do
 
     it 'should update attributes'  do
       should change(m, :attributes)
-             .from({'name' => 'John', 'age' => 25})
-             .to({'name' => 'James', 'age' => 25})
+             .from({'name' => 'The Great John', 'age' => 25})
+             .to({'name' => 'The Great James', 'age' => 25})
     end
 
     context 'without non-hash params' do
@@ -62,14 +65,14 @@ describe Acfs::Model::Attributes do
     end
 
     context 'with unknown attributes' do
-      let(:params) { {name: 'James', born_at: Time.now} }
+      let(:params) { {name: 'James', born_at: 'today'} }
 
       it { should_not raise_error }
 
-      it 'should update known attributes'  do
+      it 'should update known attributes and store unknown'  do
         should change(m, :attributes)
-               .from({'name' => 'John', 'age' => 25})
-               .to({'name' => 'James', 'age' => 25})
+               .from({'name' => 'The Great John', 'age' => 25})
+               .to({'name' => 'The Great James', 'age' => 25, 'born_at' => 'today'})
       end
 
       context 'with unknown: :raise option' do
@@ -94,13 +97,6 @@ describe Acfs::Model::Attributes do
     it 'should return default value' do
       expect(model.new.name).to be == 'John'
     end
-
-    it 'should return matching ivar\'s value' do
-      o = model.new
-      o.instance_variable_set :@name, 'Johannes'
-
-      expect(o.name).to be == 'Johannes'
-    end
   end
 
   describe '#_setter_' do
@@ -114,13 +110,6 @@ describe Acfs::Model::Attributes do
       o.name = 'Paul'
 
       expect(o.name).to be == 'Paul'
-    end
-
-    it 'should set instance var' do
-      o = model.new
-      o.name = 'Paul'
-
-      expect(o.instance_variable_get(:@name)).to be == 'Paul'
     end
 
     it 'should update attributes hash' do
