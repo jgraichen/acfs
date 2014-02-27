@@ -170,7 +170,7 @@ module Acfs::Model
         type = data.delete 'type'
         klass = resource_class_lookup(type)
         (opts[:origin].is_a?(klass) ? opts[:origin] : klass.new).tap do |m|
-          m.attributes = data
+          m.write_attributes data, opts
           m.loaded!
         end
       end

@@ -1,5 +1,9 @@
 # Changelog
 
+## Next
+
+* Do not raise errors on unknown attributes by default, add :unknown option.
+
 ## 0.32.1
 
 * Fix multiple callbacks on `QueryMethods#all`

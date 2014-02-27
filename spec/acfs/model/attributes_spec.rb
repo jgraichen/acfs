@@ -42,19 +42,42 @@ describe Acfs::Model::Attributes do
       model.attribute :name, :string, default: 'John'
       model.attribute :age, :integer, default: 25
     end
+    let(:args) { [params] }
+    let(:params){ {name: 'James'} }
     let(:m) { model.new }
+    let(:action) { lambda{ m.write_attributes *args } }
+    subject { action }
 
-    it 'should update attributes' do
-      m.write_attributes name: 'James'
-
-      expect(m.attributes).to be == { name: 'James', age: 25 }.stringify_keys
+    it 'should update attributes'  do
+      should change(m, :attributes)
+             .from({'name' => 'John', 'age' => 25})
+             .to({'name' => 'James', 'age' => 25})
     end
 
-    it 'should do nothing on non-array types' do
-      ret = m.write_attributes 'James'
+    context 'without non-hash params' do
+      let(:params) { 'James' }
 
-      expect(ret).to be false
-      expect(m.attributes).to be == { name: 'John', age: 25 }.stringify_keys
+      it { should_not change(m, :attributes) }
+      its(:call) { should eq false }
+    end
+
+    context 'with unknown attributes' do
+      let(:params) { {name: 'James', born_at: Time.now} }
+
+      it { should_not raise_error }
+
+      it 'should update known attributes'  do
+        should change(m, :attributes)
+               .from({'name' => 'John', 'age' => 25})
+               .to({'name' => 'James', 'age' => 25})
+      end
+
+      context 'with unknown: :raise option' do
+        let(:args) { [params, {unknown: :raise}] }
+
+        it { should raise_error(ArgumentError, /unknown attribute/i) }
+        it { expect{ subject.call rescue true }.to_not change(m, :attributes) }
+      end
     end
   end
 

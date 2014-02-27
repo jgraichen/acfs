@@ -98,6 +98,16 @@ module Acfs::Model
     def write_attributes(attributes, opts = {})
       return false unless attributes.respond_to? :each
 
+      if opts.fetch(:unknown,:ignore) == :raise
+        if (attributes.keys.map(&:to_s) - self.class.attributes.keys).any?
+          raise ArgumentError.new "Unknown attributes: #{(attributes.keys - self.class.attributes.keys).map(&:inspect).join(', ')}"
+        end
+      end
+
+      attributes = attributes.select do |k, v|
+        self.class.attributes.keys.include? k.to_s
+      end
+
       procs = {}
 
       attributes.each do |key, _|
