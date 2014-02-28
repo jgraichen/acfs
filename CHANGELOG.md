@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 0.33.0
 
 * Do not raise errors on unknown attributes by default, add :unknown option.
 * Add support to store unknown attributes
