@@ -3,6 +3,7 @@ require 'active_support/core_ext/hash'
 require 'active_support/core_ext/class'
 require 'active_support/core_ext/string'
 require 'active_support/core_ext/module'
+require 'active_support/notifications'
 
 module Acfs
   extend ActiveSupport::Autoload

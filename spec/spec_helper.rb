@@ -1,6 +1,4 @@
 require 'rspec'
-require 'rspec/its'
-require 'rspec/collection_matchers'
 require 'webmock/rspec'
 
 if ENV['CI'] || (defined?(:RUBY_ENGINE) && RUBY_ENGINE != 'rbx')
