@@ -11,40 +11,15 @@ describe Acfs::Model::QueryMethods do
           stub_request(:get, 'http://users.example.org/users/2').to_return response({id: 2, type: 'Customer', name: 'Clare Customer', age: 24 })
         end
 
+        let(:action) { lambda{|cb=nil| model.find 1, &cb } }
+        it_behaves_like 'a query method with multi-callback support'
+
         it 'should load a single remote resource' do
-          user = model.find 1
+          user = action.call
           Acfs.run
 
           expect(user.attributes).to eq(
             {id: 1, name: 'Anon', age: 12, born_at: 'Berlin'}.stringify_keys)
-        end
-
-        it 'should invoke callback after model is loaded' do
-          proc = Proc.new { }
-          expect(proc).to receive(:call) do |user|
-            expect(user).to equal @user
-            expect(user).to be_loaded
-          end
-
-          @user = model.find 1, &proc
-          Acfs.run
-        end
-
-        it 'should invoke multiple callback after model is loaded' do
-          proc1 = Proc.new { }
-          proc2 = Proc.new { }
-          expect(proc1).to receive(:call) do |user|
-            expect(user).to equal @user
-            expect(user).to be_loaded
-          end
-          expect(proc2).to receive(:call) do |user|
-            expect(user).to equal @user
-            expect(user).to be_loaded
-          end
-
-          @user = model.find 1, &proc1
-          Acfs.add_callback(@user, &proc2)
-          Acfs.run
         end
 
         context 'with resource type inheritance' do
