@@ -154,6 +154,20 @@ describe Acfs::Stub do
           expect(computers.last).to be_a Mac
         end
       end
+
+      context 'with header' do
+        before do
+          Acfs::Stub.resource Comment, :list,
+          return: [{ id: 1, text: 'Foo' }, { id: 2, text: 'Bar' }],
+          headers: headers
+        end
+
+        let!(:comments) { Comment.all }
+        let(:headers) { {'X-Total-Pages' => '2'} }
+        subject { Acfs.run; comments }
+
+        its(:total_pages) { should eq 2 }
+      end
     end
 
     context 'with update action' do
