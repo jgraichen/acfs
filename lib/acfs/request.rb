@@ -18,8 +18,6 @@ module Acfs
         @headers = options.delete(:headers) || {}
         @params  = options.delete(:params) || {}
         @method  = options.delete(:method) || :get
-
-        url.query = nil # params.any? ? params.to_param : nil
       end.to_s
       on_complete &block if block_given?
     end

@@ -21,15 +21,6 @@ describe Acfs::Request do
         expect(request.url).to be == "#{url}"
       end
     end
-
-    context 'with parameters in URL' do
-      let(:url) { 'http://api.example.org/v1/examples?b=ac' }
-      let(:params) { { id: 10 }}
-
-      it 'should strip query from URL' do
-        expect(request.url).to be == 'http://api.example.org/v1/examples'
-      end
-    end
   end
 
   describe '#headers' do

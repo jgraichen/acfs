@@ -10,8 +10,10 @@ module Acfs
     include Acfs::Util::Callbacks
     include Collections::Paginatable
 
-    def initialize
+    def initialize(resource_class)
       super([])
+
+      @resource_class = resource_class
     end
 
     def __getobj__

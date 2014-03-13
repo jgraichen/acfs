@@ -5,7 +5,7 @@ module Acfs
   # Global handler for stubbing resources.
   #
   class Stub
-    ACTIONS = [ :read, :create, :update, :delete, :list ]
+    ACTIONS = [:read, :create, :update, :delete, :list]
 
     attr_reader :opts
 
@@ -26,8 +26,8 @@ module Acfs
       return true if opts[:with] == params || data == opts[:with]
       return true if (opts[:with].nil? && params.empty? && data.empty?)
 
-      return true if opts[:with].reject{|k,v|v.nil?} == params.reject{|k,v|v.nil?}
-      return true if opts[:with].reject{|k,v|v.nil?} == data.reject{|k,v|v.nil?}
+      return true if opts[:with].reject { |k, v| v.nil? } == params.reject { |k, v| v.nil? }
+      return true if opts[:with].reject { |k, v| v.nil? } == data.reject { |k, v| v.nil? }
 
       false
     end
@@ -44,11 +44,17 @@ module Acfs
     def call(op)
       calls << op
 
-      if (err = opts[:raise])
+      err  = opts[:raise]
+      data = opts[:return]
+
+      if err
         raise_error op, err, opts[:return]
-      elsif (data = opts[:return])
-        headers = opts[:headers] || {}
-        op.call data, headers
+      elsif data
+        response = Acfs::Response.new op.request,
+                                      headers: opts[:headers] || {},
+                                      status:  opts[:status] || 200,
+                                      data:    data || {}
+        op.call data, response
       else
         raise ArgumentError, 'Unsupported stub.'
       end
@@ -72,7 +78,7 @@ module Acfs
         raise ArgumentError, "Unknown action `#{action}`." unless ACTIONS.include? action
 
         Stub.new(opts).tap do |stub|
-          stubs[klass] ||= {}
+          stubs[klass]         ||= {}
           stubs[klass][action] ||= []
           stubs[klass][action] << stub
         end
@@ -90,8 +96,13 @@ module Acfs
         @enabled ||= false
       end
 
-      def enable; @enabled = true end
-      def disable; @enabled = false end
+      def enable;
+        @enabled = true
+      end
+
+      def disable;
+        @enabled = false
+      end
 
       # Clear all stubs.
       #
