@@ -8,10 +8,10 @@ describe Acfs::Model::QueryMethods do
       context 'with successful response' do
         before do
           stub_request(:get, 'http://users.example.org/users/1').to_return response({id: 1, name: 'Anon', age: 12, born_at: 'Berlin'})
-          stub_request(:get, 'http://users.example.org/users/2').to_return response({id: 2, type: 'Customer', name: 'Clare Customer', age: 24 })
+          stub_request(:get, 'http://users.example.org/users/2').to_return response({id: 2, type: 'Customer', name: 'Clare Customer', age: 24})
         end
 
-        let(:action) { lambda{|cb=nil| model.find 1, &cb } }
+        let(:action) { lambda { |cb=nil| model.find 1, &cb } }
         it_behaves_like 'a query method with multi-callback support'
 
         it 'should load a single remote resource' do
@@ -19,7 +19,7 @@ describe Acfs::Model::QueryMethods do
           Acfs.run
 
           expect(user.attributes).to eq(
-            {id: 1, name: 'Anon', age: 12, born_at: 'Berlin'}.stringify_keys)
+                                         {id: 1, name: 'Anon', age: 12, born_at: 'Berlin'}.stringify_keys)
         end
 
         context 'with resource type inheritance' do
@@ -40,7 +40,7 @@ describe Acfs::Model::QueryMethods do
 
       context 'with 404 response' do
         before do
-          stub_request(:get, 'http://users.example.org/users/1').to_return response({ error: 'not found' }, status: 404)
+          stub_request(:get, 'http://users.example.org/users/1').to_return response({error: 'not found'}, status: 404)
         end
 
         it 'should raise a NotFound error' do
@@ -69,10 +69,10 @@ describe Acfs::Model::QueryMethods do
 
     context 'with multiple ids' do
       before do
-        stub_request(:get, 'http://users.example.org/users/1').to_return response({ id: 1, name: 'Anon', age: 12 })
-        stub_request(:get, 'http://users.example.org/users/2').to_return response({ id: 2, name: 'Johnny', age: 42 })
-        stub_request(:get, 'http://users.example.org/users/3').to_return response({ id: 3, type: 'Customer', name: 'Anon', age: 12 })
-        stub_request(:get, 'http://users.example.org/users/4').to_return response({ id: 4, name: 'Johnny', age: 42 })
+        stub_request(:get, 'http://users.example.org/users/1').to_return response({id: 1, name: 'Anon', age: 12})
+        stub_request(:get, 'http://users.example.org/users/2').to_return response({id: 2, name: 'Johnny', age: 42})
+        stub_request(:get, 'http://users.example.org/users/3').to_return response({id: 3, type: 'Customer', name: 'Anon', age: 12})
+        stub_request(:get, 'http://users.example.org/users/4').to_return response({id: 4, name: 'Johnny', age: 42})
       end
 
       context 'with successful response' do
@@ -81,12 +81,12 @@ describe Acfs::Model::QueryMethods do
           Acfs.run
 
           expect(users.size).to be == 2
-          expect(users[0].attributes).to be == { id: 1, name: 'Anon', age: 12 }.stringify_keys
-          expect(users[1].attributes).to be == { id: 2, name: 'Johnny', age: 42 }.stringify_keys
+          expect(users[0].attributes).to be == {id: 1, name: 'Anon', age: 12}.stringify_keys
+          expect(users[1].attributes).to be == {id: 2, name: 'Johnny', age: 42}.stringify_keys
         end
 
         it 'should invoke callback after all models are loaded' do
-          proc = Proc.new { }
+          proc = Proc.new {}
           expect(proc).to receive(:call) do |users|
             expect(users).to be === @users
             expect(users.size).to be == 2
@@ -98,8 +98,8 @@ describe Acfs::Model::QueryMethods do
         end
 
         it 'should invoke multiple callback after all models are loaded' do
-          proc1 = Proc.new { }
-          proc2 = Proc.new { }
+          proc1 = Proc.new {}
+          proc2 = Proc.new {}
           expect(proc1).to receive(:call) do |users|
             expect(users).to be === @users
             expect(users.size).to be == 2
@@ -127,7 +127,7 @@ describe Acfs::Model::QueryMethods do
 
       context 'with one 404 response' do
         before do
-          stub_request(:get, 'http://users.example.org/users/1').to_return response({ error: 'not found' }, status: 404)
+          stub_request(:get, 'http://users.example.org/users/1').to_return response({error: 'not found'}, status: 404)
         end
 
         it 'should raise resource not found error' do
@@ -144,12 +144,12 @@ describe Acfs::Model::QueryMethods do
     let(:pc) { PC }
     let(:mac) { Mac }
     before do
-      stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'PC' }, { id: 2, type: 'Computer' }, { id: 3, type: 'Mac' }])
+      stub_request(:get, 'http://computers.example.org/computers').to_return response([{id: 1, type: 'PC'}, {id: 2, type: 'Computer'}, {id: 3, type: 'Mac'}])
     end
 
     it 'should invoke multiple callback after all models are loaded' do
-      proc1 = Proc.new { }
-      proc2 = Proc.new { }
+      proc1 = Proc.new {}
+      proc2 = Proc.new {}
       expect(proc1).to receive(:call) do |computers|
         expect(computers).to be === @computers
         expect(computers.size).to be == 3
@@ -191,21 +191,21 @@ describe Acfs::Model::QueryMethods do
 
         context 'with another resource as type instead' do
           before do
-            stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'MyUser' }, { id: 2, type: 'Computer' }, { id: 3, type: 'Mac' }])
+            stub_request(:get, 'http://computers.example.org/computers').to_return response([{id: 1, type: 'MyUser'}, {id: 2, type: 'Computer'}, {id: 3, type: 'Mac'}])
           end
           it_behaves_like 'with invalid type'
         end
 
         context 'with a random string as type instead' do
           before do
-            stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'PC' }, { id: 2, type: 'noValidType' }, { id: 3, type: 'Mac' }])
+            stub_request(:get, 'http://computers.example.org/computers').to_return response([{id: 1, type: 'PC'}, {id: 2, type: 'noValidType'}, {id: 3, type: 'Mac'}])
           end
           it_behaves_like 'with invalid type'
         end
 
         context 'with a non-string as type instead' do
           before do
-            stub_request(:get, 'http://computers.example.org/computers').to_return response([{ id: 1, type: 'PC' }, { id: 2, type: 'Computer' }, { id: 3, type: 42 }])
+            stub_request(:get, 'http://computers.example.org/computers').to_return response([{id: 1, type: 'PC'}, {id: 2, type: 'Computer'}, {id: 3, type: 42}])
           end
           it_behaves_like 'with invalid type'
         end
@@ -239,7 +239,7 @@ describe Acfs::Model::QueryMethods do
         before { stub_request(:get, 'http://users.example.org/users?age=24').to_return response([{id: 1, name: 'Mike', age: 24}, {id: 4, type: 'Maria', age: 24}, {id: 7, type: 'James', age: 24}]) }
 
         it 'should invoke callback after model is loaded' do
-          proc = Proc.new { }
+          proc = Proc.new {}
 
           expect(proc).to receive(:call) do |user|
             expect(user).to eql @user.__getobj__
@@ -252,8 +252,8 @@ describe Acfs::Model::QueryMethods do
         end
 
         it 'should invoke multiple callbacks after model is loaded' do
-          proc1 = Proc.new { }
-          proc2 = Proc.new { }
+          proc1 = Proc.new {}
+          proc2 = Proc.new {}
 
           expect(proc1).to receive(:call) do |user|
             expect(user).to eql @user.__getobj__
@@ -282,7 +282,7 @@ describe Acfs::Model::QueryMethods do
       let(:model) { Single }
 
       it '.find_by should not be defined' do
-        expect{ model.find_by }.to raise_error NoMethodError
+        expect { model.find_by }.to raise_error NoMethodError
       end
     end
   end
@@ -292,7 +292,7 @@ describe Acfs::Model::QueryMethods do
     it_behaves_like 'find_by'
 
     context 'standard resource' do
-      let(:model){ MyUser }
+      let(:model) { MyUser }
       let!(:user) { model.send described_method, age: 24 }
       subject { Acfs.run; user }
 
@@ -302,7 +302,7 @@ describe Acfs::Model::QueryMethods do
         it { should be_nil }
 
         it 'should invoke callback after model is loaded' do
-          proc = Proc.new { }
+          proc = Proc.new {}
 
           expect(proc).to receive(:call) do |user|
             expect(user).to eql @user.__getobj__
@@ -314,8 +314,8 @@ describe Acfs::Model::QueryMethods do
         end
 
         it 'should invoke multiple callbacks after model is loaded' do
-          proc1 = Proc.new { }
-          proc2 = Proc.new { }
+          proc1 = Proc.new {}
+          proc2 = Proc.new {}
 
           expect(proc1).to receive(:call) do |user|
             expect(user).to eql @user.__getobj__
@@ -339,7 +339,7 @@ describe Acfs::Model::QueryMethods do
     it_behaves_like 'find_by'
 
     context 'standard resource' do
-      let(:model){ MyUser }
+      let(:model) { MyUser }
       let!(:user) { model.send described_method, age: 24 }
       subject { Acfs.run; user }
 
@@ -348,16 +348,16 @@ describe Acfs::Model::QueryMethods do
 
         it 'should raise an ResourceNotFound error' do
           model.find_by! age: 24
-          expect{ Acfs.run }.to raise_error Acfs::ResourceNotFound
+          expect { Acfs.run }.to raise_error Acfs::ResourceNotFound
         end
 
         it 'should not invoke callback after model could not be loaded' do
-          proc = Proc.new { }
+          proc = Proc.new {}
 
           expect(proc).not_to receive(:call)
 
           model.find_by! age: 24, &proc
-          expect{ Acfs.run }.to raise_error
+          expect { Acfs.run }.to raise_error
         end
       end
     end
