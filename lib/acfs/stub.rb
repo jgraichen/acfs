@@ -47,7 +47,8 @@ module Acfs
       if (err = opts[:raise])
         raise_error op, err, opts[:return]
       elsif (data = opts[:return])
-        op.call data
+        headers = opts[:headers] || {}
+        op.call data, headers
       else
         raise ArgumentError, 'Unsupported stub.'
       end

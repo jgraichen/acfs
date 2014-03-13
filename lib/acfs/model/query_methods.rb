@@ -75,10 +75,11 @@ module Acfs::Model
         collection = ::Acfs::Collection.new
         collection.__callbacks__ << block if block
 
-        operation :list, params: params do |data|
+        operation :list, params: params do |data, header|
           data.each do |obj|
             collection << create_resource(obj)
           end
+          collection.setup_pagination params, header
           collection.loaded!
           collection.__invoke__
         end

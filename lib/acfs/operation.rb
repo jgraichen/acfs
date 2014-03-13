@@ -50,7 +50,7 @@ module Acfs
       request = ::Acfs::Request.new url, method: method, params: params, data: data
       request.on_complete do |response|
         handle_failure response unless response.success?
-        callback.call response.data
+        callback.call response.data, response.headers
       end
       request
     end
