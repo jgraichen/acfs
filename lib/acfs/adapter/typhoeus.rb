@@ -9,6 +9,9 @@ module Acfs
 
       def start
         hydra.run
+      rescue
+        @hydra = nil
+        raise
       end
 
       def abort

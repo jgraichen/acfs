@@ -55,6 +55,10 @@ module Acfs
 
       @running = true
       adapter.start
+    rescue
+      queue.clear
+      raise
+    ensure
       @running = false
     end
 
