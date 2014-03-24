@@ -62,8 +62,12 @@ module Acfs
 
         @running = true
         adapter.start
-        @running = false
       end
+    rescue
+      queue.clear
+      raise
+    ensure
+      @running = false
     end
 
     def clear

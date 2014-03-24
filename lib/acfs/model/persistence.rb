@@ -39,7 +39,7 @@ module Acfs
       # @return [Boolean] True if resource is newly created, false otherwise.
       #
       def new?
-        read_attribute(:id).nil?
+        !loaded?
       end
       alias :new_record? :new?
 

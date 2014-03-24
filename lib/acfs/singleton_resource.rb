@@ -72,16 +72,7 @@ module Acfs
       #   @return [ self ] Resource object.
       #
       def find(*attrs, &block)
-        opts = { params: attrs.extract_options! }
-
-        model = Util::ResourceDelegator.new self.new
-
-        operation :read, opts do |data|
-          model.__setobj__ create_resource data, origin: model.__getobj__
-          block.call model unless block.nil?
-        end
-
-        model
+        find_single nil, params: attrs.extract_options!, &block
       end
 
       # @api public

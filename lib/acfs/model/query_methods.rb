@@ -71,14 +71,15 @@ module Acfs::Model
       #
       # @return [ Collection ] Collection of requested resources.
       #
-      def all(params = {}, &block)
-        collection = ::Acfs::Collection.new
+      def all(params = {}, opts = {}, &block)
+        collection = ::Acfs::Collection.new self
         collection.__callbacks__ << block if block
 
-        operation :list, params: params do |data|
+        operation :list, opts.merge(params: params) do |data, response|
           data.each do |obj|
             collection << create_resource(obj)
           end
+          collection.process_response response
           collection.loaded!
           collection.__invoke__
         end
@@ -137,7 +138,7 @@ module Acfs::Model
         model = Acfs::Util::ResourceDelegator.new self.new
 
         opts[:params] ||= {}
-        opts[:params].merge!({ id: id })
+        opts[:params].merge!({ id: id }) unless id.nil?
 
         model.__callbacks__ << block unless block.nil?
 
@@ -150,7 +151,7 @@ module Acfs::Model
       end
 
       def find_multiple(ids, opts, &block)
-        ::Acfs::Collection.new.tap do |collection|
+        ::Acfs::Collection.new(self).tap do |collection|
           collection.__callbacks__ << block unless block.nil?
 
           counter = 0

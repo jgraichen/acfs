@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.34.1
+
+* Fix leaking failed requests in request queues
+
+## 0.34.0
+
+* Add support for will_paginate view helper used with `Acfs::Collection`s
+* Add support for pagination header added by [paginate-responder](https://github.com/jgraichen/paginate-responder)
+* Improve `Resource#new?` detection by using `loaded?` instead of presence of `:id` attribute
+
 ## 0.33.0
 
 * Do not raise errors on unknown attributes by default, add :unknown option.

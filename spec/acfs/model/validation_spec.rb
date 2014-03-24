@@ -95,6 +95,7 @@ describe Acfs::Model::Validation do
     end
 
     context 'on changed resource' do
+      before { model.loaded! }
       let(:model) { super().tap { |m| m.id = 1 } }
 
       it 'should validate with `save` context' do

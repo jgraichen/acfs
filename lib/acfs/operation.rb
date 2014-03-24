@@ -19,8 +19,12 @@ module Acfs
       @params   = (opts[:params] || {}).dup
       @data     = (opts[:data]   || {}).dup
 
-      @location = resource.location(action: @action).extract_from(@params, @data)
-      @url      = location.str
+      if opts[:url]
+        @url      = opts[:url]
+      else
+        @location = resource.location(action: @action).extract_from(@params, @data)
+        @url      = location.str
+      end
 
       @callback = block
     end
@@ -39,7 +43,11 @@ module Acfs
     end
 
     def full_params
-      (id ? params.merge(id: id) : params).merge location.args
+      (id ? params.merge(id: id) : params).merge location_args
+    end
+
+    def location_args
+      location ? location.args : {}
     end
 
     def method
@@ -54,7 +62,7 @@ module Acfs
                                                   response: response
 
         handle_failure response unless response.success?
-        callback.call response.data
+        callback.call response.data, response
       end
       request
     end
