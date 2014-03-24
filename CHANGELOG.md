@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.34.1
+
+* Fix leaking failed requests in request queues
+
 ## 0.34.0
 
 * Add support for will_paginate view helper used with `Acfs::Collection`s
