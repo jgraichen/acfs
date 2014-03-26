@@ -282,6 +282,23 @@ it 'should find user number one' do
 end
 ```
 
+## Instrumentation
+
+Acfs supports [instrumentation via active support][1].
+
+Acfs expose to following events
+
+* `acfs.operation.complete(operation, response)`: Acfs operation completed
+* `acfs.runner.sync_run(operation)`: Run operation right now skipping queue.
+* `acfs.runner.enqueue(operation)`: Enqueue operation to be run later.
+* `acfs.before_run`: directly before `acfs.run`
+* `acfs.run`: Run all queued operations.
+
+Read [official guide][2] to see to to subscribe.
+
+[1]: http://guides.rubyonrails.org/active_support_instrumentation.html
+[2]: http://guides.rubyonrails.org/active_support_instrumentation.html#subscribing-to-an-event
+
 ## Roadmap
 
 * Update

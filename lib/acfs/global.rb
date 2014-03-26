@@ -18,7 +18,10 @@ module Acfs
     # @return [undefined]
     #
     def run
-      runner.start
+      ::ActiveSupport::Notifications.instrument 'acfs.before_run'
+      ::ActiveSupport::Notifications.instrument 'acfs.run' do
+        runner.start
+      end
     end
 
     # @api public
@@ -37,8 +40,10 @@ module Acfs
     # Reset all queues, stubs and internal state.
     #
     def reset
-      self.runner.clear
-      Acfs::Stub.clear
+      ::ActiveSupport::Notifications.instrument 'acfs.reset' do
+        self.runner.clear
+        Acfs::Stub.clear
+      end
     end
 
     # @api public

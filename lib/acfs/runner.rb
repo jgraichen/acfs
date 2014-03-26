@@ -23,7 +23,9 @@ module Acfs
     # Run operation right now skipping queue.
     #
     def run(op)
-      op_request(op) { |req| adapter.run req }
+      ::ActiveSupport::Notifications.instrument 'acfs.runner.sync_run', operation: op do
+        op_request(op) { |req| adapter.run req }
+      end
     end
 
     # List of current queued operations.
@@ -35,10 +37,12 @@ module Acfs
     # Enqueue operation to be run later.
     #
     def enqueue(op)
-      if running?
-        op_request(op) { |req| adapter.queue req }
-      else
-        queue << op
+      ::ActiveSupport::Notifications.instrument 'acfs.runner.enqueue', operation: op do
+        if running?
+          op_request(op) { |req| adapter.queue req }
+        else
+          queue << op
+        end
       end
     end
 
