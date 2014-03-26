@@ -48,17 +48,10 @@ describe ::Acfs::Runner do
       ::ActiveSupport::Notifications.subscribe /^acfs\.runner/, collector
     end
 
-    describe '#start' do
-      it 'should trigger event' do
-        runner.start
-        expect(collector.events).to have(1).items
-      end
-    end
-
     describe '#process' do
       it 'should trigger event' do
         runner.process ::Acfs::Operation.new MyUser, :read, params: {id: 0}
-        expect(collector.events).to have(2).items
+        expect(collector.events).to have(1).items
       end
     end
 

@@ -17,15 +17,13 @@ module Acfs
     # and parallel operations will be queued.
     #
     def process(op)
-      ::ActiveSupport::Notifications.instrument 'acfs.runner.process', operation: op do
-        op.synchronous? ? run(op) : enqueue(op)
-      end
+      op.synchronous? ? run(op) : enqueue(op)
     end
 
     # Run operation right now skipping queue.
     #
     def run(op)
-      ::ActiveSupport::Notifications.instrument 'acfs.runner.run', operation: op do
+      ::ActiveSupport::Notifications.instrument 'acfs.runner.sync_run', operation: op do
         op_request(op) { |req| adapter.run req }
       end
     end
@@ -57,13 +55,10 @@ module Acfs
     # Start processing queued operations.
     #
     def start
-      ::ActiveSupport::Notifications.instrument 'acfs.runner.to_start'
-      ::ActiveSupport::Notifications.instrument 'acfs.runner.start' do
-        enqueue_operations
+      enqueue_operations
 
-        @running = true
-        adapter.start
-      end
+      @running = true
+      adapter.start
     rescue
       queue.clear
       raise

@@ -38,8 +38,6 @@ module Acfs
       # @return [ Acfs::Request ] The request itself.
       #
       def complete!(response)
-        ::ActiveSupport::Notifications.instrument 'acfs.request.complete', request: self
-
         call_callback response, 0
         self
       end
