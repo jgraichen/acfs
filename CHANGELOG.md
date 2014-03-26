@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.35.0
+
+* Add instrumentation support
+
 ## 0.34.1
 
 * Fix leaking failed requests in request queues
