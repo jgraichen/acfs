@@ -57,6 +57,7 @@ module Acfs
     # Start processing queued operations.
     #
     def start
+      ::ActiveSupport::Notifications.instrument 'acfs.runner.to_start'
       ::ActiveSupport::Notifications.instrument 'acfs.runner.start' do
         enqueue_operations
 
