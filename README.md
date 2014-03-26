@@ -330,6 +330,7 @@ Read [official guide][2] to see to to subscribe.
 
 * [Nicolas Fricke](https://github.com/nicolas-fricke)
 * [Tino Junge](https://github.com/tino-junge)
+* [Malte Swart](https://github.com/mswart)
 
 ## License
 
