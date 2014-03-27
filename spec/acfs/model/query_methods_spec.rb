@@ -361,5 +361,133 @@ describe Acfs::Model::QueryMethods do
         end
       end
     end
+
+    describe '#each_page' do
+      context 'without parameters' do
+        before do
+          stub_request(:get, 'http://users.example.org/users').
+              to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => '<http://users.example.org/users?page=2>; rel="next"'
+                                 })
+          stub_request(:get, 'http://users.example.org/users?page=2').
+              to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
+                                 })
+          stub_request(:get, 'http://users.example.org/users?page=3').
+              to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
+                                 })
+          stub_request(:get, 'http://users.example.org/users?page=4').
+              to_return response([{id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => ''
+                                 })
+        end
+
+        it 'should iterate all pages' do
+          index = 0
+          model.each_page do |page|
+            expect(page).to be_a Acfs::Collection
+
+            index += 1
+            expect(page.first.id).to eq index
+          end
+          Acfs.run
+
+          expect(index).to eq 4
+        end
+      end
+
+      context 'with parameters' do
+        before do
+          stub_request(:get, 'http://users.example.org/users?param=bla').
+              to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => '<http://users.example.org/users?where=fuu&page=2>; rel="next"'
+                                 })
+          stub_request(:get, 'http://users.example.org/users?where=fuu&page=2').
+              to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
+                                 })
+          stub_request(:get, 'http://users.example.org/users?page=3').
+              to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
+                                 })
+          stub_request(:get, 'http://users.example.org/users?page=4').
+              to_return response([{id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => ''
+                                 })
+        end
+
+        it 'should call first page with params and follow relations' do
+          index = 0
+          model.each_page(param: 'bla') do |page|
+            expect(page).to be_a Acfs::Collection
+
+            index += 1
+            expect(page.first.id).to eq index
+          end
+          Acfs.run
+
+          expect(index).to eq 4
+        end
+      end
+    end
+
+    describe '#each_item' do
+      context 'without parameters' do
+        before do
+          stub_request(:get, 'http://users.example.org/users').
+              to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => '<http://users.example.org/users?page=2>; rel="next"'
+                                 })
+          stub_request(:get, 'http://users.example.org/users?page=2').
+              to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
+                                 })
+          stub_request(:get, 'http://users.example.org/users?page=3').
+              to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'},{id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
+                                 })
+          stub_request(:get, 'http://users.example.org/users?page=4').
+              to_return response([{id: 5, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+                                 headers: {
+                                     'X-Total-Pages' => '4',
+                                     'Link'          => ''
+                                 })
+        end
+
+        it 'should iterate all pages' do
+          indecies = []
+          model.each_item do |item|
+            expect(item).to be_a MyUser
+            indecies << item.id
+          end
+          Acfs.run
+
+          expect(indecies).to eq [1,2,3,4,5]
+        end
+      end
+    end
   end
 end

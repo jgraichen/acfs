@@ -133,6 +133,62 @@ module Acfs::Model
         end
       end
 
+      # @api public
+      #
+      # Iterates over all pages returned by index action.
+      #
+      # Server must return a paginated resource.
+      #
+      # @example
+      #   User.each_page do |page|
+      #     p page.size
+      #   end
+      #   Acfs.run
+      #   # => 50
+      #   # => 50
+      #   # => 42
+      #
+      # @param opts [Hash] Options passed to {#where}.
+      #
+      # @yield [collection] Callback that will be invoked for each page.
+      # @yieldparam collection [Collection] Paginated collection.
+      #
+      # @return [Collection] First page.
+      #
+      def each_page(opts = {})
+        cb = proc do |collection|
+          yield collection
+          collection.next_page(&cb) rescue ArgumentError
+        end
+        where opts, &cb
+      end
+
+      # @api public
+      #
+      # Iterates over all items of all pages returned by index action.
+      #
+      # Server must return a paginated resource.
+      #
+      # @example
+      #   index = 0
+      #   User.each_item do |page|
+      #     index += 1
+      #   end
+      #   Acfs.run
+      #   print index
+      #   # => 142
+      #
+      # @param opts [Hash] Options passed to {#each_page}.
+      #
+      # @yield [item] Callback that will be invoked for each item.
+      # @yieldparam item [self] Resource.
+      #
+      def each_item(opts = {}, &block)
+        each_page(opts) do |collection|
+          collection.each &block
+        end
+      end
+
       private
       def find_single(id, opts, &block)
         model = Acfs::Util::ResourceDelegator.new self.new

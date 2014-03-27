@@ -17,8 +17,4 @@ describe Acfs::Adapter::Typhoeus do
     expect{ adapter.start }.to raise_error /404\-[12]/
     expect{ adapter.start }.to_not raise_error
   end
-
-  it 'should clear queue on error' do
-
-  end
 end

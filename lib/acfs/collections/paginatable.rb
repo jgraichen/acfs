@@ -21,25 +21,25 @@ module Acfs::Collections
       setup_headers response.headers
     end
 
-    def next_page
-      page 'next'
+    def next_page(&block)
+      page 'next', &block
     end
 
-    def prev_page
-      page 'prev'
+    def prev_page(&block)
+      page 'prev', &block
     end
 
-    def first_page
-      page 'first'
+    def first_page(&block)
+      page 'first', &block
     end
 
-    def last_page
-      page 'last'
+    def last_page(&block)
+      page 'last', &block
     end
 
-    def page(rel)
+    def page(rel, &block)
       if relations[rel]
-        @resource_class.all nil, url: relations[rel]
+        @resource_class.all nil, url: relations[rel], &block
       else
         raise ArgumentError.new "No relative page `#{rel}'."
       end
