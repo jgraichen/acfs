@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.36.0
+
+* Add #each_page and #each_item query methods
+
 ## 0.35.0
 
 * Add instrumentation support
