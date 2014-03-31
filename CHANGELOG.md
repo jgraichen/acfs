@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.37.0
+
+* Add Acfs.on
+
 ## 0.36.0
 
 * Add #each_page and #each_item query methods
