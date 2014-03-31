@@ -68,5 +68,13 @@ module Acfs
         resource.__callbacks__ << block
       end
     end
+
+    def on(*resources)
+      resources.each do |resource|
+        add_callback resource do |ret|
+          yield(*resources) unless resources.any? { |res| !res.loaded? }
+        end
+      end
+    end
   end
 end

@@ -42,4 +42,34 @@ describe ::Acfs::Global do
       end
     end
   end
+
+  describe '#on' do
+    before do
+      stub_request(:get, %r{http://users.example.org/users/\d+}).to_return(
+        status: 200,
+        body: '{}',
+        headers: { 'Content-Type' => 'application/json' })
+    end
+
+    it 'should invoke when both resources' do
+      user1 = MyUser.find 1
+      user2 = MyUser.find 2
+
+      expect do |cb|
+        Acfs.on(user1, user2, &cb)
+        Acfs.run
+      end.to yield_with_args(user1, user2)
+    end
+
+    it 'should invoke when both resources when loaded' do
+      user1 = MyUser.find 1
+      user2 = MyUser.find 2
+
+      Acfs.on(user1, user2) do |u1, u2|
+        expect(u1).to be_loaded
+        expect(u2).to be_loaded
+      end
+      Acfs.run
+    end
+  end
 end
