@@ -9,6 +9,8 @@ module Acfs
     end
   end
 
+  class UnsupportedOperation < StandardError; end
+
   # Response error containing the responsible response object.
   #
   class ErroneousResponse < Error
@@ -58,6 +60,7 @@ module Acfs
   class ResourceNotFound < ErroneousResponse
   end
 
+  #
   class InvalidResource < ErroneousResponse
     attr_reader :errors, :resource
 

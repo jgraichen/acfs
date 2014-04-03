@@ -1,12 +1,12 @@
 require 'delegate'
 
-require 'acfs/model/loadable'
+require 'acfs/resource/loadable'
 require 'acfs/collections/paginatable'
 
 module Acfs
-
+  #
   class Collection < ::Delegator
-    include Model::Loadable
+    include Resource::Loadable
     include Acfs::Util::Callbacks
     include Collections::Paginatable
 

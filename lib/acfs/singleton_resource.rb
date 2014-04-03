@@ -4,29 +4,16 @@ module Acfs
   #
   # Usage explanation:
   #   Single.find      => sends GET    request to http://service:port/single
-  #   my_single.save   => sends POST   request to http://service:port/single if my_single is a new object
-  #                    or sends PUT    request to http://service:port/single if my_single has been requested before
+  #   my_single.save   => sends POST   request to http://service:port/single
+  #                                    if my_single is a new object
+  #                    or sends PUT    request to http://service:port/single
+  #                                    if my_single has been requested before
   #   my_single.delete => sends DELETE request to http://service:port/single
   #
   # SingletonResources do not support the Resource method :all, since
   # always only a single instance of the resource is being returned
   #
   class SingletonResource < Acfs::Resource
-
-    # @api public
-    #
-    # Return true if model is a new record and was not saved yet.
-    #
-    # Checks weather object is loaded via delegator or not, since
-    # the id-attribute is not required for singletons this check
-    # cannot check for existence of value in id-attribute
-    #
-    # @return [Boolean] True if resource is newly created, false otherwise.
-    #
-    def new?
-      !loaded?
-    end
-    alias :new_record? :new?
 
     # @api public
     #
@@ -66,7 +53,8 @@ module Acfs
       #   @param [ Hash ] opts Additional options.
       #   @option opts [ Hash ] :params Additional parameters added to request.
       #
-      #   @yield [ resource ] Callback block to be executed after resource was fetched successfully.
+      #   @yield [ resource ] Callback block to be executed after
+      #     resource was fetched successfully.
       #   @yieldparam resource [ self ] Fetched resources.
       #
       #   @return [ self ] Resource object.
@@ -82,10 +70,11 @@ module Acfs
       # methods :all and :where are not defined.
       # :find_by is not defined on singletons, use :find instead
       #
-      undef_method :all
-      undef_method :where
-      undef_method :find_by
-      undef_method :find_by!
+      def all
+        raise ::Acfs::UnsupportedOperation.new
+      end
+      alias_method :find_by, :all
+      alias_method :find_by!, :all
 
       # @api private
       def location_default_path(_, path)

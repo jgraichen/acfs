@@ -1,4 +1,6 @@
 module Acfs::Collections
+
+  #
   module Paginatable
     extend ActiveSupport::Concern
 
@@ -6,14 +8,8 @@ module Acfs::Collections
       def self.operation(action, opts = {}, &block)
         opts[:url]
       end
-    end
 
-    def total_pages
-      @total_pages
-    end
-
-    def current_page
-      @current_page
+      attr_reader :total_pages, :current_page
     end
 
     def process_response(response)
@@ -41,17 +37,21 @@ module Acfs::Collections
       if relations[rel]
         @resource_class.all nil, url: relations[rel], &block
       else
-        raise ArgumentError.new "No relative page `#{rel}'."
+        # raise ArgumentError.new "No relative page `#{rel}'."
+        nil
       end
     end
 
     private
+
     def relations
       @relations ||= {}
     end
 
     def setup_headers(headers)
-      @total_pages  = Integer(headers['X-Total-Pages']) if headers['X-Total-Pages']
+      if headers['X-Total-Pages']
+        @total_pages = Integer(headers['X-Total-Pages'])
+      end
 
       setup_links headers['Link'] if headers['Link']
     end
@@ -65,7 +65,11 @@ module Acfs::Collections
     end
 
     def setup_params(params)
-      @current_page = Integer(params.fetch(:page, 1)) rescue params[:page]
+      @current_page = begin
+        Integer params.fetch(:page, 1)
+      rescue ArgumentError
+        params[:page]
+      end
     end
   end
 end

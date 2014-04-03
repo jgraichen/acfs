@@ -118,12 +118,12 @@ describe 'Acfs' do
     end
 
     it 'should raise error when calling `all\'' do
-      expect {Single.all}.to raise_error(NoMethodError)
+      expect{ Single.all }.to raise_error ::Acfs::UnsupportedOperation
     end
   end
 
   it 'should load multiple single resources' do
-    @users = MyUser.find(2, 3, 100) do |users|
+    @users = MyUser.find([2, 3, 100]) do |users|
       # This block should be called only after *all* resources are loaded.
       @john = users[0]
       @mirx = users[1]
