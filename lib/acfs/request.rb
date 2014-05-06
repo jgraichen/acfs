@@ -7,7 +7,7 @@ module Acfs
   #
   class Request
     attr_accessor :body, :format
-    attr_reader :url, :headers, :params, :data, :method
+    attr_reader :url, :headers, :params, :data, :method, :operation
 
     include Request::Callbacks
 
@@ -19,6 +19,7 @@ module Acfs
         @params  = options.delete(:params) || {}
         @method  = options.delete(:method) || :get
       end.to_s
+      @operation = options.delete(:operation) || nil
       on_complete &block if block_given?
     end
 
