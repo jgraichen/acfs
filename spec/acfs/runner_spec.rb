@@ -69,4 +69,25 @@ describe ::Acfs::Runner do
       end
     end
   end
+
+  describe '#run' do
+    before do
+      expect_any_instance_of(UserService).to receive(:prepare).and_return nil
+    end
+    it 'it should not do requests when a middleware aborted' do
+      expect(adapter).to_not receive :run
+      runner.run ::Acfs::Operation.new MyUser, :read, params: {id: 0}
+    end
+  end
+
+  describe '#enqueue' do
+    before do
+      expect_any_instance_of(UserService).to receive(:prepare).and_return nil
+    end
+    it 'it should not do requests when a middleware aborted' do
+      expect(adapter).to_not receive :queue
+      runner.enqueue ::Acfs::Operation.new MyUser, :read, params: {id: 0}
+      runner.start
+    end
+  end
 end
