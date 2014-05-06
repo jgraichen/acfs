@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.38.0
+
+* Allow middlewares to abort request processing
+* Allow middlewares to receive the request operation object (via the request)
+
 ## 0.37.0
 
 * Add Acfs.on
