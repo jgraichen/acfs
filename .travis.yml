@@ -24,6 +24,7 @@ deploy:
 matrix:
   allow_failures:
     - rvm: 2.1.0
+    - rvm: rbx
 before_install:
   - gem install minitest -v '4.7.5'
   - gem install json -v '1.8.1'
