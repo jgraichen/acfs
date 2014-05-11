@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.39.0
+
+* Add new event acfs.operation.before_process
+
 ## 0.38.0
 
 * Allow middlewares to abort request processing
