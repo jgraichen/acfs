@@ -288,6 +288,7 @@ Acfs supports [instrumentation via active support][1].
 
 Acfs expose to following events
 
+* `acfs.operation.before_process(operation)`: Acfs operation about to process
 * `acfs.operation.complete(operation, response)`: Acfs operation completed
 * `acfs.runner.sync_run(operation)`: Run operation right now skipping queue.
 * `acfs.runner.enqueue(operation)`: Enqueue operation to be run later.

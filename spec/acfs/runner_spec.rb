@@ -37,6 +37,7 @@ describe ::Acfs::Runner do
   let(:adapter) { ::NullAdapter.new }
   let(:runner) { ::Acfs::Runner.new adapter }
   let(:collector) { NotificationCollector.new }
+  let(:collector2) { NotificationCollector.new }
 
   after do
     ::ActiveSupport::Notifications.notifier = \
@@ -46,12 +47,14 @@ describe ::Acfs::Runner do
   describe '#instrumentation' do
     before do
       ::ActiveSupport::Notifications.subscribe /^acfs\.runner/, collector
+      ::ActiveSupport::Notifications.subscribe /^acfs\.operation/, collector2
     end
 
     describe '#process' do
       it 'should trigger event' do
         runner.process ::Acfs::Operation.new MyUser, :read, params: {id: 0}
         expect(collector.events).to have(1).items
+        expect(collector2.events).to have(1).items
       end
     end
 
@@ -59,13 +62,15 @@ describe ::Acfs::Runner do
       it 'should trigger event' do
         runner.run ::Acfs::Operation.new MyUser, :read, params: {id: 0}
         expect(collector.events).to have(1).items
+        expect(collector2.events).to have(0).items
       end
     end
 
     describe '#enqueue' do
       it 'should trigger event' do
-        runner.run ::Acfs::Operation.new MyUser, :read, params: {id: 0}
+        runner.enqueue ::Acfs::Operation.new MyUser, :read, params: {id: 0}
         expect(collector.events).to have(1).items
+        expect(collector2.events).to have(0).items
       end
     end
   end

@@ -17,6 +17,7 @@ module Acfs
     # and parallel operations will be queued.
     #
     def process(op)
+      ::ActiveSupport::Notifications.instrument 'acfs.operation.before_process', operation: op
       op.synchronous? ? run(op) : enqueue(op)
     end
 
