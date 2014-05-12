@@ -85,3 +85,10 @@ class Single < Acfs::SingletonResource
   attribute :score, :integer
   attribute :user_id, :integer
 end
+
+class PathArguments < Acfs::Resource
+  service UserService, path: ':required_arg/users/'
+
+  attribute :id,           :integer
+  attribute :required_arg, :string
+end
