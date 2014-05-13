@@ -177,7 +177,7 @@ module Acfs
       private
       def attributes_for_url(action)
         arguments_for_url = self.class.location(action: action).arguments
-        params_for_url    = attributes.slice(*arguments_for_url)
+        attributes.slice(*arguments_for_url)
       end
 
       module ClassMethods
