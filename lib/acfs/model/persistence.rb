@@ -166,12 +166,18 @@ module Acfs
       #
       def delete!(opts = {})
         opts[:params] ||= {}
-        opts[:params].merge! id: id
+        opts[:params] = attributes_for_url(:delete).merge opts[:params]
 
         operation :delete, opts do |data|
           update_with data
           freeze
         end
+      end
+
+      private
+      def attributes_for_url(action)
+        arguments_for_url = self.class.location(action: action).arguments
+        attributes.slice(*arguments_for_url)
       end
 
       module ClassMethods
