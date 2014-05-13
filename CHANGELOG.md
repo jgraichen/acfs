@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.39.1
+
+* Fix automatic path parameter handling for #destroy
+
 ## 0.39.0
 
 * Add new event acfs.operation.before_process
