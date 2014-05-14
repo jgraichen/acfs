@@ -1,14 +1,14 @@
 module Acfs
-
+  #
   # Global Acfs module methods.
   #
   module Global
-
+    #
     # @api private
     # @return [Runner]
     #
     def runner
-      @runner ||= Runner.new Adapter::Typhoeus.new
+      Thread.current[:acfs_runner] ||= Runner.new Adapter::Typhoeus.new
     end
 
     # @api public
@@ -32,7 +32,7 @@ module Acfs
     # @see Configuration#configure
     #
     def configure(&block)
-      Configuration.current.configure &block
+      Configuration.current.configure(&block)
     end
 
     # @api public
@@ -41,7 +41,7 @@ module Acfs
     #
     def reset
       ::ActiveSupport::Notifications.instrument 'acfs.reset' do
-        self.runner.clear
+        runner.clear
         Acfs::Stub.clear
       end
     end
@@ -51,15 +51,18 @@ module Acfs
     # Add an additional callback hook to not loaded resource.
     # If given resource already loaded callback will be invoked immediately.
     #
-    # This method will be replaced by explicit callback handling when query methods
-    # return explicit future objects.
+    # This method will be replaced by explicit callback
+    # handling when query methods return explicit future objects.
     #
     # @example
     #   user = MyUser.find 1, &callback_one
     #   Acfs.add_callback(user, &callback_two)
     #
     def add_callback(resource, &block)
-      raise ArgumentError.new "Given resource is not an Acfs resource but a: #{resource.class.name}" unless resource.respond_to?(:__callbacks__)
+      unless resource.respond_to?(:__callbacks__)
+        raise ArgumentError.new 'Given resource is not an Acfs resource ' \
+          "delegator but a: #{resource.class.name}"
+      end
       return false if block.nil?
 
       if resource.loaded?
@@ -71,8 +74,8 @@ module Acfs
 
     def on(*resources)
       resources.each do |resource|
-        add_callback resource do |ret|
-          yield(*resources) unless resources.any? { |res| !res.loaded? }
+        add_callback resource do |_|
+          yield(*resources) unless resources.any?{|res| !res.loaded? }
         end
       end
     end
