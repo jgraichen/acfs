@@ -122,7 +122,7 @@ describe Acfs::Model::Persistence do
       let(:model) { model_class.find 1 }
       before { model; Acfs.run; model.name = 'dhh' }
 
-      it { expect(model).to_not be_persisted }
+      it { expect(model).to be_persisted }
       it { expect(model).to_not be_new }
     end
 

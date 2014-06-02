@@ -9,8 +9,7 @@ module Acfs
       # @api public
       #
       # Check if the model is persisted. A model is persisted if
-      # it is saved after beeing created or when it was not changed
-      # since it was loaded.
+      # it is saved after being created
       #
       # @example Newly created resource:
       #   user = User.new name: "John"
@@ -22,14 +21,14 @@ module Acfs
       #   user2 = User.find 5
       #   user2.persisted? # => true
       #   user2.name = 'Amy'
-      #   user2.persisted? # => false
+      #   user2.persisted? # => true
       #   user2.save
       #   user2.persisted? # => true
       #
-      # @return [Boolean] True if resource has no changes and is not newly created, false otherwise.
+      # @return [Boolean] True if resource has been saved
       #
       def persisted?
-        !new? && !changed?
+        !new?
       end
 
       # @api public
