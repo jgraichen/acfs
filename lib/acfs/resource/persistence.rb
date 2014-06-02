@@ -8,8 +8,7 @@ class Acfs::Resource
     # @api public
     #
     # Check if the model is persisted. A model is persisted if
-    # it is saved after being created or when it was not changed
-    # since it was loaded.
+    # it is saved after being created
     #
     # @example Newly created resource:
     #   user = User.new name: "John"
@@ -21,15 +20,14 @@ class Acfs::Resource
     #   user2 = User.find 5
     #   user2.persisted? # => true
     #   user2.name = 'Amy'
-    #   user2.persisted? # => false
+    #   user2.persisted? # => true
     #   user2.save
     #   user2.persisted? # => true
     #
-    # @return [Boolean] True if resource has no changes and
-    #   is not newly created, false otherwise.
+    # @return [Boolean] True if resource has been saved
     #
     def persisted?
-      !new? && !changed?
+      !new?
     end
 
     # @api public
@@ -174,7 +172,7 @@ class Acfs::Resource
     #
     def delete!(opts = {})
       opts[:params] ||= {}
-      opts[:params].merge! id: id
+      opts[:params] = attributes_for_url(:delete).merge opts[:params]
 
       operation :delete, opts do |data|
         update_with data
@@ -182,7 +180,13 @@ class Acfs::Resource
       end
     end
 
-    #
+    private
+
+    def attributes_for_url(action)
+      arguments_for_url = self.class.location(action: action).arguments
+      attributes.slice(*arguments_for_url)
+    end
+
     module ClassMethods
 
       # @api public

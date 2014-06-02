@@ -17,6 +17,7 @@ module Acfs
     # and parallel operations will be queued.
     #
     def process(op)
+      ::ActiveSupport::Notifications.instrument 'acfs.operation.before_process', operation: op
       op.synchronous? ? run(op) : enqueue(op)
     end
 
@@ -81,7 +82,11 @@ module Acfs
 
     def op_request(op)
       return if Acfs::Stub.enabled? and Acfs::Stub.stubbed(op)
-      yield prepare op.service.prepare op.request
+      req = op.service.prepare op.request
+      return unless req.is_a? Acfs::Request
+      req = prepare req
+      return unless req.is_a? Acfs::Request
+      yield req
     end
   end
 end

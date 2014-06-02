@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.40.0
+
+* Change `Resource#persisted?` to return true if it is not new
+
+## 0.39.1
+
+* Fix automatic path parameter handling for #destroy
+
+## 0.39.0
+
+* Add new event acfs.operation.before_process
+
+## 0.38.0
+
+* Allow middlewares to abort request processing
+* Allow middlewares to receive the request operation object (via the request)
+
 ## 0.37.0
 
 * Add Acfs.on

@@ -1,14 +1,14 @@
 module Acfs
-
+  #
   # Global Acfs module methods.
   #
   module Global
-
+    #
     # @api private
     # @return [Runner]
     #
     def runner
-      @runner ||= Runner.new Adapter::Typhoeus.new
+      Thread.current[:acfs_runner] ||= Runner.new Adapter::Typhoeus.new
     end
 
     # @api public
@@ -59,9 +59,10 @@ module Acfs
     #   Acfs.add_callback(user, &callback_two)
     #
     def add_callback(resource, &block)
-      raise ArgumentError.new "Given resource is not an Acfs resource but "\
-                              "a: #{resource.class.name}" \
-                              unless resource.respond_to?(:__callbacks__)
+      unless resource.respond_to?(:__callbacks__)
+        raise ArgumentError.new 'Given resource is not an Acfs resource ' \
+          "delegator but a: #{resource.class.name}"
+      end
       return false if block.nil?
 
       if resource.loaded?
@@ -73,8 +74,8 @@ module Acfs
 
     def on(*resources)
       resources.each do |resource|
-        add_callback resource do |ret|
-          yield(*resources) unless resources.any? {|res| !res.loaded? }
+        add_callback resource do |_|
+          yield(*resources) unless resources.any?{|res| !res.loaded? }
         end
       end
     end

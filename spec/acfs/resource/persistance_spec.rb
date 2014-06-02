@@ -122,22 +122,53 @@ describe Acfs::Resource::Persistence do
       let(:model) { model_class.find 1 }
       before { model; Acfs.run; model.name = 'dhh' }
 
-      it { expect(model).to_not be_persisted }
+      it { expect(model).to be_persisted }
       it { expect(model).to_not be_new }
     end
 
     describe '#delete!' do
       let(:model) { model_class.find 1 }
-      before { model; Acfs.run }
+      let(:before_acfs_run) {}
 
-      it 'should trigger DELETE request' do
-        model.delete!
-        expect(@del).to have_been_requested
+      describe 'normal delete actions' do
+        before { model; Acfs.run }
+
+        it 'should trigger DELETE request' do
+          model.delete!
+          expect(@del).to have_been_requested
+        end
+
+        it 'should be frozen after DELETE' do
+          model.delete!
+          expect(model.__getobj__).to be_frozen
+        end
       end
 
-      it 'should be frozen after DELETE' do
-        model.delete!
-        expect(model.__getobj__).to be_frozen
+      describe 'correct URL generation' do
+        let(:model_class) {PathArguments}
+        let(:model) {model_class.find 1, params: {required_arg: 'some_value'}}
+
+        before :each do
+          resource_url = 'http://users.example.org/some_value/users/1'
+          @my_get_stub = stub_request(:get, resource_url)
+          .to_return response({ id: 1, required_arg: 'some_value' })
+          @my_delete_stub = stub_request(:delete, resource_url)
+          .with(body: '{}')
+          .to_return response({ id: 1, required_arg: 'some_value'  }, status: 200)
+          model
+          Acfs.run
+        end
+
+        it 'should not raise an error on URL generation' do
+          expect {
+            model.delete!
+          }.not_to raise_error
+        end
+
+        it 'should request the delete' do
+          model.delete!
+          expect(@my_delete_stub).to have_been_requested
+        end
       end
     end
 

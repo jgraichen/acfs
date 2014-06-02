@@ -24,7 +24,7 @@ describe 'Acfs' do
     @user.name = 'Johnny'
 
     expect(@user).to be_changed
-    expect(@user).to_not be_persisted
+    expect(@user).to be_persisted
 
     @user.save
 
