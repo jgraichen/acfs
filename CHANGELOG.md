@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.40.0
+
+* Change `Resource#persisted?` to return true if it is not new
+
 ## 0.39.1
 
 * Fix automatic path parameter handling for #destroy
