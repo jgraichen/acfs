@@ -1,5 +1,5 @@
 language: ruby
-bundler_args: --without development
+bundler_args: "--without development"
 rvm:
 - '2.1'
 - '2.0'
@@ -11,16 +11,7 @@ gemfile:
 - gemfiles/Gemfile.rails-4-0
 - gemfiles/Gemfile.rails-3-2
 - gemfiles/Gemfile.rails-3-1
-deploy:
-  provider: rubygems
-  api_key:
-    secure: gNudZK0JaRRweudmkpdkJjUMydItTSW5cXjpYdYCfahqd/cD0xPjxotr2TCHrJibfVauoT/PytbQWcP3jnOYytp6oS0up5Y+uKpGmbqVYx/rZvShWALszcBs71lUh/IZpDXNHc+yo/01HCn10/uQUFRtrjWgMwHtHxXb09xE4wQ=
-  gem: acfs
-  on:
-    branch: master
-    repo: jgraichen/acfs
-    rvm: 2.0.0
 matrix:
   allow_failures:
-    - rvm: 2.1.0
-    - rvm: rbx-2
+  - rvm: 2.1.0
+  - rvm: rbx-2
