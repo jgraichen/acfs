@@ -56,6 +56,8 @@ module Acfs
     # Start processing queued operations.
     #
     def start
+      return if running?
+
       enqueue_operations
 
       @running = true
