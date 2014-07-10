@@ -30,13 +30,16 @@ module Acfs
   module Middleware
     extend ActiveSupport::Autoload
     require 'acfs/middleware/base'
+    require 'acfs/middleware/serializer'
 
     autoload :Print
     autoload :Logger
-    autoload :JsonDecoder
-    autoload :MessagePackDecoder, 'acfs/middleware/msgpack_decoder'
-    autoload :JsonEncoder
-    autoload :MessagePackEncoder, 'acfs/middleware/msgpack_encoder'
+    autoload :JSON
+    autoload :JsonDecoder, 'acfs/middleware/json'
+    autoload :JsonEncoder, 'acfs/middleware/json'
+    autoload :MessagePack, 'acfs/middleware/msgpack'
+    autoload :MessagePackDecoder, 'acfs/middleware/msgpack'
+    autoload :MessagePackEncoder, 'acfs/middleware/msgpack'
   end
 
   module Adapter
