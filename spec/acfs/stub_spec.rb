@@ -199,6 +199,18 @@ describe Acfs::Stub do
         }.to raise_error(::Acfs::InvalidResource)
       end
     end
+
+    context 'with create action' do
+      before do
+        Acfs::Stub.resource MyUser, :create, with: {name: 'John Smith', age: 0}, raise: 422
+      end
+
+      it 'should allow to raise error' do
+        expect {
+          user = MyUser.create! name: 'John Smith', age: 0
+        }.to raise_error(::Acfs::InvalidResource)
+      end
+    end
   end
 
   describe '.allow_requests=' do
