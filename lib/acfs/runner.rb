@@ -59,14 +59,10 @@ module Acfs
       return if running?
 
       enqueue_operations
-
-      @running = true
-      adapter.start
+      start_all
     rescue
       queue.clear
       raise
-    ensure
-      @running = false
     end
 
     def clear
@@ -76,6 +72,14 @@ module Acfs
     end
 
     private
+
+    def start_all
+      @running = true
+      adapter.start
+    ensure
+      @running = false
+    end
+
     def enqueue_operations
       while (op = queue.shift)
         op_request(op) { |req| adapter.queue req }
