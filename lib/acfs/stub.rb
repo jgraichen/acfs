@@ -24,10 +24,11 @@ module Acfs
       data   = op.data.stringify_keys
 
       return true if opts[:with] == params || data == opts[:with]
-      return true if (opts[:with].nil? && params.empty? && data.empty?)
+      return true if opts[:with].nil? && params.empty? && data.empty?
 
-      return true if opts[:with].reject { |k, v| v.nil? } == params.reject { |k, v| v.nil? }
-      return true if opts[:with].reject { |k, v| v.nil? } == data.reject { |k, v| v.nil? }
+      opts[:with] ||= {}
+      return true if opts[:with].reject{|_, v| v.nil? } == params.reject {|_, v| v.nil? }
+      return true if opts[:with].reject{|_, v| v.nil? } == data.reject {|_, v| v.nil? }
 
       false
     end
