@@ -33,10 +33,13 @@ module Acfs
 
       def convert_request(req)
         request = ::Typhoeus::Request.new req.url,
-                                          method: req.method,
-                                          params: req.params,
-                                          headers: req.headers,
-                                          body: req.body
+          method: req.method,
+          params: req.params,
+          headers: req.headers.merge(
+            'Expect'            => '',
+            'Transfer-Encoding' => ''
+          ),
+          body: req.body
 
         request.on_complete do |response|
           req.complete! convert_response(req, response)
