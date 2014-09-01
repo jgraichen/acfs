@@ -7,9 +7,9 @@ rvm:
 - jruby
 - rbx
 gemfile:
+- gemfiles/Gemfile.rails-4-1
 - gemfiles/Gemfile.rails-4-0
 - gemfiles/Gemfile.rails-3-2
-- gemfiles/Gemfile.rails-3-1
 services:
 - rabbitmq
 deploy:
@@ -20,11 +20,4 @@ deploy:
   on:
     branch: master
     repo: jgraichen/acfs
-    rvm: 2.0.0
-matrix:
-  allow_failures:
-    - rvm: 2.1.0
-    - rvm: rbx
-before_install:
-  - gem install minitest -v '4.7.5'
-  - gem install json -v '1.8.1'
+    rvm: 2.1.0
