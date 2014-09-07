@@ -250,8 +250,8 @@ it 'should find user number one' do
   expect(user.name).to be == 'John Smith'
   expect(user.age).to be == 32
 
-  expect(@stub).to has_called
-  expect(@stub).to_not have_called 5.times
+  expect(@stub).to be_called
+  expect(@stub).to_not be_called 5.times
 end
 
 it 'should not find user number two' do
