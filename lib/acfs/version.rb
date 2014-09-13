@@ -3,7 +3,7 @@ module Acfs
     MAJOR = 0
     MINOR = 41
     PATCH = 1
-    STAGE = :beta1
+    STAGE = nil
 
     STRING = [MAJOR, MINOR, PATCH, STAGE].reject(&:nil?).join('.')
 
