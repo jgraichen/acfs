@@ -24,10 +24,26 @@ describe Acfs::Model::Attributes::Dict do
     end
 
     context 'with hashable object' do
-      let(:sample) { [[3, 4], ['test', true]] }
+      let(:sample) do
+        o = Object.new
+        class << o
+          def to_h
+            {3 => 4, 'test' => true}
+          end
+        end
+        o
+      end
 
       it 'should cast object to hash' do
         expect(subject.cast(sample)).to eq 3 => 4, 'test' => true
+      end
+    end
+
+    context 'with hash subclass' do
+      let(:sample) { HashWithIndifferentAccess.new :test => :foo, 34 => 12 }
+
+      it 'should return obj unmodified' do
+        expect(subject.cast(sample)).to be sample
       end
     end
   end

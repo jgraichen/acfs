@@ -21,7 +21,8 @@ module Acfs::Model::Attributes
     # @raise [TypeError] If object cannot be casted to a hash.
     #
     def cast_type(obj)
-      return obj.to_h if obj.respond_to? :to_a
+      return obj if obj.is_a? Hash
+      return obj.to_h if obj.respond_to? :to_h
       raise TypeError.new "Cannot cast #{obj.inspect} to hash."
     end
   end
