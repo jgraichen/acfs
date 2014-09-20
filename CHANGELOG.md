@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.42.0
+
+* Add simple dict attribute type
+
 ## 0.40.0
 
 * Change `Resource#persisted?` to return true if it is not new
