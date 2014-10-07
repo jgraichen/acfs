@@ -24,6 +24,17 @@ describe Acfs::Model::Attributes do
         expect(model.new.mail).to be == 'John@srv.tld'
       end
     end
+
+    context 'with optional attribute' do
+      before do
+        model.attribute :name, :string, default: 'John'
+        model.attribute :profile, :string, optional: true
+      end
+
+      it 'should not be included in attributes' do
+        expect(model.new.attributes.keys).to match_array %w(name)
+      end
+    end
   end
 
   describe '#attributes' do
@@ -34,6 +45,18 @@ describe Acfs::Model::Attributes do
 
     it 'should return hash of all attributes' do
       expect(model.new.attributes).to be == { name: 'John', age: 25 }.stringify_keys
+    end
+
+    context 'optional attribute' do
+      before { model.attribute :profile, :string, optional: true }
+
+      it 'should not be include if not set' do
+        expect(model.new.attributes.keys).to_not include 'profile'
+      end
+
+      it 'should be include if set' do
+        expect(model.new.tap{|m| m.profile = 'abc'}.attributes).to include 'profile' => 'abc'
+      end
     end
   end
 
@@ -97,6 +120,15 @@ describe Acfs::Model::Attributes do
     it 'should return default value' do
       expect(model.new.name).to be == 'John'
     end
+
+    context 'with optional attribute' do
+      before { model.attribute :profile, :string, optional: true }
+
+      it 'should have getter' do
+        expect(model.new.profile).to eq nil
+        expect(model.new(profile: 'abc').profile).to eq 'abc'
+      end
+    end
   end
 
   describe '#_setter_' do
@@ -124,6 +156,14 @@ describe Acfs::Model::Attributes do
       o.age = '28'
 
       expect(o.age).to be == 28
+    end
+
+    context 'with optional attribute' do
+      before { model.attribute :profile, :string, optional: true }
+
+      it 'should have setter for optional attribute' do
+        expect(model.new.tap{|m| m.profile = 'abc' }.profile).to eq 'abc'
+      end
     end
   end
 
@@ -172,6 +212,14 @@ describe Acfs::Model::Attributes do
 
           resource.updated_at = ''
           expect(resource.updated_at).to eq nil
+        end
+      end
+
+      context 'optional' do
+        it 'should fail with default' do
+          expect do
+            model.send :attribute, :abc, :integer, optional: true, default: 5
+          end.to raise_error ArgumentError, /\AOptional attributes cannot have a default value\.\z/
         end
       end
     end
