@@ -6,6 +6,10 @@ module Acfs::Model::Attributes
     def initialize(opts = {})
       @options = opts
       @options.reverse_merge! allow_nil: true
+
+      if options.key?(:default) && optional?
+        raise ArgumentError.new 'Optional attributes cannot have a default value.'
+      end
     end
 
     def nil_allowed?
@@ -18,6 +22,10 @@ module Acfs::Model::Attributes
 
     def default_value
       options[:default].is_a?(Proc) ? options[:default] : cast(options[:default])
+    end
+
+    def optional?
+      options.fetch(:optional, false)
     end
 
     def cast(obj)

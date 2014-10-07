@@ -23,6 +23,8 @@ module Acfs::Model
     #
     # Write default attributes defined in resource class.
     #
+    # Optional attributes will not be initialized.
+    #
     # @see #write_attributes
     # @see ClassMethods#attributes
     #
@@ -35,6 +37,8 @@ module Acfs::Model
     # @api public
     #
     # Returns ActiveModel compatible list of attributes and values.
+    #
+    # Will not include not set optional attributes.
     #
     # @example
     #   class User
@@ -180,11 +184,15 @@ module Acfs::Model
       #
       # Available types can be found in `Acfs::Model::Attributes::*`.
       #
+      # Optional attributes will not be included in most attribute listing
+      # unless they are populated from server or client.
+      #
       # @example
       #   class User
       #     include Acfs::Model
       #     attribute :name, :string, default: 'Anon'
       #     attribute :email, :string, default: lambda{ "#{name}@example.org"}
+      #     attribute :profile, :string, optional: true
       #   end
       #
       # @param [ #to_sym ] name Attribute name.
@@ -202,6 +210,8 @@ module Acfs::Model
       #
       # Return list of possible attributes and default values for this model class.
       #
+      # This method will not include attributes marked as optional.
+      #
       # @example
       #   class User
       #     include Acfs::Model
@@ -215,7 +225,7 @@ module Acfs::Model
       def attributes
         Hash.new.tap do |attrs|
           defined_attributes.each do |key, attr|
-            attrs[key] = attr.default_value
+            attrs[key] = attr.default_value unless attr.optional?
           end
         end
       end
