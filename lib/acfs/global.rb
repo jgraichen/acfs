@@ -75,7 +75,7 @@ module Acfs
     def on(*resources)
       resources.each do |resource|
         add_callback resource do |_|
-          yield(*resources) unless resources.any?{|res| !res.loaded? }
+          yield(*resources) unless resources.any? {|res| !res.loaded? }
         end
       end
     end

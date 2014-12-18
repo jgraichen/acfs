@@ -2,11 +2,9 @@ require 'logger'
 
 module Acfs
   module Middleware
-
     # Log requests and responses.
     #
     class Logger < Base
-
       def initialize(app, options = {})
         super
         @logger = options[:logger] if options[:logger]

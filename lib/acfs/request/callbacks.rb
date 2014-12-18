@@ -1,6 +1,5 @@
 module Acfs
   class Request
-
     # Module containing callback handling for Requests.
     # Current the only callback type is `on_complete`:
     #
@@ -8,7 +7,6 @@ module Acfs
     #   request.on_complete { |response| ... }
     #
     module Callbacks
-
       # Add a new `on_complete` callback for this request.
       #
       # @example Set on_complete.
@@ -43,8 +41,9 @@ module Acfs
       end
 
       private
+
       def call_callback(res, index)
-        callbacks[index].call res, proc { |res| call_callback res, index + 1 } if index < callbacks.size
+        callbacks[index].call res, proc {|res| call_callback res, index + 1 } if index < callbacks.size
       end
     end
   end

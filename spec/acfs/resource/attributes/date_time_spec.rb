@@ -32,16 +32,16 @@ describe Acfs::Resource::Attributes::DateTime do
 
     it 'should raise an error if obj is of String class not in valid ISO-8601 format' do
       malformed_string = 'qwe123'
-      expect {
+      expect do
         subject.cast(malformed_string)
-      }.to raise_error ArgumentError
+      end.to raise_error ArgumentError
     end
 
     it 'should raise an error if obj is of wrong class (Fixnum)' do
       fixnum = 12
-      expect {
+      expect do
         subject.cast(fixnum)
-      }.to raise_error TypeError
+      end.to raise_error TypeError
     end
 
     context 'with allow_nil option' do

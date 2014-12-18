@@ -1,7 +1,6 @@
 require 'acfs/service/middleware'
 
 module Acfs
-
   # User {Acfs::Service} to define your services. That includes
   # an identity used to identify the service in configuration files
   # and middlewares the service uses.
@@ -35,11 +34,11 @@ module Acfs
     # @return [Location]
     #
     def location(resource_class, opts = {})
-      opts.reverse_merge! self.options
+      opts.reverse_merge! options
 
       action = opts[:action] || :list
 
-      path = if Hash === opts[:path] && opts[:path].has_key?(action)
+      path = if Hash === opts[:path] && opts[:path].key?(action)
                opts[:path].fetch(action)
              else
                path = if Hash === opts[:path]
@@ -59,7 +58,6 @@ module Acfs
     end
 
     class << self
-
       # @api public
       #
       # @overload identity()

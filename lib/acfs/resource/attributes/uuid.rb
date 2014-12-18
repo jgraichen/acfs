@@ -1,5 +1,4 @@
 module Acfs::Resource::Attributes
-
   # @api public
   #
   # UUID attribute type. Use it in your model as an attribute type:
@@ -10,7 +9,6 @@ module Acfs::Resource::Attributes
   #   end
   #
   class UUID < Base
-
     #
     REGEXP = /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i
 
@@ -46,7 +44,7 @@ module Acfs::Resource::Attributes
         str
       else
         raise ArgumentError.new "given String `#{str}` " \
-                                "does not look like a UUID"
+                                'does not look like a UUID'
       end
     end
   end

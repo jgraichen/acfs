@@ -2,7 +2,6 @@ require 'uri'
 require 'yaml'
 
 module Acfs
-
   # Acfs configuration is used to locate services and get their base URLs.
   #
   class Configuration
@@ -64,10 +63,10 @@ module Acfs
     # @return [undefined]
     #
     def load(filename)
-      config = YAML::load File.read filename
+      config = YAML.load File.read filename
       env    = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
 
-      config = config[env] if config.has_key? env
+      config = config[env] if config.key? env
       config.each do |key, value|
         case key
           when 'services' then load_services value
@@ -88,7 +87,6 @@ module Acfs
     end
 
     class << self
-
       # @api private
       #
       # Return current configuration object.

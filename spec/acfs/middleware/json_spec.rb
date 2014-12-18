@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Acfs::Middleware::JSON do
-  let(:data)     { [{id: 1, name: "Anon"},{id: 2, name:"John", friends: [ 1 ]}] }
+  let(:data)     { [{id: 1, name: 'Anon'}, {id: 2, name: 'John', friends: [1]}] }
   let(:body)     { '' }
   let(:headers)  { {} }
   let(:request)  { Acfs::Request.new 'url', method: 'GET', data: data }
   let(:response) { Acfs::Response.new request, status: 200, headers: headers, body: body }
-  let(:decoder)  { Acfs::Middleware::JSON.new lambda { |req| req } }
+  let(:decoder)  { Acfs::Middleware::JSON.new lambda {|req| req } }
 
   before do
     decoder.call request

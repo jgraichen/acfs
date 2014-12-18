@@ -1,5 +1,4 @@
 module Acfs::Resource::Attributes
-
   # @api public
   #
   # String attribute type. Use it in your model as
@@ -11,7 +10,6 @@ module Acfs::Resource::Attributes
   #   end
   #
   class String < Base
-
     # @api public
     #
     # Cast given object to string.

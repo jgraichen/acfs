@@ -1,10 +1,8 @@
 module Acfs::Adapter
-
   # Base adapter handling operation queuing
   # and processing.
   #
   class Base
-
     # Start processing queued requests.
     #
     def start

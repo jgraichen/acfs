@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Acfs::Configuration do
-
   let(:cfg) { Acfs::Configuration.new }
   before { @configuration = Acfs::Configuration.current.dup }
   after { Acfs::Configuration.set @configuration }

@@ -14,11 +14,11 @@ describe ::Acfs::Global do
   let(:adapter) { ::NullAdapter.new }
   let(:runner) { double 'runner' }
   let(:collector) { NotificationCollector.new }
-  let(:acfs) { Object.new.tap { |o| o.extend ::Acfs::Global } }
+  let(:acfs) { Object.new.tap {|o| o.extend ::Acfs::Global } }
 
   describe 'instrumentation' do
     before do
-      #allow(runner).to receive(:start)
+      # allow(runner).to receive(:start)
       allow(acfs).to receive(:runner).and_return runner
     end
 
@@ -48,7 +48,7 @@ describe ::Acfs::Global do
       stub_request(:get, %r{http://users.example.org/users/\d+}).to_return(
         status: 200,
         body: '{}',
-        headers: { 'Content-Type' => 'application/json' })
+        headers: {'Content-Type' => 'application/json'})
     end
 
     it 'should invoke when both resources' do

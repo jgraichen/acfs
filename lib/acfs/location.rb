@@ -1,5 +1,4 @@
 module Acfs
-
   # @api private
   #
   # Describes a URL with placeholders.
@@ -7,13 +6,13 @@ module Acfs
   class Location
     attr_reader :arguments, :raw, :struct, :args
 
-    REGEXP= /^:([A-z][A-z0-9_]*)$/
+    REGEXP = /^:([A-z][A-z0-9_]*)$/
 
     def initialize(uri, args = {})
       @raw       = URI.parse uri
       @args      = args
-      @struct    = raw.path.split('/').reject(&:empty?).map{|s| s =~ REGEXP ? $1.to_sym : s }
-      @arguments = struct.select{|s| Symbol === s }
+      @struct    = raw.path.split('/').reject(&:empty?).map {|s| s =~ REGEXP ? Regexp.last_match[1].to_sym : s }
+      @arguments = struct.select {|s| Symbol === s }
     end
 
     def build(args = {})
@@ -26,7 +25,7 @@ module Acfs
 
     def extract_from(*args)
       args = Hash.new.tap do |collect|
-        arguments.each{|key| collect[key] = extract_arg key, args }
+        arguments.each {|key| collect[key] = extract_arg key, args }
       end
 
       build args
@@ -34,7 +33,7 @@ module Acfs
 
     def str
       uri = raw.dup
-      uri.path = URI.escape '/' + struct.map{|s| lookup_arg(s, args) }.join('/')
+      uri.path = URI.escape '/' + struct.map {|s| lookup_arg(s, args) }.join('/')
       uri.to_s
     end
 
@@ -44,9 +43,10 @@ module Acfs
     alias_method :to_s, :raw_uri
 
     private
+
     def extract_arg(key, hashes)
       hashes.each_with_index do |hash, index|
-        return (index == 0 ? hash.delete(key) : hash.fetch(key)) if hash.has_key?(key)
+        return (index == 0 ? hash.delete(key) : hash.fetch(key)) if hash.key?(key)
       end
 
       nil
@@ -67,7 +67,7 @@ module Acfs
       args.fetch(sym.to_s) do
         args.fetch(sym) do
           if args[:raise].nil? || args[:raise]
-            raise ArgumentError.new "URI path argument `#{sym}' missing on `#{to_s}'. Given: `#{args}.inspect'"
+            raise ArgumentError.new "URI path argument `#{sym}' missing on `#{self}'. Given: `#{args}.inspect'"
           else
             ":#{sym}"
           end

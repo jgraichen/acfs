@@ -2,10 +2,8 @@ require 'action_dispatch'
 
 module Acfs
   class Response
-
     # Quick accessors for format handling.
     module Formats
-
       def content_type
         @content_type ||= read_content_type
       end
@@ -15,6 +13,7 @@ module Acfs
       end
 
       private
+
       def read_content_type
         return 'text/plain' unless headers && headers['Content-Type']
 

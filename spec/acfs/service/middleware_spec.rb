@@ -10,7 +10,7 @@ describe Acfs::Service::Middleware do
   let(:middleware) { TestMiddleware }
 
   describe '.use' do
-    let(:options) { { abc: 'cde' } }
+    let(:options) { {abc: 'cde'} }
 
     it 'should add middleware to list' do
       srv_class.use middleware

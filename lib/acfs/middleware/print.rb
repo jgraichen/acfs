@@ -1,10 +1,8 @@
 module Acfs
   module Middleware
-
     # Print resquests and response on terminal
     #
     class Print < Base
-
       def call(req)
         puts '-' * 80
         puts req.inspect

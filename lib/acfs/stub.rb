@@ -1,7 +1,6 @@
 require 'rack/utils'
 
 module Acfs
-
   # Global handler for stubbing resources.
   #
   class Stub
@@ -14,7 +13,7 @@ module Acfs
 
       @opts[:with].stringify_keys! if @opts[:with].is_a? Hash
       @opts[:return].stringify_keys! if @opts[:return].is_a? Hash
-      @opts[:return].map! { |h| h.stringify_keys! if h.is_a? Hash } if @opts[:return].is_a? Array
+      @opts[:return].map! {|h| h.stringify_keys! if h.is_a? Hash } if @opts[:return].is_a? Array
     end
 
     def accept?(op)
@@ -24,10 +23,10 @@ module Acfs
       data   = op.data.stringify_keys
 
       return true if opts[:with] == params || data == opts[:with]
-      return true if (opts[:with].nil? && params.empty? && data.empty?)
+      return true if opts[:with].nil? && params.empty? && data.empty?
 
-      return true if opts[:with].reject { |k, v| v.nil? } == params.reject { |k, v| v.nil? }
-      return true if opts[:with].reject { |k, v| v.nil? } == data.reject { |k, v| v.nil? }
+      return true if opts[:with].reject {|_k, v| v.nil? } == params.reject {|_k, v| v.nil? }
+      return true if opts[:with].reject {|_k, v| v.nil? } == data.reject {|_k, v| v.nil? }
 
       false
     end
@@ -51,9 +50,9 @@ module Acfs
         raise_error op, err, opts[:return]
       elsif data
         response = Acfs::Response.new op.request,
-                                      headers: opts[:headers] || {},
-                                      status:  opts[:status] || 200,
-                                      data:    data || {}
+          headers: opts[:headers] || {},
+          status:  opts[:status] || 200,
+          data:    data || {}
         op.call data, response
       else
         raise ArgumentError, 'Unsupported stub.'
@@ -61,6 +60,7 @@ module Acfs
     end
 
     private
+
     def raise_error(op, name, data)
       raise name if name.is_a? Class
       data.stringify_keys! if data.respond_to? :stringify_keys!
@@ -69,11 +69,10 @@ module Acfs
     end
 
     class << self
-
       # Stub a resource with given handler block. An already created handler
       # for same resource class will be overridden.
       #
-      def resource(klass, action, opts = {}, &block)
+      def resource(klass, action, opts = {}, &_block)
         action = action.to_sym
         raise ArgumentError, "Unknown action `#{action}`." unless ACTIONS.include? action
 
@@ -96,11 +95,11 @@ module Acfs
         @enabled ||= false
       end
 
-      def enable;
+      def enable
         @enabled = true
       end
 
-      def disable;
+      def disable
         @enabled = false
       end
 
@@ -118,7 +117,7 @@ module Acfs
         return false unless (classes = stubs[op.resource])
         return false unless (stubs = classes[op.action])
 
-        accepted_stubs = stubs.select { |stub| stub.accept? op }
+        accepted_stubs = stubs.select {|stub| stub.accept? op }
 
         raise AmbiguousStubError.new stubs: accepted_stubs, operation: op if accepted_stubs.size > 1
 
@@ -142,8 +141,9 @@ module Acfs
       end
 
       private
+
       def pretty_print
-        out = String.new
+        out = ''
         stubs.each do |klass, actions|
           out << '  ' << klass.name << ":\n"
           actions.each do |action, stubs|

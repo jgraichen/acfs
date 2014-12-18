@@ -14,7 +14,7 @@ describe Acfs::Resource::QueryMethods do
                                 name: 'Clare Customer', age: 24
         end
 
-        let(:action) { lambda{|cb = nil| model.find(1, &cb) } }
+        let(:action) { lambda {|cb = nil| model.find(1, &cb) } }
         it_behaves_like 'a query method with multi-callback support'
 
         it 'should load a single remote resource' do
@@ -44,7 +44,7 @@ describe Acfs::Resource::QueryMethods do
       context 'with 404 response' do
         before do
           stub_request(:get, 'http://users.example.org/users/1')
-            .to_return response({error: 'not found'}, status: 404)
+            .to_return response({error: 'not found'}, {status: 404})
         end
 
         it 'should raise a NotFound error' do
@@ -95,7 +95,7 @@ describe Acfs::Resource::QueryMethods do
         end
 
         it 'should invoke callback after all models are loaded' do
-          block = proc{}
+          block = proc {}
           expect(block).to receive(:call) do |users|
             expect(users).to equal @users
             expect(users.size).to be == 2
@@ -107,8 +107,8 @@ describe Acfs::Resource::QueryMethods do
         end
 
         it 'should invoke multiple callback after all models are loaded' do
-          proc1 = proc{}
-          proc2 = proc{}
+          proc1 = proc {}
+          proc2 = proc {}
           expect(proc1).to receive(:call) do |users|
             expect(users).to equal @users
             expect(users.size).to be == 2
@@ -137,7 +137,7 @@ describe Acfs::Resource::QueryMethods do
       context 'with one 404 response' do
         before do
           stub_request(:get, 'http://users.example.org/users/1')
-            .to_return response({error: 'not found'}, status: 404)
+            .to_return response({error: 'not found'}, {status: 404})
         end
 
         it 'should raise resource not found error' do
@@ -162,8 +162,8 @@ describe Acfs::Resource::QueryMethods do
     end
 
     it 'should invoke multiple callback after all models are loaded' do
-      proc1 = proc{}
-      proc2 = proc{}
+      proc1 = proc {}
+      proc2 = proc {}
       expect(proc1).to receive(:call) do |computers|
         expect(computers).to equal @computers
         expect(computers.size).to be == 3
@@ -274,7 +274,7 @@ describe Acfs::Resource::QueryMethods do
         end
 
         it 'should invoke callback after model is loaded' do
-          block = proc{}
+          block = proc {}
 
           expect(block).to receive(:call) do |user|
             expect(user).to eql @user.__getobj__
@@ -287,8 +287,8 @@ describe Acfs::Resource::QueryMethods do
         end
 
         it 'should invoke multiple callbacks after model is loaded' do
-          proc1 = proc{}
-          proc2 = proc{}
+          proc1 = proc {}
+          proc2 = proc {}
 
           expect(proc1).to receive(:call) do |user|
             expect(user).to eql @user.__getobj__
@@ -340,7 +340,7 @@ describe Acfs::Resource::QueryMethods do
         it { should be_nil }
 
         it 'should invoke callback after model is loaded' do
-          block = proc{}
+          block = proc {}
 
           expect(block).to receive(:call) do |user|
             expect(user).to eql @user.__getobj__
@@ -352,8 +352,8 @@ describe Acfs::Resource::QueryMethods do
         end
 
         it 'should invoke multiple callbacks after model is loaded' do
-          proc1 = proc{}
-          proc2 = proc{}
+          proc1 = proc {}
+          proc2 = proc {}
 
           expect(proc1).to receive(:call) do |user|
             expect(user).to eql @user.__getobj__
@@ -393,7 +393,7 @@ describe Acfs::Resource::QueryMethods do
         end
 
         it 'should not invoke callback after model could not be loaded' do
-          block = proc{}
+          block = proc {}
 
           expect(block).not_to receive(:call)
 
@@ -406,30 +406,30 @@ describe Acfs::Resource::QueryMethods do
     describe '#each_page' do
       context 'without parameters' do
         before do
-          stub_request(:get, 'http://users.example.org/users').
-              to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => '<http://users.example.org/users?page=2>; rel="next"'
-                                 })
-          stub_request(:get, 'http://users.example.org/users?page=2').
-              to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
-                                 })
-          stub_request(:get, 'http://users.example.org/users?page=3').
-              to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
-                                 })
-          stub_request(:get, 'http://users.example.org/users?page=4').
-              to_return response([{id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => ''
-                                 })
+          stub_request(:get, 'http://users.example.org/users')
+            .to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => '<http://users.example.org/users?page=2>; rel="next"'
+              })
+          stub_request(:get, 'http://users.example.org/users?page=2')
+            .to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
+              })
+          stub_request(:get, 'http://users.example.org/users?page=3')
+            .to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
+              })
+          stub_request(:get, 'http://users.example.org/users?page=4')
+            .to_return response([{id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => ''
+              })
         end
 
         it 'should iterate all pages' do
@@ -448,30 +448,30 @@ describe Acfs::Resource::QueryMethods do
 
       context 'with parameters' do
         before do
-          stub_request(:get, 'http://users.example.org/users?param=bla').
-              to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => '<http://users.example.org/users?where=fuu&page=2>; rel="next"'
-                                 })
-          stub_request(:get, 'http://users.example.org/users?where=fuu&page=2').
-              to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
-                                 })
-          stub_request(:get, 'http://users.example.org/users?page=3').
-              to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
-                                 })
-          stub_request(:get, 'http://users.example.org/users?page=4').
-              to_return response([{id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => ''
-                                 })
+          stub_request(:get, 'http://users.example.org/users?param=bla')
+            .to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => '<http://users.example.org/users?where=fuu&page=2>; rel="next"'
+              })
+          stub_request(:get, 'http://users.example.org/users?where=fuu&page=2')
+            .to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
+              })
+          stub_request(:get, 'http://users.example.org/users?page=3')
+            .to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
+              })
+          stub_request(:get, 'http://users.example.org/users?page=4')
+            .to_return response([{id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => ''
+              })
         end
 
         it 'should call first page with params and follow relations' do
@@ -492,30 +492,30 @@ describe Acfs::Resource::QueryMethods do
     describe '#each_item' do
       context 'without parameters' do
         before do
-          stub_request(:get, 'http://users.example.org/users').
-              to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => '<http://users.example.org/users?page=2>; rel="next"'
-                                 })
-          stub_request(:get, 'http://users.example.org/users?page=2').
-              to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
-                                 })
-          stub_request(:get, 'http://users.example.org/users?page=3').
-              to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'},{id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
-                                 })
-          stub_request(:get, 'http://users.example.org/users?page=4').
-              to_return response([{id: 5, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
-                                 headers: {
-                                     'X-Total-Pages' => '4',
-                                     'Link'          => ''
-                                 })
+          stub_request(:get, 'http://users.example.org/users')
+            .to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => '<http://users.example.org/users?page=2>; rel="next"'
+              })
+          stub_request(:get, 'http://users.example.org/users?page=2')
+            .to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
+              })
+          stub_request(:get, 'http://users.example.org/users?page=3')
+            .to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'}, {id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
+              })
+          stub_request(:get, 'http://users.example.org/users?page=4')
+            .to_return response([{id: 5, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
+              headers: {
+                'X-Total-Pages' => '4',
+                'Link'          => ''
+              })
         end
 
         it 'should iterate all pages' do

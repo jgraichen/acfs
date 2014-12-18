@@ -14,7 +14,7 @@ describe Acfs::Stub do
 
   describe '#called?' do
     context 'without specified number' do
-      let!(:operation) { Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 } }
+      let!(:operation) { Acfs::Stub.resource MyUser, :read, with: {id: 1}, return: {id: 1, name: 'John Smith', age: 32} }
 
       it 'should allow to test if stub was called' do
         MyUser.find 1
@@ -38,8 +38,8 @@ describe Acfs::Stub do
   describe '.resource' do
     context 'with ambiguous stubs' do
       before do
-        Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
-        Acfs::Stub.resource MyUser, :read, with: { id: 1 }, raise: :not_found
+        Acfs::Stub.resource MyUser, :read, with: {id: 1}, return: {id: 1, name: 'John Smith', age: 32}
+        Acfs::Stub.resource MyUser, :read, with: {id: 1}, raise: :not_found
       end
 
       it 'should raise error' do
@@ -51,9 +51,9 @@ describe Acfs::Stub do
 
     context 'with read action' do
       before do
-        Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
-        Acfs::Stub.resource MyUser, :read, with: { id: 2 }, raise: SpecialCustomError
-        Acfs::Stub.resource MyUser, :read, with: { id: 3 }, raise: :not_found
+        Acfs::Stub.resource MyUser, :read, with: {id: 1}, return: {id: 1, name: 'John Smith', age: 32}
+        Acfs::Stub.resource MyUser, :read, with: {id: 2}, raise: SpecialCustomError
+        Acfs::Stub.resource MyUser, :read, with: {id: 3}, raise: :not_found
       end
 
       it 'should allow to stub resource reads' do
@@ -81,8 +81,8 @@ describe Acfs::Stub do
 
       context 'with type parameter' do
         before do
-          Acfs::Stub.resource Computer, :read, with: { id: 1 }, return: { id: 1, type: 'PC' }
-          Acfs::Stub.resource Computer, :read, with: { id: 2 }, return: { id: 2, type: 'Mac' }
+          Acfs::Stub.resource Computer, :read, with: {id: 1}, return: {id: 1, type: 'PC'}
+          Acfs::Stub.resource Computer, :read, with: {id: 2}, return: {id: 2, type: 'Mac'}
         end
 
         it 'should create inherited type' do
@@ -99,8 +99,8 @@ describe Acfs::Stub do
 
     context 'with create action' do
       before do
-        Acfs::Stub.resource Session, :create, with: { ident: 'john@exmaple.org', password: 's3cr3t' }, return: { id: 'longhash', user: 1 }
-        Acfs::Stub.resource Session, :create, with: lambda { |op| op.data[:ident] == 'john@exmaple.org' && op.data[:password] == 'wrong' }, raise: 422
+        Acfs::Stub.resource Session, :create, with: {ident: 'john@exmaple.org', password: 's3cr3t'}, return: {id: 'longhash', user: 1}
+        Acfs::Stub.resource Session, :create, with: lambda {|op| op.data[:ident] == 'john@exmaple.org' && op.data[:password] == 'wrong' }, raise: 422
       end
 
       it 'should allow stub resource creation' do
@@ -111,16 +111,16 @@ describe Acfs::Stub do
       end
 
       it 'should allow to raise error' do
-        expect {
+        expect do
           Session.create! ident: 'john@exmaple.org', password: 'wrong'
-        }.to raise_error(::Acfs::InvalidResource)
+        end.to raise_error(::Acfs::InvalidResource)
       end
     end
 
     context 'with list action' do
       before do
         Acfs::Stub.resource MyUser, :list,
-          return: [{ id: 1, name: 'John Smith', age: 32 }, { id: 2, name: 'Anon', age: 12 }]
+          return: [{id: 1, name: 'John Smith', age: 32}, {id: 2, name: 'Anon', age: 12}]
       end
 
       it 'should return collection' do
@@ -158,8 +158,8 @@ describe Acfs::Stub do
       context 'with header' do
         before do
           Acfs::Stub.resource Comment, :list,
-          return: [{ id: 1, text: 'Foo' }, { id: 2, text: 'Bar' }],
-          headers: headers
+            return: [{id: 1, text: 'Foo'}, {id: 2, text: 'Bar'}],
+            headers: headers
         end
 
         let!(:comments) { Comment.all }
@@ -172,9 +172,9 @@ describe Acfs::Stub do
 
     context 'with update action' do
       before do
-        Acfs::Stub.resource MyUser, :read, with: { id: 1 }, return: { id: 1, name: 'John Smith', age: 32 }
-        Acfs::Stub.resource MyUser, :update, with: { id: 1, name: 'John Smith', age: 22 }, return: { id: 1, name: 'John Smith', age: 23 }
-        Acfs::Stub.resource MyUser, :update, with: { id: 1, name: 'John Smith', age: 0 }, raise: 422
+        Acfs::Stub.resource MyUser, :read, with: {id: 1}, return: {id: 1, name: 'John Smith', age: 32}
+        Acfs::Stub.resource MyUser, :update, with: {id: 1, name: 'John Smith', age: 22}, return: {id: 1, name: 'John Smith', age: 23}
+        Acfs::Stub.resource MyUser, :update, with: {id: 1, name: 'John Smith', age: 0}, raise: 422
       end
 
       it 'should allow stub resource update' do
@@ -194,9 +194,9 @@ describe Acfs::Stub do
         user.age = 0
         user.save
 
-        expect {
+        expect do
           user.save!
-        }.to raise_error(::Acfs::InvalidResource)
+        end.to raise_error(::Acfs::InvalidResource)
       end
     end
 
@@ -206,9 +206,9 @@ describe Acfs::Stub do
       end
 
       it 'should allow to raise error' do
-        expect {
+        expect do
           user = MyUser.create! name: 'John Smith', age: 0
-        }.to raise_error(::Acfs::InvalidResource)
+        end.to raise_error(::Acfs::InvalidResource)
       end
     end
   end
@@ -217,7 +217,7 @@ describe Acfs::Stub do
     context 'when enabled' do
       before do
         Acfs::Stub.allow_requests = true
-        stub_request(:get, 'http://users.example.org/users/2').to_return response({ id: 2, name: 'John', age: 26 })
+        stub_request(:get, 'http://users.example.org/users/2').to_return response(id: 2, name: 'John', age: 26)
       end
 
       it 'should allow real requests' do

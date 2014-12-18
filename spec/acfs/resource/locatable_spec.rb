@@ -28,7 +28,7 @@ describe Acfs::Resource::Locatable do
 
       context 'without attributes' do
         it 'should raise an error if attribute is missing' do
-          expect{ model.url }.to raise_error ArgumentError
+          expect { model.url }.to raise_error ArgumentError
         end
       end
     end
@@ -59,7 +59,7 @@ describe Acfs::Resource::Locatable do
       context ':update location' do
         let(:action) { :update }
         its(:raw_uri) do
-          expect{ subject }.to raise_error ArgumentError, /update.*disabled/
+          expect { subject }.to raise_error ArgumentError, /update.*disabled/
         end
       end
 

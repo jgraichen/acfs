@@ -2,7 +2,6 @@ require 'multi_json'
 
 module Acfs
   module Middleware
-
     # A middleware to encore request data using JSON.
     #
     class JSON < Serializer

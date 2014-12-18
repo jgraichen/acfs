@@ -1,6 +1,5 @@
 module Acfs
   class Service
-
     # Module providing all function to register middlewares
     # on services and process queued request through the
     # middleware stack.
@@ -16,7 +15,6 @@ module Acfs
       end
 
       module ClassMethods
-
         # @api public
         #
         # Register a new middleware to be used for this service.
@@ -47,7 +45,7 @@ module Acfs
         # @return [#call]
         #
         def middleware
-          @middleware ||= proc { |request| request}
+          @middleware ||= proc {|request| request }
         end
 
         # @api public

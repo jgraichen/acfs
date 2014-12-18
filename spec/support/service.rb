@@ -33,7 +33,6 @@ class Profile < Acfs::SingletonResource
 end
 
 class Customer < MyUser
-
 end
 
 class MyUserWithValidations < MyUser
@@ -43,9 +42,9 @@ end
 
 class Session < Acfs::Resource
   service UserService, path: {
-      list: 'users/:user_id/sessions',
-      delete: 'users/:user_id/sessions/del/:id',
-      update: nil
+    list: 'users/:user_id/sessions',
+    delete: 'users/:user_id/sessions/del/:id',
+    update: nil
   }
 
   attribute :id, :string
@@ -72,11 +71,9 @@ class Computer < Acfs::Resource
 end
 
 class PC < Computer
-
 end
 
 class Mac < Computer
-
 end
 
 class Single < Acfs::SingletonResource

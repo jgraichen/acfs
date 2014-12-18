@@ -1,5 +1,4 @@
 class Acfs::Resource
-
   # Included by Acfs::Model. Allows to configure the service
   # a resource belongs to.
   #
@@ -8,7 +7,6 @@ class Acfs::Resource
 
     #
     module ClassMethods
-
       # @api public
       #
       # @overload service()

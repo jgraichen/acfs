@@ -1,5 +1,4 @@
 class Acfs::Resource
-
   # Methods providing the query interface for finding resouces.
   #
   # @example
@@ -17,7 +16,6 @@ class Acfs::Resource
 
     #
     module ClassMethods
-
       # @api public
       #
       # @overload find(id, opts = {})
@@ -139,7 +137,7 @@ class Acfs::Resource
       def find_by!(params, &block)
         find_by params do |m|
           if m.nil?
-            raise Acfs::ResourceNotFound.new message: "Recieved erronious " \
+            raise Acfs::ResourceNotFound.new message: 'Recieved erronious ' \
               "response: no `#{name}` with params #{params} found"
           end
           block.call m unless block.nil?

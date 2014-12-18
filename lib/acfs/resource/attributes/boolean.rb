@@ -1,5 +1,4 @@
 module Acfs::Resource::Attributes
-
   # @api public
   #
   # Boolean attribute type. Use it in your model as an attribute type:
@@ -15,7 +14,6 @@ module Acfs::Resource::Attributes
   #  true, on, yes
   #
   class Boolean < Base
-
     TRUE_VALUES = %w(true on yes 1)
 
     # @api public

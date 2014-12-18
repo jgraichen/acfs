@@ -34,7 +34,7 @@ describe Acfs::Resource::Validation do
 
       it 'should not override errors' do
         subject.valid?
-        expect(subject.errors.to_hash).to eq({name: ['can\'t be blank']})
+        expect(subject.errors.to_hash).to eq(name: ['can\'t be blank'])
       end
     end
   end
@@ -73,7 +73,7 @@ describe Acfs::Resource::Validation do
       let(:resource) { MyUser.create params }
       subject { resource }
 
-      its(:errors) { expect(subject.errors.to_hash).to eq({name: ['can\'t be blank']}) }
+      its(:errors) { expect(subject.errors.to_hash).to eq(name: ['can\'t be blank']) }
     end
   end
 
@@ -96,7 +96,7 @@ describe Acfs::Resource::Validation do
 
     context 'on changed resource' do
       before { model.loaded! }
-      let(:model) { super().tap { |m| m.id = 1 } }
+      let(:model) { super().tap {|m| m.id = 1 } }
 
       it 'should validate with `save` context' do
         expect(model).to receive(:valid?).with(:save).and_call_original
@@ -106,6 +106,5 @@ describe Acfs::Resource::Validation do
   end
 
   describe 'validates with context' do
-
   end
 end

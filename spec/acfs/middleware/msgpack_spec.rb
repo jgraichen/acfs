@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Acfs::Middleware::MessagePack do
-  let(:data)     { [{id: 1, name: 'Anon'}, {id: 2, name: 'John', friends: [ 1 ]}] }
+  let(:data)     { [{id: 1, name: 'Anon'}, {id: 2, name: 'John', friends: [1]}] }
   let(:body)     { '' }
   let(:headers)  { {} }
   let(:request)  { Acfs::Request.new 'url', data: data }
   let(:response) { Acfs::Response.new request, status: 200, headers: headers, body: body }
-  let(:decoder)  { Acfs::Middleware::MessagePack.new ->(req){ req } }
+  let(:decoder)  { Acfs::Middleware::MessagePack.new ->(req) { req } }
 
   before do
     decoder.call request
@@ -43,7 +43,7 @@ describe Acfs::Middleware::MessagePack do
   end
 
   context 'with Message Pack response' do
-    let(:headers) { { 'Content-Type' => 'application/x-msgpack' } }
+    let(:headers) { {'Content-Type' => 'application/x-msgpack'} }
     let(:body)    { MessagePack.pack data }
 
     it 'should decode body data' do
@@ -54,7 +54,7 @@ describe Acfs::Middleware::MessagePack do
   end
 
   context 'without Message Pack response' do
-    let(:headers) { { 'Content-Type' => 'application/text' } }
+    let(:headers) { {'Content-Type' => 'application/text'} }
     let(:body)    { data.to_json }
 
     it 'should not decode non-MessagePack encoded responses' do

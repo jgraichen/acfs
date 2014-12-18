@@ -1,5 +1,4 @@
 module Acfs::Resource::Attributes
-
   #
   class Base
     attr_reader :options
@@ -30,7 +29,7 @@ module Acfs::Resource::Attributes
       cast_type obj
     end
 
-    def cast_type(obj)
+    def cast_type(_obj)
       raise NotImplementedError
     end
   end

@@ -3,7 +3,6 @@ require 'acfs/response/status'
 require 'active_support/core_ext/module/delegation'
 
 module Acfs
-
   # This represents a response. In addition to an standard HTTP
   # it has a field `data` for storing the encoded body.
   #
@@ -14,7 +13,7 @@ module Acfs
     include Response::Formats
     include Response::Status
 
-    #delegate :status, :status_message, :success?, :modified?, :timed_out?,
+    # delegate :status, :status_message, :success?, :modified?, :timed_out?,
     #         :response_body, :response_headers, :response_code, :headers,
     #         to: :response
 

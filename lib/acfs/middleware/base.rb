@@ -1,6 +1,5 @@
 module Acfs
   module Middleware
-
     # A base middleware that does not modify request or response.
     # Can be used as super class for custom middleware implementations.
     #
@@ -13,7 +12,7 @@ module Acfs
       end
 
       def call(request)
-        request.on_complete { |res, nxt| response(res, nxt) } if respond_to? :response
+        request.on_complete {|res, nxt| response(res, nxt) } if respond_to? :response
         app.call(request)
       end
     end

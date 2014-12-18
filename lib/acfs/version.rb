@@ -7,6 +7,8 @@ module Acfs
 
     STRING = [MAJOR, MINOR, PATCH, STAGE].reject(&:nil?).join('.')
 
-    def self.to_s; STRING end
+    def self.to_s
+      STRING
+    end
   end
 end

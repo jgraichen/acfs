@@ -15,7 +15,7 @@ describe Acfs::Request do
     end
 
     context 'with parameters' do
-      let(:params) { { id: 10 }}
+      let(:params) { {id: 10} }
 
       it 'should return URL without query' do
         expect(request.url).to be == "#{url}"
@@ -24,7 +24,7 @@ describe Acfs::Request do
   end
 
   describe '#headers' do
-    let(:headers) { { 'Accept' => 'application/json' } }
+    let(:headers) { {'Accept' => 'application/json'} }
 
     it 'should return request headers' do
       expect(request.headers).to be == headers
@@ -46,7 +46,7 @@ describe Acfs::Request do
   end
 
   describe '#params' do
-    let(:params) { { id: 10 }}
+    let(:params) { {id: 10} }
 
     it 'should return request headers' do
       expect(request.params).to be == params
@@ -54,7 +54,7 @@ describe Acfs::Request do
   end
 
   describe '#data' do
-    let(:data) { { id: 10, name: 'Anon' } }
+    let(:data) { {id: 10, name: 'Anon'} }
 
     it 'should return request data' do
       expect(request.data).to be == data
@@ -63,7 +63,7 @@ describe Acfs::Request do
 
   describe '#data' do
     context 'with data' do
-      let(:data) { { id: 10, name: 'Anon' } }
+      let(:data) { {id: 10, name: 'Anon'} }
 
       it { expect(request).to be_data }
     end

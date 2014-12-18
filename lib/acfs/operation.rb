@@ -1,5 +1,4 @@
 module Acfs
-
   # @api private
   #
   # Describes a CRUD operation. Handle request creation and response
@@ -51,7 +50,7 @@ module Acfs
     end
 
     def method
-      { read: :get, list: :get, update: :put, create: :post, delete: :delete }[action]
+      {read: :get, list: :get, update: :put, create: :post, delete: :delete}[action]
     end
 
     def request
@@ -59,8 +58,8 @@ module Acfs
                                          data: data, operation: self
       request.on_complete do |response|
         ::ActiveSupport::Notifications.instrument 'acfs.operation.complete',
-                                                  operation: self,
-                                                  response: response
+          operation: self,
+          response: response
 
         handle_failure response unless response.success?
         callback.call response.data, response

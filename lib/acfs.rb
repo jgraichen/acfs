@@ -47,4 +47,3 @@ module Acfs
     require 'acfs/adapter/typhoeus'
   end
 end
-

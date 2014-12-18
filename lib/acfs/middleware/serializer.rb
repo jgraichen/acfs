@@ -1,15 +1,14 @@
 module Acfs
   module Middleware
-
     # A base middleware that does not modify request or response.
     # Can be used as super class for custom middleware implementations.
     #
     class Serializer < Base
-      def encode(data)
+      def encode(_data)
         raise NotImplementedError
       end
 
-      def decode(data)
+      def decode(_data)
         raise NotImplementedError
       end
 

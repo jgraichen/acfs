@@ -1,7 +1,6 @@
 require 'acfs/service/middleware'
 
 module Acfs
-
   # @api private
   #
   class Runner
@@ -25,7 +24,7 @@ module Acfs
     #
     def run(op)
       ::ActiveSupport::Notifications.instrument 'acfs.runner.sync_run', operation: op do
-        op_request(op) { |req| adapter.run req }
+        op_request(op) {|req| adapter.run req }
       end
     end
 
@@ -40,7 +39,7 @@ module Acfs
     def enqueue(op)
       ::ActiveSupport::Notifications.instrument 'acfs.runner.enqueue', operation: op do
         if running?
-          op_request(op) { |req| adapter.queue req }
+          op_request(op) {|req| adapter.queue req }
         else
           queue << op
         end
@@ -76,14 +75,15 @@ module Acfs
     end
 
     private
+
     def enqueue_operations
       while (op = queue.shift)
-        op_request(op) { |req| adapter.queue req }
+        op_request(op) {|req| adapter.queue req }
       end
     end
 
     def op_request(op)
-      return if Acfs::Stub.enabled? and Acfs::Stub.stubbed(op)
+      return if Acfs::Stub.enabled? && Acfs::Stub.stubbed(op)
       req = op.service.prepare op.request
       return unless req.is_a? Acfs::Request
       req = prepare req

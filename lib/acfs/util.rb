@@ -7,7 +7,7 @@ module Acfs
       end
 
       def __invoke__
-        __callbacks__.each{|c| c.call self}
+        __callbacks__.each {|c| c.call self }
       end
     end
 

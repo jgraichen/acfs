@@ -1,5 +1,4 @@
 module Acfs
-
   # Acfs SingletonResources
   #
   # Usage explanation:
@@ -14,7 +13,6 @@ module Acfs
   # always only a single instance of the resource is being returned
   #
   class SingletonResource < Acfs::Resource
-
     # @api public
     #
     # Destroy resource by sending a DELETE request.

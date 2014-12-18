@@ -188,7 +188,6 @@ class Acfs::Resource
     end
 
     module ClassMethods
-
       # @api public
       #
       # Create a new resource sending given data. If resource cannot be
@@ -212,10 +211,8 @@ class Acfs::Resource
       #   will be overridden with provided data hash.
       # @see #create
       #
-      def create!(data, opts = {})
-        new(data).tap do |model|
-          model.save!
-        end
+      def create!(data, _opts = {})
+        new(data).tap(&:save!)
       end
 
       # @api public
@@ -238,7 +235,7 @@ class Acfs::Resource
       #   will be overridden with provided data hash.
       # @see #create!
       #
-      def create(data, opts = {})
+      def create(data, _opts = {})
         model = new data
         model.save
         model

@@ -1,5 +1,4 @@
 module Acfs::Resource::Attributes
-
   # @api public
   #
   # Integer attribute type. Use it in your model as an attribute type:
@@ -10,7 +9,6 @@ module Acfs::Resource::Attributes
   #   end
   #
   class Integer < Base
-
     # @api public
     #
     # Cast given object to integer.

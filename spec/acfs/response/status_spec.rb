@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Acfs::Response::Status do
   let(:status)    { 200 }
   let(:mime_type) { 'application/unknown' }
-  let(:headers)   { { 'Content-Type' => mime_type } }
+  let(:headers)   { {'Content-Type' => mime_type} }
   let(:request)   { Acfs::Request.new 'fubar' }
   let(:body)      { nil }
   let(:response)  { Acfs::Response.new request, status: status, headers: headers, body: body }

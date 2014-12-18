@@ -1,11 +1,10 @@
 module Acfs::Collections
-
   #
   module Paginatable
     extend ActiveSupport::Concern
 
     included do
-      def self.operation(action, opts = {}, &block)
+      def self.operation(_action, opts = {}, &_block)
         opts[:url]
       end
 
@@ -59,7 +58,7 @@ module Acfs::Collections
     def setup_links(links)
       links.split(/,\s+/).each do |link|
         if link =~ /^\s*<([^>]+)>.*\s+rel="([\w_-]+)".*$/
-          relations[$2] = $1
+          relations[Regexp.last_match[2]] = Regexp.last_match[1]
         end
       end
     end

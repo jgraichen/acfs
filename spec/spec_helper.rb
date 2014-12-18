@@ -13,7 +13,7 @@ Bundler.require
 
 require 'acfs'
 
-Dir[File.expand_path('spec/support/**/*.rb')].each {|f| require f}
+Dir[File.expand_path('spec/support/**/*.rb')].each {|f| require f }
 
 RSpec.configure do |config|
   # ## Mock Framework

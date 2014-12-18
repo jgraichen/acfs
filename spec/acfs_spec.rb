@@ -1,19 +1,18 @@
 require 'spec_helper'
 
 describe 'Acfs' do
-
   before do
-    stub_request(:get, 'http://users.example.org/users').to_return response([{ id: 1, name: 'Anon', age: 12 }, { id: 2, name: 'John', age: 26 }])
-    stub_request(:get, 'http://users.example.org/users/2').to_return response({ id: 2, name: 'John', age: 26 })
-    stub_request(:get, 'http://users.example.org/users/3').to_return response({ id: 3, name: 'Miraculix', age: 122 })
-    stub_request(:get, 'http://users.example.org/users/100').to_return response({ id:100, name: 'Jimmy', age: 45 })
-    stub_request(:get, 'http://users.example.org/users/2/friends').to_return response([{ id: 1, name: 'Anon', age: 12 }])
-    stub_request(:get, 'http://comments.example.org/comments?user=2').to_return response([{ id: 1, text: 'Comment #1' }, { id: 2, text: 'Comment #2' }])
+    stub_request(:get, 'http://users.example.org/users').to_return response([{id: 1, name: 'Anon', age: 12}, {id: 2, name: 'John', age: 26}])
+    stub_request(:get, 'http://users.example.org/users/2').to_return response(id: 2, name: 'John', age: 26)
+    stub_request(:get, 'http://users.example.org/users/3').to_return response(id: 3, name: 'Miraculix', age: 122)
+    stub_request(:get, 'http://users.example.org/users/100').to_return response(id: 100, name: 'Jimmy', age: 45)
+    stub_request(:get, 'http://users.example.org/users/2/friends').to_return response([{id: 1, name: 'Anon', age: 12}])
+    stub_request(:get, 'http://comments.example.org/comments?user=2').to_return response([{id: 1, text: 'Comment #1'}, {id: 2, text: 'Comment #2'}])
   end
 
   it 'should update single resource synchronously' do
     stub = stub_request(:put, 'http://users.example.org/users/2')
-      .to_return { |request| { body: request.body, headers: {'Content-Type' => request.headers['Content-Type']}} }
+           .to_return {|request| {body: request.body, headers: {'Content-Type' => request.headers['Content-Type']}} }
 
     @user = MyUser.find 2
     Acfs.run
@@ -34,7 +33,7 @@ describe 'Acfs' do
   end
 
   it 'should create a single resource synchronously' do
-    stub = stub_request(:post, 'http://users.example.org/sessions').to_return response({id: 'sessionhash', user: 1})
+    stub = stub_request(:post, 'http://users.example.org/sessions').to_return response(id: 'sessionhash', user: 1)
 
     session = Session.create ident: 'Anon'
 
@@ -58,11 +57,11 @@ describe 'Acfs' do
 
   describe 'singleton' do
     before do
-      stub_request(:get, 'http://users.example.org/singles?user_id=5').to_return response({ score: 250, user_id: 5 })
+      stub_request(:get, 'http://users.example.org/singles?user_id=5').to_return response(score: 250, user_id: 5)
     end
 
     it 'should create a singleton resource' do
-      stub = stub_request(:post, 'http://users.example.org/singles').to_return response({ score: 250, user_id: 5 })
+      stub = stub_request(:post, 'http://users.example.org/singles').to_return response(score: 250, user_id: 5)
 
       @single = Single.new user_id: 5, score: 250
       expect(@single.new?).to eq true
@@ -83,10 +82,12 @@ describe 'Acfs' do
     end
 
     it 'should update singleton resource' do
-      stub = stub_request(:put, 'http://users.example.org/singles').to_return { |request| {
+      stub = stub_request(:put, 'http://users.example.org/singles').to_return do |request|
+        {
           body: request.body,
-          headers: { 'Content-Type' => request.headers['Content-Type'] }
-      } }
+          headers: {'Content-Type' => request.headers['Content-Type']}
+        }
+      end
 
       @single = Single.find user_id: 5
       Acfs.run
@@ -102,10 +103,12 @@ describe 'Acfs' do
     end
 
     it 'should delete singleton resource' do
-      stub = stub_request(:delete, 'http://users.example.org/singles').to_return { |request| {
+      stub = stub_request(:delete, 'http://users.example.org/singles').to_return do |request|
+        {
           body: request.body,
-          headers: { 'Content-Type' => request.headers['Content-Type'] }
-      } }
+          headers: {'Content-Type' => request.headers['Content-Type']}
+        }
+      end
 
       @single = Single.find user_id: 5
       Acfs.run
@@ -118,7 +121,7 @@ describe 'Acfs' do
     end
 
     it 'should raise error when calling `all\'' do
-      expect{ Single.all }.to raise_error ::Acfs::UnsupportedOperation
+      expect { Single.all }.to raise_error ::Acfs::UnsupportedOperation
     end
   end
 

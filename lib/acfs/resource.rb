@@ -17,8 +17,8 @@ class Acfs::Resource
   if ActiveModel::VERSION::MAJOR >= 4
     include ActiveModel::Model
   else
-    extend  ActiveModel::Naming
-    extend  ActiveModel::Translation
+    extend ActiveModel::Naming
+    extend ActiveModel::Translation
     include ActiveModel::Conversion
     include ActiveModel::Validations
   end

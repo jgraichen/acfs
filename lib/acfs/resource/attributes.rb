@@ -178,7 +178,6 @@ class Acfs::Resource
 
     #
     module ClassMethods
-
       ATTR_CLASS_BASE = '::Acfs::Resource::Attributes'.freeze
 
       #

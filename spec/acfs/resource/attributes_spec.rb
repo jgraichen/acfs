@@ -46,15 +46,15 @@ describe Acfs::Resource::Attributes do
       end
     end
     let(:args) { [params] }
-    let(:params){ {name: 'James'} }
+    let(:params) { {name: 'James'} }
     let(:m) { model.new }
-    let(:action) { ->{ m.write_attributes(*args) } }
+    let(:action) { -> { m.write_attributes(*args) } }
     subject { action }
 
     it 'should update attributes'  do
       should change(m, :attributes)
-             .from(name: 'The Great John', age: 25)
-             .to(name: 'The Great James', age: 25)
+        .from(name: 'The Great John', age: 25)
+        .to(name: 'The Great James', age: 25)
     end
 
     context 'without non-hash params' do
@@ -71,8 +71,8 @@ describe Acfs::Resource::Attributes do
 
       it 'should update known attributes and store unknown'  do
         should change(m, :attributes)
-               .from(name: 'The Great John', age: 25)
-               .to(name: 'The Great James', age: 25, born_at: 'today')
+          .from(name: 'The Great John', age: 25)
+          .to(name: 'The Great James', age: 25, born_at: 'today')
       end
 
       context 'with unknown: :raise option' do
@@ -158,7 +158,7 @@ describe Acfs::Resource::Attributes do
 
       it 'should accept an class type' do
         model.send :attribute, :age, Acfs::Resource::Attributes::Integer,
-                   default: '12'
+          default: '12'
 
         expect(model.attributes.symbolize_keys).to eq age: 12
       end
@@ -166,7 +166,7 @@ describe Acfs::Resource::Attributes do
       context 'allow nil option' do
         it 'should allow nil as value' do
           model.send :attribute, :updated_at, :date_time,
-                     default: DateTime.new, allow_nil: true
+            default: DateTime.new, allow_nil: true
 
           resource = model.new
           expect(resource.updated_at).to eq DateTime.new
@@ -179,7 +179,7 @@ describe Acfs::Resource::Attributes do
       context 'allow blank option' do
         it 'should allow blank as value' do
           model.send :attribute, :updated_at, :date_time,
-                     default: DateTime.new, allow_blank: true
+            default: DateTime.new, allow_blank: true
 
           resource = model.new
           expect(resource.updated_at).to eq DateTime.new

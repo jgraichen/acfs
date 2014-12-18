@@ -1,5 +1,4 @@
 class Acfs::Resource
-
   # Provide methods for generation URLs for resources.
   #
   # @example
@@ -14,7 +13,6 @@ class Acfs::Resource
 
     #
     module ClassMethods
-
       # @overload url(suffix)
       #   @deprecated
       #   Return URL for this class of resource. Given suffix

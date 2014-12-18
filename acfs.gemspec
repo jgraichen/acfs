@@ -8,13 +8,13 @@ Gem::Specification.new do |spec|
   spec.version       = Acfs::VERSION
   spec.authors       = ['Jan Graichen']
   spec.email         = %w(jg@altimos.de)
-  spec.description   = %q{API Client For Services}
-  spec.summary       = %q{An abstract API base client for service oriented application.}
+  spec.description   = 'API Client For Services'
+  spec.summary       = 'An abstract API base client for service oriented application.'
   spec.homepage      = 'https://github.com/jgraichen/acfs'
   spec.license       = 'MIT'
 
   spec.files         = Dir['**/*'].grep(%r{^((bin|lib|test|spec|features)/|.*\.gemspec|.*LICENSE.*|.*README.*|.*CHANGELOG.*)})
-  spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
+  spec.executables   = spec.files.grep(%r{^bin/}) {|f| File.basename(f) }
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = %w(lib)
 

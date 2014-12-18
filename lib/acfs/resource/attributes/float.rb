@@ -1,5 +1,4 @@
 module Acfs::Resource::Attributes
-
   # @api public
   #
   # Float attribute type. Use it in your model as an attribute type:
@@ -10,7 +9,6 @@ module Acfs::Resource::Attributes
   #   end
   #
   class Float < Base
-
     # @api public
     #
     # Cast given object to float.

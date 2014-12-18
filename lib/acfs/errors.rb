@@ -1,5 +1,4 @@
 module Acfs
-
   # Acfs base error.
   #
   class Error < StandardError
@@ -23,20 +22,20 @@ module Acfs
         message << ": #{response.code}"
         if response.data
           message << "\n  with content:\n    "
-          message << response.data.map{|k,v| "#{k.inspect}: #{v.inspect}"}.join("\n    ")
+          message << response.data.map {|k, v| "#{k.inspect}: #{v.inspect}" }.join("\n    ")
         end
         if response.headers.any?
           message << "\n  with headers:\n    "
-          message << response.headers.map{|k,v| "#{k}: #{v}"}.join("\n    ")
+          message << response.headers.map {|k, v| "#{k}: #{v}" }.join("\n    ")
         end
         message << "\nbased on request: #{response.request.method.upcase} #{response.request.url} #{response.request.format}"
         if response.request.data
           message << "\n  with content:\n    "
-          message << response.request.data.map{|k,v| "#{k.inspect}: #{v.inspect}"}.join("\n    ")
+          message << response.request.data.map {|k, v| "#{k.inspect}: #{v.inspect}" }.join("\n    ")
         end
         if response.request.headers.any?
           message << "\n  with headers:\n    "
-          message << response.request.headers.map{|k,v| "#{k}: #{v}"}.join("\n    ")
+          message << response.request.headers.map {|k, v| "#{k}: #{v}" }.join("\n    ")
         end
       end
       super opts, message
@@ -52,7 +51,6 @@ module Acfs
 
       super opts, 'Ambiguous stubs.'
     end
-
   end
 
   # Resource not found error raised on a 404 response
@@ -67,7 +65,7 @@ module Acfs
     def initialize(opts = {})
       @errors   = opts.delete :errors
       @resource = opts.delete :resource
-      opts[:message] ||= @errors.map{ |k,v| "#{k}: #{v.join ', '}" }.join ', ' if @errors.is_a? Hash
+      opts[:message] ||= @errors.map {|k, v| "#{k}: #{v.join ', '}" }.join ', ' if @errors.is_a? Hash
       opts[:message] ||= @errors.join ', ' if @errors.is_a? Array
       super
     end

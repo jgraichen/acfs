@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 class NullAdapter < Acfs::Adapter::Base
-
   # Start processing queued requests.
   #
   def start

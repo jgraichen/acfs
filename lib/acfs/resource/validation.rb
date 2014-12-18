@@ -1,8 +1,6 @@
 class Acfs::Resource
-
   #
   module Validation
-
     def valid?(*args)
       super
       remote_errors.each {|f, e| errors.add f, e }

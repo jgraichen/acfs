@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Acfs::Request::Callbacks do
-  let(:callback) { lambda { |res| } }
+  let(:callback) { lambda {|_res| } }
   let(:request)  { Acfs::Request.new('fubar') }
 
   describe '#on_complete' do
@@ -13,7 +13,7 @@ describe Acfs::Request::Callbacks do
     end
 
     it 'should store multiple callback' do
-      request.on_complete { |res| "abc" }
+      request.on_complete {|_res| 'abc' }
       request.on_complete &callback
 
       expect(request.callbacks).to have(2).item
@@ -34,9 +34,9 @@ describe Acfs::Request::Callbacks do
     it 'should trigger multiple callback in reverted insertion order' do
       check = []
 
-      request.on_complete { |res, nxt| check << 1; nxt.call res }
-      request.on_complete { |res, nxt| check << 2; nxt.call res }
-      request.on_complete { |res, nxt| check << 3; nxt.call res }
+      request.on_complete {|res, nxt| check << 1; nxt.call res }
+      request.on_complete {|res, nxt| check << 2; nxt.call res }
+      request.on_complete {|res, nxt| check << 3; nxt.call res }
 
       request.complete! response
 
