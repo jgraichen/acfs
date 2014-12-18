@@ -1,4 +1,6 @@
+sudo: false
 language: ruby
+cache: bundler
 bundler_args: "--without development"
 rvm:
 - '2.1'
