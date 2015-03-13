@@ -19,14 +19,14 @@ group :development do
   gem 'redcarpet', platform: :ruby
 end
 
-# Platform specific development dependencies
-#
-platform :rbx do
-  gem 'rubysl', '~> 2.0'
-  gem 'rubinius-coverage'
+group :test do
+  platform :rbx do
+    gem 'rubysl', '~> 2.0'
+    gem 'rubinius-coverage'
+  end
+
+  gem 'msgpack', '~> 0.5.11'
 end
-gem 'msgpack', '< 0.5.8', platform: :ruby
-gem 'msgpack-jruby', require: 'msgpack', platform: :jruby
 
 # Specify your gem's dependencies in acfs.gemspec
 gemroot = File.dirname File.absolute_path __FILE__
