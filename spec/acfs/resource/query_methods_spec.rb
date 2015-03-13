@@ -14,7 +14,7 @@ describe Acfs::Resource::QueryMethods do
                                 name: 'Clare Customer', age: 24
         end
 
-        let(:action) { lambda {|cb = nil| model.find(1, &cb) } }
+        let(:action) { ->(cb = nil) { model.find(1, &cb) } }
         it_behaves_like 'a query method with multi-callback support'
 
         it 'should load a single remote resource' do

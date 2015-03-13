@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Acfs::Request::Callbacks do
-  let(:callback) { lambda {|_res| } }
+  let(:callback) { ->(_res) {} }
   let(:request)  { Acfs::Request.new('fubar') }
 
   describe '#on_complete' do

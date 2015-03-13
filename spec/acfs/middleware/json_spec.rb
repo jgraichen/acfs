@@ -6,7 +6,7 @@ describe Acfs::Middleware::JSON do
   let(:headers)  { {} }
   let(:request)  { Acfs::Request.new 'url', method: 'GET', data: data }
   let(:response) { Acfs::Response.new request, status: 200, headers: headers, body: body }
-  let(:decoder)  { Acfs::Middleware::JSON.new lambda {|req| req } }
+  let(:decoder)  { Acfs::Middleware::JSON.new ->(req) { req } }
 
   before do
     decoder.call request

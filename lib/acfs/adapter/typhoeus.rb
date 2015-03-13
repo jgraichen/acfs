@@ -32,7 +32,10 @@ module Acfs
         request = ::Typhoeus::Request.new req.url,
           method: req.method,
           params: req.params,
-          headers: req.headers,
+          headers: req.headers.merge(
+            'Expect'            => '',
+            'Transfer-Encoding' => ''
+          ),
           body: req.body
 
         request.on_complete do |response|

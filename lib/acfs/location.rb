@@ -24,7 +24,7 @@ module Acfs
     end
 
     def extract_from(*args)
-      args = Hash.new.tap do |collect|
+      args = {}.tap do |collect|
         arguments.each {|key| collect[key] = extract_arg key, args }
       end
 

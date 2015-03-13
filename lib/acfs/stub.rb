@@ -25,8 +25,9 @@ module Acfs
       return true if opts[:with] == params || data == opts[:with]
       return true if opts[:with].nil? && params.empty? && data.empty?
 
-      return true if opts[:with].reject {|_k, v| v.nil? } == params.reject {|_k, v| v.nil? }
-      return true if opts[:with].reject {|_k, v| v.nil? } == data.reject {|_k, v| v.nil? }
+      opts[:with] ||= {}
+      return true if opts[:with].reject {|_, v| v.nil? } == params.reject {|_, v| v.nil? }
+      return true if opts[:with].reject {|_, v| v.nil? } == data.reject {|_, v| v.nil? }
 
       false
     end

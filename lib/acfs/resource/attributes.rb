@@ -222,7 +222,7 @@ class Acfs::Resource
       #   Attributes with default values.
       #
       def attributes
-        Hash.new.tap do |attrs|
+        {}.tap do |attrs|
           defined_attributes.each do |key, attr|
             attrs[key] = attr.default_value
           end

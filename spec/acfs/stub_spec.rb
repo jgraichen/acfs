@@ -100,7 +100,7 @@ describe Acfs::Stub do
     context 'with create action' do
       before do
         Acfs::Stub.resource Session, :create, with: {ident: 'john@exmaple.org', password: 's3cr3t'}, return: {id: 'longhash', user: 1}
-        Acfs::Stub.resource Session, :create, with: lambda {|op| op.data[:ident] == 'john@exmaple.org' && op.data[:password] == 'wrong' }, raise: 422
+        Acfs::Stub.resource Session, :create, with: ->(op) { op.data[:ident] == 'john@exmaple.org' && op.data[:password] == 'wrong' }, raise: 422
       end
 
       it 'should allow stub resource creation' do
