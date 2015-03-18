@@ -267,6 +267,34 @@ describe Acfs::Stub do
   end
 
   describe 'accept?' do
+    subject { stub.accept?(op) }
+
+    context 'with a match in params' do
+      let(:op) do
+        double('operation').tap do |op|
+          allow(op).to receive(:full_params).and_return(id: 1337, blub: 'abc')
+          allow(op).to receive(:data).and_return({})
+        end
+      end
+
+      let(:stub) { Acfs::Stub.resource MyUser, :read, with: {id: 1337} }
+
+      it { is_expected.to be true }
+    end
+
+    context 'with a match in data' do
+      let(:op) do
+        double('operation').tap do |op|
+          allow(op).to receive(:full_params).and_return({})
+          allow(op).to receive(:data).and_return(id: 1337, blub: 'abc')
+        end
+      end
+
+      let(:stub) { Acfs::Stub.resource MyUser, :read, with: {id: 1337} }
+
+      it { is_expected.to be true }
+    end
+
     context 'with no match in params nor data' do
       let(:op) do
         double('operation').tap do |op|
@@ -275,15 +303,35 @@ describe Acfs::Stub do
         end
       end
 
-      subject do
-        Acfs::Stub.resource MyUser, :read,
-          with: {abc: '123'},
-          return: 404
+      let(:stub) { Acfs::Stub.resource MyUser, :read, with: {abc: '123'} }
+
+      it { is_expected.to be false }
+    end
+
+    context 'with a wrong match' do
+      let(:op) do
+        double('operation').tap do |op|
+          allow(op).to receive(:full_params).and_return(id: 1337, blub: 'abc')
+          allow(op).to receive(:data).and_return({})
+        end
       end
 
-      it 'should not accept' do
-        is_expected.to_not be_accept(op)
+      let(:stub) { Acfs::Stub.resource MyUser, :read, with: {id: 1337, blub: '123'} }
+
+      it { is_expected.to be false }
+    end
+
+    context 'with a missing match' do
+      let(:op) do
+        double('operation').tap do |op|
+          allow(op).to receive(:full_params).and_return(id: 1337, blub: 'abc')
+          allow(op).to receive(:data).and_return({})
+        end
       end
+
+      let(:stub) { Acfs::Stub.resource MyUser, :read, with: {id: 1337, answer: 42} }
+
+      it { is_expected.to be false }
     end
   end
 end
