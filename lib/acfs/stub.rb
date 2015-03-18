@@ -57,7 +57,7 @@ module Acfs
         raise_error op, err, opts[:return]
       elsif data
         if data.respond_to?(:call)
-          data = data.call(op.full_params.merge(op.data))
+          data = data.call(op)
         end
 
         response = Acfs::Response.new op.request,

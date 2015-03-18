@@ -180,7 +180,7 @@ describe Acfs::Stub do
       let!(:update_stub) do
         Acfs::Stub.resource MyUser, :update,
           with: {id: 1, name: 'Jane Smith'},
-          return: -> (data) { data.map {|k, v| [k, v.to_s.upcase] }.to_h }
+          return: -> (op) { Hash[op.data.map {|k, v| [k, v.to_s.upcase] }] }
       end
 
       it 'should allow stub resource update' do
