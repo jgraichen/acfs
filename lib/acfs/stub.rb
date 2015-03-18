@@ -32,8 +32,8 @@ module Acfs
           return true if with.reject {|_, v| v.nil? } == data.reject {|_, v| v.nil? }
           false
         when :inclusion
-          !with.each_pair.any? do |k, v|
-            (params.key?(k) && params[k] != v) || (data.key?(k) && data[k] != v)
+          with.each_pair.all? do |k, v|
+            (params.key?(k) && params[k] == v) || (data.key?(k) && data[k] == v)
           end
       end
     end

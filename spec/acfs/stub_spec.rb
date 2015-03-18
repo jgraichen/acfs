@@ -265,4 +265,25 @@ describe Acfs::Stub do
       end
     end
   end
+
+  describe 'accept?' do
+    context 'with no match in params nor data' do
+      let(:op) do
+        double('operation').tap do |op|
+          allow(op).to receive(:full_params).and_return(id: 1337)
+          allow(op).to receive(:data).and_return({})
+        end
+      end
+
+      subject do
+        Acfs::Stub.resource MyUser, :read,
+          with: {abc: '123'},
+          return: 404
+      end
+
+      it 'should not accept' do
+        is_expected.to_not be_accept(op)
+      end
+    end
+  end
 end
