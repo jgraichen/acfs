@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.43.1
+
+* Fix `:with` condition matching on stubs
+
 ## 0.43.0
 
 * Remove `Acfs::Model` (inherit from `Acfs::Resource`)
