@@ -45,8 +45,8 @@ describe ::Acfs::Runner do
 
   describe '#instrumentation' do
     before do
-      ::ActiveSupport::Notifications.subscribe /^acfs\.runner/, collector
-      ::ActiveSupport::Notifications.subscribe /^acfs\.operation/, collector2
+      ::ActiveSupport::Notifications.subscribe(/^acfs\.runner/, collector)
+      ::ActiveSupport::Notifications.subscribe(/^acfs\.operation/, collector2)
     end
 
     describe '#process' do

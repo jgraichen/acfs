@@ -235,7 +235,7 @@ describe Acfs::Stub do
 
       it 'should allow to raise error' do
         expect do
-          user = MyUser.create! name: 'John Smith', age: 0
+          MyUser.create! name: 'John Smith', age: 0
         end.to raise_error(::Acfs::InvalidResource)
       end
     end

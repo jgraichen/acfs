@@ -43,7 +43,7 @@ module Acfs
       private
 
       def call_callback(res, index)
-        callbacks[index].call res, proc {|res| call_callback res, index + 1 } if index < callbacks.size
+        callbacks[index].call res, proc {|bres| call_callback bres, index + 1 } if index < callbacks.size
       end
     end
   end

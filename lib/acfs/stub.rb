@@ -56,9 +56,7 @@ module Acfs
       if err
         raise_error op, err, opts[:return]
       elsif data
-        if data.respond_to?(:call)
-          data = data.call(op)
-        end
+        data = data.call(op) if data.respond_to?(:call)
 
         response = Acfs::Response.new op.request,
           headers: opts[:headers] || {},
@@ -66,7 +64,7 @@ module Acfs
           data:    data || {}
         op.call data, response
       else
-        raise ArgumentError, 'Unsupported stub.'
+        raise ArgumentError.new 'Unsupported stub.'
       end
     end
 
@@ -85,7 +83,7 @@ module Acfs
       #
       def resource(klass, action, opts = {}, &_block)
         action = action.to_sym
-        raise ArgumentError, "Unknown action `#{action}`." unless ACTIONS.include? action
+        raise ArgumentError.new "Unknown action `#{action}`." unless ACTIONS.include? action
 
         Stub.new(opts).tap do |stub|
           stubs[klass]         ||= {}

@@ -12,11 +12,11 @@ module Acfs
       @raw       = URI.parse uri
       @args      = args
       @struct    = raw.path.split('/').reject(&:empty?).map {|s| s =~ REGEXP ? Regexp.last_match[1].to_sym : s }
-      @arguments = struct.select {|s| Symbol === s }
+      @arguments = struct.select {|s| s.is_a?(Symbol) }
     end
 
     def build(args = {})
-      unless Hash === args
+      unless args.is_a?(Hash)
         raise ArgumentError.new "URI path arguments must be a hash, `#{args.inspect}' given."
       end
 
@@ -53,7 +53,7 @@ module Acfs
     end
 
     def lookup_arg(arg, args)
-      Symbol === arg ? lookup_replacement(arg, args) : arg
+      arg.is_a?(Symbol) ? lookup_replacement(arg, args) : arg
     end
 
     def lookup_replacement(sym, args)

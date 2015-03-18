@@ -38,10 +38,10 @@ module Acfs
 
       action = opts[:action] || :list
 
-      path = if Hash === opts[:path] && opts[:path].key?(action)
+      path = if opts[:path].is_a?(Hash) && opts[:path].key?(action)
                opts[:path].fetch(action)
              else
-               path = if Hash === opts[:path]
+               path = if opts[:path].is_a?(Hash)
                         opts[:path][:all].to_s
                       else
                         opts[:path].to_s
@@ -81,7 +81,7 @@ module Acfs
       #
       def base_url
         unless (base = Acfs::Configuration.current.locate identity)
-          raise ArgumentError, "#{identity} not configured. Add `locate '#{identity.to_s.underscore}', 'http://service.url/'` to your configuration."
+          raise ArgumentError.new "#{identity} not configured. Add `locate '#{identity.to_s.underscore}', 'http://service.url/'` to your configuration."
         end
 
         base.to_s

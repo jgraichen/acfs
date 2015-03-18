@@ -6,7 +6,7 @@ describe Acfs::Request::Callbacks do
 
   describe '#on_complete' do
     it 'should store a given callback' do
-      request.on_complete &callback
+      request.on_complete(&callback)
 
       expect(request.callbacks).to have(1).item
       expect(request.callbacks[0]).to be == callback
@@ -14,7 +14,7 @@ describe Acfs::Request::Callbacks do
 
     it 'should store multiple callback' do
       request.on_complete {|_res| 'abc' }
-      request.on_complete &callback
+      request.on_complete(&callback)
 
       expect(request.callbacks).to have(2).item
       expect(request.callbacks[0]).to be == callback
@@ -27,7 +27,7 @@ describe Acfs::Request::Callbacks do
     it 'should trigger registered callbacks with given response' do
       expect(callback).to receive(:call).with(response, kind_of(Proc))
 
-      request.on_complete &callback
+      request.on_complete(&callback)
       request.complete! response
     end
 

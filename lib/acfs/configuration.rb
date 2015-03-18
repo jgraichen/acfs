@@ -27,7 +27,7 @@ module Acfs
       if block.arity > 0
         block.call self
       else
-        instance_eval &block
+        instance_eval(&block)
       end
     end
 

@@ -19,7 +19,7 @@ module Acfs
         @method  = options.delete(:method) || :get
       end.to_s
       @operation = options.delete(:operation) || nil
-      on_complete &block if block_given?
+      on_complete(&block) if block_given?
     end
 
     def data?

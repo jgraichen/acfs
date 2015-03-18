@@ -33,12 +33,9 @@ module Acfs::Collections
     end
 
     def page(rel, &block)
-      if relations[rel]
-        @resource_class.all nil, url: relations[rel], &block
-      else
-        # raise ArgumentError.new "No relative page `#{rel}'."
-        nil
-      end
+      return unless relations[rel]
+
+      @resource_class.all nil, url: relations[rel], &block
     end
 
     private

@@ -250,9 +250,8 @@ class Acfs::Resource
     end
 
     def check_loaded!(opts = {})
-      unless loaded? || opts[:force]
-        raise ::Acfs::ResourceNotLoaded.new resource: self
-      end
+      return if loaded? || opts[:force]
+      raise ::Acfs::ResourceNotLoaded.new resource: self
     end
   end
 end

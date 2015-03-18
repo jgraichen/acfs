@@ -1,3 +1,5 @@
+inherit_from: .rubocop_todo.yml
+
 AllCops:
   Include:
     - '**/*.gemspec'
@@ -38,6 +40,7 @@ Style/CaseIndentation:
 
 Style/ClassAndModuleChildren:
   EnforcedStyle: compact
+  Enabled: false
 
 Metrics/LineLength:
   Exclude:

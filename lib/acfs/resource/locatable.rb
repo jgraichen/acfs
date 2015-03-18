@@ -88,8 +88,6 @@ class Acfs::Resource
             return path
           when :read, :update, :delete
             return "#{path}/:id"
-          else
-            nil
         end
       end
     end
