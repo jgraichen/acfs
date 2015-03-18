@@ -23,7 +23,7 @@ describe Acfs::Resource::Validation do
       after  { Acfs::Stub.disable }
 
       before do
-        Acfs::Stub.resource MyUser, :create, with: {}, return: {errors: {name: ['can\'t be blank']}}, raise: 422
+        Acfs::Stub.resource MyUser, :create, return: {errors: {name: ['can\'t be blank']}}, raise: 422
       end
 
       let(:params)   { {} }

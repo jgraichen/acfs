@@ -21,15 +21,21 @@ module Acfs
 
       params = op.full_params.stringify_keys
       data   = op.data.stringify_keys
+      with   = opts[:with]
 
-      return true if opts[:with] == params || data == opts[:with]
-      return true if opts[:with].nil? && params.empty? && data.empty?
+      return true if with.nil?
 
-      opts[:with] ||= {}
-      return true if opts[:with].reject {|_, v| v.nil? } == params.reject {|_, v| v.nil? }
-      return true if opts[:with].reject {|_, v| v.nil? } == data.reject {|_, v| v.nil? }
-
-      false
+      case opts.fetch(:match, :inclusion)
+        when :legacy
+          return true if with.empty? && params.empty? && data.empty?
+          return true if with.reject {|_, v| v.nil? } == params.reject {|_, v| v.nil? }
+          return true if with.reject {|_, v| v.nil? } == data.reject {|_, v| v.nil? }
+          false
+        when :inclusion
+          !with.each_pair.any? do |k, v|
+            (params.key?(k) && params[k] != v) || (data.key?(k) && data[k] != v)
+          end
+      end
     end
 
     def calls
@@ -50,6 +56,10 @@ module Acfs
       if err
         raise_error op, err, opts[:return]
       elsif data
+        if data.respond_to?(:call)
+          data = data.call(op.full_params.merge(op.data))
+        end
+
         response = Acfs::Response.new op.request,
           headers: opts[:headers] || {},
           status:  opts[:status] || 200,

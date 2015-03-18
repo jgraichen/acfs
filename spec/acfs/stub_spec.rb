@@ -177,6 +177,12 @@ describe Acfs::Stub do
         Acfs::Stub.resource MyUser, :update, with: {id: 1, name: 'John Smith', age: 0}, raise: 422
       end
 
+      let!(:update_stub) do
+        Acfs::Stub.resource MyUser, :update,
+          with: {id: 1, name: 'Jane Smith'},
+          return: -> (data) { data.map {|k, v| [k, v.to_s.upcase] }.to_h }
+      end
+
       it 'should allow stub resource update' do
         user = MyUser.find 1
         Acfs.run
@@ -197,6 +203,28 @@ describe Acfs::Stub do
         expect do
           user.save!
         end.to raise_error(::Acfs::InvalidResource)
+      end
+
+      it 'should match partial :with' do
+        user = MyUser.find 1
+        Acfs.run
+
+        user.age = 5
+        user.name = 'Jane Smith'
+        user.save!
+
+        expect(update_stub).to be_called
+      end
+
+      it 'should process response body' do
+        user = MyUser.find 1
+        Acfs.run
+
+        user.age = 5
+        user.name = 'Jane Smith'
+        user.save!
+
+        expect(user.name).to eq 'JANE SMITH'
       end
     end
 
