@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.43.0
+
+* Remove `Acfs::Model` (inherit from `Acfs::Resource`)
+* Stub does only a partial match of `:with` attributes now
+* Allow blocks as stub `:return`s
+
 ## 0.42.0
 
 * Add simple dict attribute type
