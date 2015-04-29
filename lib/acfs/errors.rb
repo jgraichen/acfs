@@ -97,7 +97,7 @@ module Acfs
     def initialize(opts = {})
       @base_class    = opts.delete :base_class
       @type_name     = opts.delete :type_name
-      opts[:message] = "Recieved ressource type `#{type_name}` is no subclass of #{base_class}"
+      opts[:message] = "Received resource type `#{type_name}` is no subclass of #{base_class}"
       super
     end
   end
