@@ -49,7 +49,8 @@ module Acfs
       @stubs     = opts.delete :stubs
       @operation = opts.delete :operation
 
-      super opts, 'Ambiguous stubs.'
+      super opts, "Ambiguous stubs for #{operation.action} on #{operation.resource}.\n" +
+        stubs.map {|s| "  #{s.opts.pretty_inspect}" }.join
     end
   end
 
