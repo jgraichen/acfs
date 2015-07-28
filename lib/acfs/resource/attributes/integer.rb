@@ -17,7 +17,11 @@ module Acfs::Resource::Attributes
     # @return [Fixnum] Casted object as fixnum.
     #
     def cast_type(obj)
+      return 0 if obj == ''
+
       Integer obj
+    rescue ArgumentError => e
+      raise TypeError.new e.message
     end
   end
 end
