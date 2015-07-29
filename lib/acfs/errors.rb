@@ -46,6 +46,8 @@ module Acfs
     attr_reader :stubs, :operation
 
     def initialize(opts = {})
+      require 'pp'
+
       @stubs     = opts.delete :stubs
       @operation = opts.delete :operation
 
