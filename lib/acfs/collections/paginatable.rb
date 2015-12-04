@@ -8,7 +8,7 @@ module Acfs::Collections
         opts[:url]
       end
 
-      attr_reader :total_pages, :current_page
+      attr_reader :total_pages, :current_page, :total_count
     end
 
     def process_response(response)
@@ -47,6 +47,10 @@ module Acfs::Collections
     def setup_headers(headers)
       if headers['X-Total-Pages']
         @total_pages = Integer(headers['X-Total-Pages'])
+      end
+
+      if headers['X-Total-Count']
+        @total_count = Integer(headers['X-Total-Count'])
       end
 
       setup_links headers['Link'] if headers['Link']
