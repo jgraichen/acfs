@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.43.2
+
+* add `total_count` for paginated collections
+
 ## 0.43.1
 
 * Fix `:with` condition matching on stubs
