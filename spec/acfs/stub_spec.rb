@@ -163,10 +163,16 @@ describe Acfs::Stub do
         end
 
         let!(:comments) { Comment.all }
-        let(:headers) { {'X-Total-Pages' => '2'} }
+        let(:headers) do
+          {
+            'X-Total-Pages' => '2',
+            'X-Total-Count' => '10'
+          }
+        end
         subject { Acfs.run; comments }
 
         its(:total_pages) { should eq 2 }
+        its(:total_count) { should eq 10 }
       end
     end
 
