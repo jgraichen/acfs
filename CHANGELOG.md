@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.44.0
+
+* Add option to configure adapter creation and pass option to typhoeus adapter e.g.
+  limiting concurrency.
+
 ## 0.43.2
 
 * add `total_count` for paginated collections
