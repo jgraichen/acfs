@@ -72,4 +72,22 @@ describe ::Acfs::Global do
       Acfs.run
     end
   end
+
+  describe '#runner' do
+    it 'returns per-thread runner' do
+      runner1 = Thread.new { acfs.runner } .value
+      runner2 = Thread.new { acfs.runner } .value
+
+      expect(runner1).to_not equal runner2
+    end
+
+    it 'uses configurated adapter' do
+      adapter = double :adapter
+      expect(Acfs::Configuration.current).to receive(:adapter).and_return(-> { adapter })
+
+      runner = Thread.new { acfs.runner }.value
+
+      expect(runner.adapter).to equal adapter
+    end
+  end
 end

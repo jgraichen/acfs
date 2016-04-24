@@ -5,6 +5,10 @@ module Acfs
     # Adapter for Typhoeus.
     #
     class Typhoeus < Base
+      def initialize(**kwargs)
+        @options = kwargs
+      end
+
       def start
         hydra.run
       rescue
@@ -25,7 +29,7 @@ module Acfs
       protected
 
       def hydra
-        @hydra ||= ::Typhoeus::Hydra.new
+        @hydra ||= ::Typhoeus::Hydra.new(**@options)
       end
 
       def convert_request(req)

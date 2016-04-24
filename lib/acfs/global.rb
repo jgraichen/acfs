@@ -8,7 +8,15 @@ module Acfs
     # @return [Runner]
     #
     def runner
-      Thread.current[:acfs_runner] ||= Runner.new Adapter::Typhoeus.new
+      Thread.current[:acfs_runner] ||= begin
+        adapter = Configuration.current.adapter
+
+        if adapter
+          Runner.new adapter.call
+        else
+          Runner.new Adapter::Typhoeus.new
+        end
+      end
     end
 
     # @api public

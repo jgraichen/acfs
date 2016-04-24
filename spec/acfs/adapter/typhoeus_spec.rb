@@ -17,4 +17,12 @@ describe Acfs::Adapter::Typhoeus do
     expect { adapter.start }.to raise_error(/404\-[12]/)
     expect { adapter.start }.to_not raise_error
   end
+
+  it 'passes arguments to typhoeus hydra' do
+    value = {key: 1, key2: 2}
+
+    expect(::Typhoeus::Hydra).to receive(:new).with(value)
+
+    described_class.new(**value).send :hydra
+  end
 end

@@ -6,6 +6,7 @@ module Acfs
   #
   class Configuration
     attr_reader :locations
+    attr_accessor :adapter
 
     # @api private
     def initialize

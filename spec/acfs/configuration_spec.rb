@@ -39,4 +39,13 @@ describe Acfs::Configuration do
       end
     end
   end
+
+  describe '#adapter' do
+    let(:object) { Object.new }
+
+    it 'should be a accessor' do
+      cfg.adapter = object
+      expect(cfg.adapter).to eq object
+    end
+  end
 end
