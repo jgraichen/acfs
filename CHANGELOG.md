@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0
+
+* Middleware stack is build on ActionDispatch::MiddlewareStack now
+* Drop legacy middleware names (xyEncoder, xyDecoder)
+
 ## 0.44.0
 
 * Add option to configure adapter creation and pass option to typhoeus adapter e.g.
