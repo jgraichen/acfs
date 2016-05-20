@@ -12,12 +12,6 @@ describe Acfs::Middleware::JSON do
     decoder.call request
   end
 
-  context 'API compatibility' do
-    subject { Acfs::Middleware::JSON }
-    it { is_expected.to eql Acfs::Middleware::JsonDecoder }
-    it { is_expected.to eql Acfs::Middleware::JsonEncoder }
-  end
-
   describe 'encode' do
     context 'with not serialized request' do
       it 'should set Content-Type' do

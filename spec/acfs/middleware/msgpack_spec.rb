@@ -12,12 +12,6 @@ describe Acfs::Middleware::MessagePack do
     decoder.call request
   end
 
-  context 'API compatibility' do
-    subject { Acfs::Middleware::MessagePack }
-    it { is_expected.to eql Acfs::Middleware::MessagePackDecoder }
-    it { is_expected.to eql Acfs::Middleware::MessagePackEncoder }
-  end
-
   describe 'encode' do
     context 'with not serialized request' do
       it 'should set Content-Type' do
