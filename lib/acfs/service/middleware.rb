@@ -1,3 +1,5 @@
+require 'acfs/service/middleware/stack'
+
 module Acfs
   class Service
     # Module providing all function to register middlewares
@@ -15,28 +17,23 @@ module Acfs
       end
 
       module ClassMethods
-        # @api public
+        # @!method use(klass, *args, &block)
+        #   @api public
         #
-        # Register a new middleware to be used for this service.
+        #   Register a new middleware to be used for this service.
         #
-        # @example
-        #   class MyService < Acfs::Service
-        #     self.base_url = 'http://my.srv'
-        #     use Acfs::Middleware::JsonDecoder
-        #   end
+        #   @example
+        #     class MyService < Acfs::Service
+        #       self.base_url = 'http://my.srv'
+        #       use Acfs::Middleware::JSON
+        #     end
         #
-        # @param [Class] klass Middleware class to instantiate and append to middleware stack.
-        # @param [Hash, Object] options Options to delegate to middleware class initializer.
-        # @return [undefined]
+        #   @param [Class] klass Middleware class to append
+        #   @param [Array<Object>] args Arguments passed to klass initialize
+        #   @param [Proc] block Block passed to klass initialize
+        #   @return [undefined]
         #
-        def use(klass, options = {})
-          @middlewares ||= []
-
-          return false if @middlewares.include? klass
-
-          @middlewares << klass
-          @middleware = klass.new(middleware, options)
-        end
+        delegate :use, to: :middleware
 
         # @api private
         #
@@ -45,18 +42,7 @@ module Acfs
         # @return [#call]
         #
         def middleware
-          @middleware ||= proc {|request| request }
-        end
-
-        # @api public
-        #
-        # Clear all registered middlewares.
-        #
-        # @return [undefined]
-        #
-        def clear
-          @middleware  = nil
-          @middlewares = []
+          @middleware ||= Stack.new
         end
       end
     end
