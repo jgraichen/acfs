@@ -24,7 +24,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'multi_json'
 
   # Bundle update w/o version resolves to 0.3.3 ...
-  spec.add_runtime_dependency 'typhoeus', '>= 0.6.5'
+  spec.add_runtime_dependency 'typhoeus', '~> 1.0'
 
   spec.add_runtime_dependency 'rack'
 
