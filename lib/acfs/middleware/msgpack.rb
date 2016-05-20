@@ -20,8 +20,5 @@ module Acfs
         ::MessagePack.unpack body
       end
     end
-
-    MessagePackEncoder = MessagePack
-    MessagePackDecoder = MessagePack
   end
 end

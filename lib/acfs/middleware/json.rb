@@ -17,8 +17,5 @@ module Acfs
         ::MultiJson.load body
       end
     end
-
-    JsonDecoder = JSON
-    JsonEncoder = JSON
   end
 end

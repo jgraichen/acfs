@@ -35,11 +35,7 @@ module Acfs
     autoload :Print
     autoload :Logger
     autoload :JSON
-    autoload :JsonDecoder, 'acfs/middleware/json'
-    autoload :JsonEncoder, 'acfs/middleware/json'
     autoload :MessagePack, 'acfs/middleware/msgpack'
-    autoload :MessagePackDecoder, 'acfs/middleware/msgpack'
-    autoload :MessagePackEncoder, 'acfs/middleware/msgpack'
   end
 
   module Adapter
