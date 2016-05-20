@@ -25,7 +25,7 @@ group :test do
     gem 'rubinius-coverage'
   end
 
-  gem 'msgpack', '~> 0.5.11'
+  gem 'msgpack', '~> 0.7.6'
 end
 
 # Specify your gem's dependencies in acfs.gemspec
