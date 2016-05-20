@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 # Development gems
 #
-gem 'webmock', '~> 1.7'
+gem 'webmock', '~> 2.0'
 gem 'rake'
 gem 'rspec', '~> 3.0'
 gem 'rspec-its'
