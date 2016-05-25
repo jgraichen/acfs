@@ -223,9 +223,9 @@ class Acfs::Resource
           collection.__callbacks__ << block unless block.nil?
 
           counter = 0
-          ids.each do |id|
+          ids.each_with_index do |id, index|
             find_single id, opts do |resource|
-              collection << resource
+              collection[index] = resource
               if (counter += 1) == ids.size
                 collection.loaded!
                 collection.__invoke__
