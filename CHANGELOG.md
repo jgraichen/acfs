@@ -2,6 +2,7 @@
 
 ## 0.45.0
 
+* Fetching multiple records (`find(ary)`) is stable now, but untested (#38)
 * Middleware stack is build on ActionDispatch::MiddlewareStack now
 * Deprecate legacy middleware names (xyEncoder, xyDecoder)
 
