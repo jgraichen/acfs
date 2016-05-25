@@ -1,9 +1,9 @@
 # Changelog
 
-## 1.0.0
+## 0.45.0
 
 * Middleware stack is build on ActionDispatch::MiddlewareStack now
-* Drop legacy middleware names (xyEncoder, xyDecoder)
+* Deprecate legacy middleware names (xyEncoder, xyDecoder)
 
 ## 0.44.0
 

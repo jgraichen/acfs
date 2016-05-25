@@ -21,7 +21,10 @@ module Acfs
       end
     end
 
+    # @deprecated
     MessagePackEncoder = MessagePack
+
+    # @deprecated
     MessagePackDecoder = MessagePack
   end
 end

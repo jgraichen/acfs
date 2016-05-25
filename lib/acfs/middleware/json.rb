@@ -18,7 +18,10 @@ module Acfs
       end
     end
 
+    # @deprecated
     JsonDecoder = JSON
+
+    # @deprecated
     JsonEncoder = JSON
   end
 end
