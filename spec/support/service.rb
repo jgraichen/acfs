@@ -6,14 +6,15 @@ Acfs.configure do
 end
 
 class UserService < Acfs::Service
-  use Acfs::Middleware::MessagePack
-  use Acfs::Middleware::JSON
+  use Acfs::Middleware::MessagePackDecoder
+  use Acfs::Middleware::JsonDecoder
+  use Acfs::Middleware::JsonEncoder
 end
 
 class CommentService < Acfs::Service
   identity :comments
 
-  use Acfs::Middleware::JSON
+  use Acfs::Middleware::JsonDecoder
 end
 
 class MyUser < Acfs::Resource
@@ -58,8 +59,9 @@ class Comment < Acfs::Resource
 end
 
 class ComputerService < Acfs::Service
-  use Acfs::Middleware::MessagePack
-  use Acfs::Middleware::JSON
+  use Acfs::Middleware::MessagePackDecoder
+  use Acfs::Middleware::JsonDecoder
+  use Acfs::Middleware::JsonEncoder
 end
 
 class Computer < Acfs::Resource
