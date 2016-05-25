@@ -6,8 +6,8 @@ Acfs.configure do
 end
 
 class UserService < Acfs::Service
-  use Acfs::Middleware::JSON
   use Acfs::Middleware::MessagePack
+  use Acfs::Middleware::JSON
 end
 
 class CommentService < Acfs::Service
@@ -58,8 +58,8 @@ class Comment < Acfs::Resource
 end
 
 class ComputerService < Acfs::Service
-  use Acfs::Middleware::JSON
   use Acfs::Middleware::MessagePack
+  use Acfs::Middleware::JSON
 end
 
 class Computer < Acfs::Resource

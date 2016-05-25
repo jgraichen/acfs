@@ -33,7 +33,10 @@ module Acfs
         #   @param [Proc] block Block passed to klass initialize
         #   @return [undefined]
         #
-        delegate :use, to: :middleware
+        def use(klass, *args, &block)
+          # Backward compatible behavior
+          middleware.unshift(klass, *args, &block)
+        end
 
         # @api private
         #
@@ -44,6 +47,9 @@ module Acfs
         def middleware
           @middleware ||= Stack.new
         end
+
+        # @deprecated
+        delegate :clear, to: :middleware
       end
     end
   end
