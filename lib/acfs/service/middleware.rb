@@ -35,7 +35,7 @@ module Acfs
         #
         def use(klass, *args, &block)
           # Backward compatible behavior
-          middleware.unshift(klass, *args, &block)
+          middleware.insert(0, klass, *args, &block)
         end
 
         # @api private
