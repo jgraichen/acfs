@@ -162,32 +162,6 @@ describe Acfs::Resource::Attributes do
 
         expect(model.attributes.symbolize_keys).to eq age: 12
       end
-
-      context 'allow nil option' do
-        it 'should allow nil as value' do
-          model.send :attribute, :updated_at, :date_time,
-            default: DateTime.new, allow_nil: true
-
-          resource = model.new
-          expect(resource.updated_at).to eq DateTime.new
-
-          resource.updated_at = ''
-          expect(resource.updated_at).to eq nil
-        end
-      end
-
-      context 'allow blank option' do
-        it 'should allow blank as value' do
-          model.send :attribute, :updated_at, :date_time,
-            default: DateTime.new, allow_blank: true
-
-          resource = model.new
-          expect(resource.updated_at).to eq DateTime.new
-
-          resource.updated_at = ''
-          expect(resource.updated_at).to eq nil
-        end
-      end
     end
   end
 end

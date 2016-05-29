@@ -13,11 +13,19 @@ module Acfs::Resource::Attributes
     #
     # Cast given object to float.
     #
-    # @param [Object] obj Object to cast.
+    # @param [Object] value Object to cast.
     # @return [Float] Casted object as float.
     #
-    def cast_type(obj)
-      Float obj
+    def cast_value(value)
+      return 0.0 if value.blank?
+
+      case value
+        when ::Float then value
+        when "Infinity" then ::Float::INFINITY
+        when "-Infinity" then -::Float::INFINITY
+        when "NaN" then ::Float::NAN
+        else Float(value)
+      end
     end
   end
 end

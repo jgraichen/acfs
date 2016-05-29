@@ -10,22 +10,21 @@ module Acfs::Resource::Attributes
   #   end
   #
   class DateTime < Base
+
     # @api public
     #
     # Cast given object to DateTime.
     #
-    # @param [Object] obj Object to cast.
+    # @param [Object] value Object to cast.
     # @return [DateTime] Casted object as DateTime.
     #
-    def cast_type(obj)
-      if nil_allowed? && obj.blank?
+    def cast_value(value)
+      if value.blank?
         nil
-      elsif obj.is_a? ::DateTime
-        obj
-      elsif obj.is_a?(Time) || obj.is_a?(Date)
-        ::DateTime.iso8601 obj.iso8601
+      elsif value.acts_like?(:time) || value.acts_like?(:date)
+        value.to_datetime
       else
-        ::DateTime.iso8601 obj
+        ::DateTime.iso8601 value
       end
     end
   end
