@@ -24,7 +24,14 @@ module Acfs::Resource::Attributes
     # @return [TrueClass, FalseClass] Casted boolean.
     #
     def cast_value(value)
-      TRUE_VALUES.include? value
+      return true if value == true
+      return false if value == false
+
+      if value.blank?
+        nil
+      else
+        TRUE_VALUES.include? value
+      end
     end
   end
 end

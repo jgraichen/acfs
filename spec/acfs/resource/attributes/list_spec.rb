@@ -52,7 +52,7 @@ describe Acfs::Resource::Attributes::List do
 
     context 'with non castable object' do
       let(:value) { Object.new }
-      it { is_expected.to raise_error TypeError }
+      it { expect(subject.call).to eq [value] }
     end
   end
 end

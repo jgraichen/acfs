@@ -27,7 +27,7 @@ module Acfs::Resource::Attributes
       elsif value.respond_to?(:to_a)
         value.to_a
       else
-        raise TypeError.new "Cannot cast to array: #{value.inspect}"
+        Array(value)
       end
     end
   end

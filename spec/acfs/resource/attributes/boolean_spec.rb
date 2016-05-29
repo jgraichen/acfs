@@ -9,11 +9,11 @@ describe Acfs::Resource::Attributes::Boolean do
     end
 
     it 'casts empty string to false' do
-      expect(subject.cast('')).to eq false
+      expect(subject.cast('')).to eq nil
     end
 
     it 'casts blank string to false' do
-      expect(subject.cast("  \t")).to eq false
+      expect(subject.cast("  \t")).to eq nil
     end
 
     it 'preserves boolean values' do
@@ -32,7 +32,6 @@ describe Acfs::Resource::Attributes::Boolean do
     it 'casts any other value to false' do
       expect(subject.cast(0)).to eq false
       expect(subject.cast(2)).to eq false
-      expect(subject.cast('')).to eq false
       expect(subject.cast('wrong')).to eq false
       expect(subject.cast('random')).to eq false
     end
