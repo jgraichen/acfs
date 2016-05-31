@@ -14,7 +14,7 @@ module Acfs::Resource::Attributes
   #  true, on, yes
   #
   class Boolean < Base
-    TRUE_VALUES = [true, 1, '1', 'on', 'yes', 'true']
+    FALSE_VALUES = [false, 0, '0', 'f', 'F', 'false', 'FALSE', 'off', 'OFF', 'no', 'NO'].to_set
 
     # @api public
     #
@@ -30,7 +30,7 @@ module Acfs::Resource::Attributes
       if value.blank?
         nil
       else
-        TRUE_VALUES.include? value
+        !FALSE_VALUES.include?(value)
       end
     end
   end
