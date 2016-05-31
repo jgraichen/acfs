@@ -18,7 +18,7 @@ module Acfs::Resource::Attributes
     # @raise [TypeError] If object cannot be casted to a list.
     #
     def cast_value(value)
-      return nil if value.blank?
+      return [] if value.blank?
 
       if value.is_a?(::Array)
         value
