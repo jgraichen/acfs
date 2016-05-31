@@ -13,12 +13,12 @@ describe Acfs::Resource::Attributes::Dict do
 
     context 'with blank string (I)' do
       let(:value) { '' }
-      it { expect(subject.call).to eq nil }
+      it { expect(subject.call).to eq Hash.new }
     end
 
     context 'with blank string (II)' do
       let(:value) { "  \t" }
-      it { expect(subject.call).to eq nil }
+      it { expect(subject.call).to eq Hash.new }
     end
 
     context 'with hash' do
