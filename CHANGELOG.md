@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.47.0
+
+* Change blank value handling of dict and list type (0a12ef1)
+
 ## 0.46.0
 
 * Rework types system (#39)
