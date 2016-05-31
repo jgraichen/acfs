@@ -10,7 +10,7 @@ module Acfs::Resource::Attributes
   #
   class UUID < Base
     #
-    REGEXP = /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i
+    UUID_REGEXP = /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i
 
     # @api public
     #
@@ -28,23 +28,16 @@ module Acfs::Resource::Attributes
     #   |     4 | 4      |
     #   |     5 | 12     |
     #
-    # @param [Object] obj Object to cast.
+    # @param [Object] value Object to cast.
     # @return [String] Casted object as UUID.
     #
-    def cast_type(obj)
-      cast_string obj.to_s
-    end
-
-    private
-
-    def cast_string(str)
-      if nil_allowed? && str.blank?
-        return nil
-      elsif str =~ REGEXP
-        str
+    def cast_value(value)
+      if value.blank?
+        nil
+      elsif value.to_s =~ UUID_REGEXP
+        value
       else
-        raise ArgumentError.new "given String `#{str}` " \
-                                'does not look like a UUID'
+        raise TypeError.new "Invalid UUID: `#{value.to_s}'"
       end
     end
   end

@@ -1,55 +1,49 @@
 require 'spec_helper'
 
 describe Acfs::Resource::Attributes::DateTime do
-  let(:model) { Class.new Acfs::Resource }
-  let(:params) { {} }
-  subject { Acfs::Resource::Attributes::DateTime.new params }
+  let(:type) { Acfs::Resource::Attributes::DateTime.new }
 
-  describe 'cast' do
-    it 'should return same object, if obj is already of DateTime class' do
-      date_time = DateTime.now
-      retval = subject.cast(date_time)
-      expect(retval).to be == date_time
+  describe '#cast' do
+    subject { -> { type.cast value } }
+
+    context 'with nil' do
+      let(:value) { nil }
+      it { expect(subject.call).to eq nil }
     end
 
-    it 'should return parsed object, if obj is of Time class' do
-      time = Time.now
-      retval = subject.cast(time)
-      expect(retval).to be == DateTime.iso8601(time.iso8601)
+    context 'with empty string' do
+      let(:value) { '' }
+      it { expect(subject.call).to eq nil }
     end
 
-    it 'should return parsed object, if obj is of Date class' do
-      date = Date.today
-      retval = subject.cast(date)
-      expect(retval).to be == DateTime.iso8601(date.iso8601)
+    context 'with blank string' do
+      let(:value) { "  \t" }
+      it { expect(subject.call).to eq nil }
     end
 
-    it 'should return parsed object, if obj is of String class in ISO-8601 format' do
-      date_time_string = DateTime.now.iso8601
-      retval = subject.cast(date_time_string)
-      expect(retval).to be == DateTime.iso8601(date_time_string)
+    context 'with DateTime' do
+      let(:value) { DateTime.now }
+      it { expect(subject.call).to eq value }
     end
 
-    it 'should raise an error if obj is of String class not in valid ISO-8601 format' do
-      malformed_string = 'qwe123'
-      expect do
-        subject.cast(malformed_string)
-      end.to raise_error ArgumentError
+    context 'with Time' do
+      let(:value) { Time.now }
+      it { expect(subject.call).to eq value.to_datetime }
     end
 
-    it 'should raise an error if obj is of wrong class (Fixnum)' do
-      fixnum = 12
-      expect do
-        subject.cast(fixnum)
-      end.to raise_error TypeError
+    context 'with Date' do
+      let(:value) { Date.today }
+      it { expect(subject.call).to eq value.to_datetime }
     end
 
-    context 'with allow_nil option' do
-      let(:params) { {allow_nil: true} }
+    context 'with ISO8601' do
+      let(:value) { DateTime.now.iso8601 }
+      it { expect(subject.call.iso8601).to eq value }
+    end
 
-      it 'should accept empty string as nil' do
-        expect(subject.cast('')).to eq nil
-      end
+    context 'with invalid string' do
+      let(:value) { 'qwe123' }
+      it { is_expected.to raise_error ArgumentError }
     end
   end
 end

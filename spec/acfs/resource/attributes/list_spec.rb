@@ -1,34 +1,58 @@
 require 'spec_helper'
 
 describe Acfs::Resource::Attributes::List do
-  let(:model) { Class.new Acfs::Resource }
-  subject { described_class.new }
+  let(:type) { Acfs::Resource::Attributes::List.new }
 
-  describe '.cast' do
+  describe '#cast' do
+    subject { -> { type.cast value } }
+
+    context 'with nil' do
+      let(:value) { nil }
+      it { expect(subject.call).to eq nil }
+    end
+
+    context 'with blank string (I)' do
+      let(:value) { '' }
+      it { expect(subject.call).to eq nil }
+    end
+
+    context 'with blank string (II)' do
+      let(:value) { "  \t" }
+      it { expect(subject.call).to eq nil }
+    end
+
     context 'with array' do
-      let(:sample) { %w(abc cde efg) }
-
-      it 'should return unmodified array' do
-        expect(subject.cast(sample)).to be == %w(abc cde efg)
-      end
+      let(:value) { %w(abc cde efg) }
+      it { expect(subject.call).to eq value }
     end
 
-    context 'with not listable object' do
-      let(:sample) { Object.new }
-
-      it 'should raise a TypeError' do
-        expect do
-          subject.cast(sample)
-        end.to raise_error TypeError
+    context 'with convertable object (I)' do
+      let(:value) do
+        Class.new do
+          def to_ary
+            [1, 2, 3]
+          end
+        end.new
       end
+
+      it { expect(subject.call).to eq [1, 2, 3] }
     end
 
-    context 'with listable object' do
-      let(:sample) { 5..10 }
-
-      it 'should cast object to array' do
-        expect(subject.cast(sample)).to be == [5, 6, 7, 8, 9, 10]
+    context 'with convertable object (II)' do
+      let(:value) do
+        Class.new do
+          def to_a
+            [1, 2, 3]
+          end
+        end.new
       end
+
+      it { expect(subject.call).to eq [1, 2, 3] }
+    end
+
+    context 'with non castable object' do
+      let(:value) { Object.new }
+      it { expect(subject.call).to eq [value] }
     end
   end
 end

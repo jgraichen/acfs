@@ -1,20 +1,59 @@
 require 'spec_helper'
 
 describe Acfs::Resource::Attributes::Float do
-  let(:model) { Class.new Acfs::Resource }
-  subject { described_class.new }
+  let(:type) { Acfs::Resource::Attributes::Float.new }
 
-  describe 'cast' do
-    it 'should return same object, if obj is already of float class' do
-      expect(subject.cast(1.3)).to be == 1.3
+  describe '#cast' do
+    subject { -> { type.cast value } }
+
+    context 'with nil' do
+      let(:value) { nil }
+      it { expect(subject.call).to eq nil }
     end
 
-    it 'should return parsed object, if obj is of Fixnum class' do
-      expect(subject.cast(7)).to be == 7.0
+    context 'with blank string (I)' do
+      let(:value) { '' }
+      it { expect(subject.call).to eq 0.0 }
     end
 
-    it 'should return parsed object, if obj is of String class containing a float' do
-      expect(subject.cast('1.7')).to be == 1.7
+    context 'with blank string (II)' do
+      let(:value) { "  \t" }
+      it { expect(subject.call).to eq 0.0 }
+    end
+
+    context 'with float' do
+      let(:value) { 1.7 }
+      it { expect(subject.call).to eq 1.7 }
+    end
+
+    context 'with Infinity' do
+      let(:value) { 'Infinity' }
+      it { expect(subject.call).to eq ::Float::INFINITY }
+    end
+
+    context 'with -Infinity' do
+      let(:value) { '-Infinity' }
+      it { expect(subject.call).to eq -::Float::INFINITY }
+    end
+
+    context 'with NaN' do
+      let(:value) { 'NaN' }
+      it { expect(subject.call).to be_nan }
+    end
+
+    context 'with fixnum' do
+      let(:value) { 1 }
+      it { expect(subject.call).to eq 1.0 }
+    end
+
+    context 'with valid string' do
+      let(:value) { '1.7' }
+      it { expect(subject.call).to eq 1.7 }
+    end
+
+    context 'with invalid string (I)' do
+      let(:value) { '1.7a' }
+      it { is_expected.to raise_error ArgumentError }
     end
   end
 end

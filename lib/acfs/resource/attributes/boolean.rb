@@ -14,20 +14,24 @@ module Acfs::Resource::Attributes
   #  true, on, yes
   #
   class Boolean < Base
-    TRUE_VALUES = %w(true on yes 1)
+    FALSE_VALUES = [false, 0, '0', 'f', 'F', 'false', 'FALSE', 'off', 'OFF', 'no', 'NO'].to_set
 
     # @api public
     #
     # Cast given object to boolean.
     #
-    # @param [Object] obj Object to cast.
+    # @param [Object] value Object to cast.
     # @return [TrueClass, FalseClass] Casted boolean.
     #
-    def cast_type(obj)
-      return true if obj.is_a? TrueClass
-      return false if obj.is_a? FalseClass
+    def cast_value(value)
+      return true if value == true
+      return false if value == false
 
-      TRUE_VALUES.include? obj.to_s
+      if value.blank?
+        nil
+      else
+        !FALSE_VALUES.include?(value)
+      end
     end
   end
 end

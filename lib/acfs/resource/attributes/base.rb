@@ -1,35 +1,27 @@
 module Acfs::Resource::Attributes
   #
   class Base
-    attr_reader :options
+    attr_reader :default
 
-    def initialize(opts = {})
-      @options = opts
-      @options.reverse_merge! allow_nil: true
+    def initialize(default: nil)
+      @default = default
     end
 
-    def nil_allowed?
-      options[:allow_nil]
-    end
-
-    def blank_allowed?
-      options[:allow_blank]
+    def cast(value)
+      cast_value(value) unless value.nil?
     end
 
     def default_value
-      if options[:default].is_a? Proc
-        options[:default]
+      if default.respond_to? :call
+        default
       else
-        cast options[:default]
+        cast default
       end
     end
 
-    def cast(obj)
-      return nil if obj.nil? && nil_allowed? || (obj == '' && blank_allowed?)
-      cast_type obj
-    end
+    private
 
-    def cast_type(_obj)
+    def cast_value(_value)
       raise NotImplementedError
     end
   end

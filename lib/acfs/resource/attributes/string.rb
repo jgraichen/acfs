@@ -14,11 +14,11 @@ module Acfs::Resource::Attributes
     #
     # Cast given object to string.
     #
-    # @param [Object] obj Object to cast.
+    # @param [Object] value Object to cast.
     # @return [String] Casted string.
     #
-    def cast_type(obj)
-      obj.to_s
+    def cast_value(value)
+      value.to_s
     end
   end
 end

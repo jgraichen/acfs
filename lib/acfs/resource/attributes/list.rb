@@ -13,13 +13,22 @@ module Acfs::Resource::Attributes
     #
     # Cast given object to a list.
     #
-    # @param [Object] obj Object to cast.
+    # @param [Object] value Object to cast.
     # @return [Fixnum] Casted object as list.
     # @raise [TypeError] If object cannot be casted to a list.
     #
-    def cast_type(obj)
-      return obj.to_a if obj.respond_to? :to_a
-      raise TypeError.new "Cannot cast #{obj.inspect} to array."
+    def cast_value(value)
+      return nil if value.blank?
+
+      if value.is_a?(::Array)
+        value
+      elsif value.respond_to?(:to_ary)
+        value.to_ary
+      elsif value.respond_to?(:to_a)
+        value.to_a
+      else
+        Array(value)
+      end
     end
   end
 end

@@ -14,14 +14,24 @@ module Acfs::Resource::Attributes
     #
     # Cast given object to a dict/hash.
     #
-    # @param [Object] obj Object to cast.
+    # @param [Object] value Object to cast.
     # @return [Hash] Casted object as hash.
     # @raise [TypeError] If object cannot be casted to a hash.
     #
-    def cast_type(obj)
-      return obj if obj.is_a? Hash
-      return obj.to_h if obj.respond_to? :to_h
-      raise TypeError.new "Cannot cast #{obj.inspect} to hash."
+    def cast_value(value)
+      return nil if value.blank?
+
+      if value.is_a?(Hash)
+        value
+      elsif value.respond_to?(:serializable_hash)
+        value.serializable_hash
+      elsif value.respond_to?(:to_hash)
+        value.to_hash
+      elsif value.respond_to?(:to_h)
+        value.to_h
+      else
+        Hash(value)
+      end
     end
   end
 end

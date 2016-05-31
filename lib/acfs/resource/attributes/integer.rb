@@ -13,15 +13,15 @@ module Acfs::Resource::Attributes
     #
     # Cast given object to integer.
     #
-    # @param [Object] obj Object to cast.
+    # @param [Object] value Object to cast.
     # @return [Fixnum] Casted object as fixnum.
     #
-    def cast_type(obj)
-      return 0 if obj == ''
-
-      Integer obj
-    rescue ArgumentError => e
-      raise TypeError.new e.message
+    def cast_value(value)
+      if value.blank?
+        0
+      else
+        Integer(value)
+      end
     end
   end
 end
