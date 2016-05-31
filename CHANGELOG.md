@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.46.0
+
+* Rework types system (#39)
+
 ## 0.45.0
 
 * Fetching multiple records (`find(ary)`) is stable now, but untested (#38)
