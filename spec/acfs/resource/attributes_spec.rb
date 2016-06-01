@@ -150,13 +150,13 @@ describe Acfs::Resource::Attributes do
         expect(model.attributes.symbolize_keys).to eq name: 'John'
       end
 
-      it 'should accept an symbolic type' do
+      it 'should accept a symbolic type' do
         model.send :attribute, :age, :integer, default: '12'
 
         expect(model.attributes.symbolize_keys).to eq age: 12
       end
 
-      it 'should accept an class type' do
+      it 'should accept a class type' do
         model.send :attribute, :age, Acfs::Resource::Attributes::Integer,
           default: '12'
 
