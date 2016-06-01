@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Acfs::Resource::Attributes do
   let(:model) { Class.new Acfs::Resource }
+  let(:submodel) { Class.new model }
 
   describe '#initialize' do
     before { model.attribute :name, :string, default: 'John' }
@@ -137,7 +138,7 @@ describe Acfs::Resource::Attributes do
   end
 
   describe 'class' do
-    describe '#attribute' do
+    describe '#attributes' do
       it 'should add an attribute to model attribute list' do
         model.send :attribute, :name, :string
 
@@ -161,6 +162,17 @@ describe Acfs::Resource::Attributes do
           default: '12'
 
         expect(model.attributes.symbolize_keys).to eq age: 12
+      end
+
+      context 'on inherited resources' do
+        before do
+          model.attribute :age, :integer, default: 5
+          submodel.attribute :born_at, :date_time
+        end
+
+        it 'includes superclass attributes' do
+          expect(submodel.attributes.keys).to match_array %w(age born_at)
+        end
       end
     end
   end

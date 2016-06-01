@@ -222,56 +222,30 @@ class Acfs::Resource
       #   Attributes with default values.
       #
       def attributes
-        {}.tap do |attrs|
-          defined_attributes.each do |key, attr|
-            attrs[key] = attr.default_value
-          end
+        defined_attributes.each_with_object({}) do |(key, attr), hash|
+          hash[key] = attr.default_value
         end
       end
 
       def defined_attributes
-        @attributes ||= begin
-          attributes = {}
-          if superclass.respond_to?(:defined_attributes)
-            attributes.merge superclass.defined_attributes
-          end
-
-          attributes
-        end
-      end
-
-      # @api public
-      #
-      # Return hash of attributes and there types.
-      #
-      # @example
-      #   class User < Acfs::Resource
-      #     attribute :name, :string
-      #     attribute :age, :integer, default: 25
-      #   end
-      #   User.attributes # => {"name": Acfs::Model::Attributes::String,
-      #                   #     "age":  Acfs::Model::Attributes::Integer}
-      #
-      # @return [Hash{Symbol => Class}] Attributes and their types.
-      #
-      def attribute_types
-        @attribute_types ||= begin
-          attribute_types = {}
-          if superclass.respond_to?(:attribute_types)
-            attribute_types.merge superclass.attribute_types
-          end
-
-          attribute_types
+        if superclass.respond_to?(:defined_attributes)
+          superclass.defined_attributes.merge(local_attributes)
+        else
+          local_attributes
         end
       end
 
       private
 
+      def local_attributes
+        @local_attributes ||= {}
+      end
+
       def define_attribute(name, type, opts = {})
         name      = name.to_s
         attribute = type.new opts
 
-        defined_attributes[name] = attribute
+        local_attributes[name] = attribute
         define_attribute_method name
 
         send :define_method, name do
