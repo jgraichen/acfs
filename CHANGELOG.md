@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.48.0
+
+* Remove #attribute_types broke since f7e4109 (Sep 2013, v0.23)
+* Fix attribute inheritance on subclassing broken since commit 7cf1d11 (Apr 2014, v0.43)
+
 ## 0.47.0
 
 * Change blank value handling of dict and list type (0a12ef1)
