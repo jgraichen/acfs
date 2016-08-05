@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.0.0
+
+* Switch to first non-development major as it's long time used in production.
+* Fix NewRelic RPM inference with middleware stack inherited from `ActionDispatch::MiddlewareStack`.
+
 ## 0.48.0
 
 * Remove #attribute_types broke since f7e4109 (Sep 2013, v0.23)
