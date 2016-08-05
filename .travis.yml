@@ -4,7 +4,7 @@ cache: bundler
 bundler_args: "--without development"
 rvm:
 - '2.3.1'
-- '2.2'
+- '2.2.5'
 - '2.1'
 - '2.0'
 gemfile:
@@ -13,3 +13,9 @@ gemfile:
 - gemfiles/Gemfile.rails-4-1
 - gemfiles/Gemfile.rails-4-0
 - gemfiles/Gemfile.rails-3-2
+matrix:
+  exclude:
+  - rvm: '2.1'
+    gemfile: gemfiles/Gemfile.rails-5-0
+  - rvm: '2.0'
+    gemfile: gemfiles/Gemfile.rails-5-0
