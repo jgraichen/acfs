@@ -9,7 +9,7 @@ module Acfs
       end
 
       def mime
-        ::Mime::MSGPACK
+        ::Mime[:msgpack]
       end
 
       def encode(data)

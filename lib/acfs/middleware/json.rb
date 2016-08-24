@@ -6,7 +6,7 @@ module Acfs
     #
     class JSON < Serializer
       def mime
-        ::Mime::JSON
+        ::Mime[:json]
       end
 
       def encode(data)
