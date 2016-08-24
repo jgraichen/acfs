@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+* Fix deprecation warnings when using ::Mime
+
 ## 1.0.0
 
 * Switch to first non-development major as it's long time used in production.
