@@ -313,7 +313,6 @@ Read [official guide][2] to see to to subscribe.
         * Reusing model definitions for generating responses?
         * Rails responders providing REST operations with integrated ETag,
           Modified Headers, conflict detection, ...
-    * Pagination? Filtering? (If service API provides such features.)
 * Documentation
 
 ## Contributing
