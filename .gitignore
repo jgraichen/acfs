@@ -21,3 +21,4 @@ tmp
 *.iml
 .rvmrc
 .ruby-version
+.ruby-gemset

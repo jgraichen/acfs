@@ -199,7 +199,7 @@ class Acfs::Resource
       #   type identifier or type class.
       #
       def attribute(name, type, opts = {})
-        if type.is_a?(Symbol) || type.is_a?(String)
+        if type.is_a?(::Symbol) || type.is_a?(String)
           type = "#{ATTR_CLASS_BASE}::#{type.to_s.classify}".constantize
         end
 
