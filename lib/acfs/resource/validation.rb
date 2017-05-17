@@ -13,8 +13,10 @@ class Acfs::Resource
 
     def remote_errors=(errors)
       (errors || []).each do |field, errs|
-        self.errors.set field.to_sym, errs
-        remote_errors.set field.to_sym, errs
+        errs.each do |err|
+          self.errors.add field.to_sym, err
+          remote_errors.add field.to_sym, err
+        end
       end
     end
 

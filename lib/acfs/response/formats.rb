@@ -9,7 +9,7 @@ module Acfs
       end
 
       def json?
-        content_type == Mime::JSON
+        content_type == Mime[:json]
       end
 
       private

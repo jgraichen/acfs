@@ -12,7 +12,7 @@ describe Acfs::Response::Formats do
     let(:headers)   { {} }
 
     it "should fallback on 'text/plain'" do
-      expect(response.content_type).to be == Mime::TEXT
+      expect(response.content_type).to be == Mime[:text]
     end
   end
 
@@ -21,7 +21,7 @@ describe Acfs::Response::Formats do
 
     describe '#content_type' do
       it 'should return Mime::JSON' do
-        expect(response.content_type).to be == Mime::JSON
+        expect(response.content_type).to be == Mime[:json]
       end
     end
 
@@ -36,7 +36,7 @@ describe Acfs::Response::Formats do
 
       describe '#content_type' do
         it 'should return Mime::JSON' do
-          expect(response.content_type).to be == Mime::JSON
+          expect(response.content_type).to be == Mime[:json]
         end
       end
 

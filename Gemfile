@@ -20,6 +20,9 @@ group :development do
 end
 
 group :test do
+  gem 'pry'
+  gem 'pry-byebug'
+
   platform :rbx do
     gem 'rubysl', '~> 2.0'
     gem 'rubinius-coverage'

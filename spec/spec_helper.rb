@@ -9,7 +9,7 @@ if ENV['CI'] || (defined?(:RUBY_ENGINE) && RUBY_ENGINE != 'rbx')
 end
 
 require 'bundler'
-Bundler.require
+Bundler.require(:default, :test)
 
 require 'acfs'
 require 'webmock/rspec'
