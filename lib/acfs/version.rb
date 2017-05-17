@@ -1,7 +1,7 @@
 module Acfs
   module VERSION
-    MAJOR = 1
-    MINOR = 1
+    MAJOR = 0
+    MINOR = 49
     PATCH = 0
     STAGE = nil
 
