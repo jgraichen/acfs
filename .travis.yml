@@ -1,18 +1,13 @@
 sudo: false
-language: ruby
+dist: trusty
 cache: bundler
+language: ruby
 bundler_args: "--without development"
 rvm:
-- '2.3.1'
-- '2.2.5'
-- '2.1.10'
+- '2.4.1'
+- '2.3.4'
+- '2.2.7'
 gemfile:
+- gemfiles/Gemfile.rails-5-1
 - gemfiles/Gemfile.rails-5-0
 - gemfiles/Gemfile.rails-4-2
-- gemfiles/Gemfile.rails-4-1
-- gemfiles/Gemfile.rails-4-0
-- gemfiles/Gemfile.rails-3-2
-matrix:
-  exclude:
-    - rvm: '2.1.10'
-      gemfile: gemfiles/Gemfile.rails-5-0
