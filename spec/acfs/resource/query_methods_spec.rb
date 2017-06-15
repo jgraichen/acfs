@@ -519,14 +519,21 @@ describe Acfs::Resource::QueryMethods do
         end
 
         it 'should iterate all pages' do
-          indecies = []
+          indices = []
           model.each_item do |item|
             expect(item).to be_a MyUser
-            indecies << item.id
+            indices << item.id
           end
           Acfs.run
 
-          expect(indecies).to eq [1, 2, 3, 4, 5]
+          expect(indices).to eq [1, 2, 3, 4, 5]
+        end
+
+        it 'should pass the collection to the provided block' do
+          model.each_item do |_item, collection|
+            expect(collection).to be_a Acfs::Collection
+          end
+          Acfs.run
         end
       end
     end
