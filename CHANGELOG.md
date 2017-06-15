@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+* `each_item`: Pass collection to provided block (#40)
+
 ## 1.1.0
 
 * Add support for Rails 5.1
