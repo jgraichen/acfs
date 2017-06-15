@@ -193,10 +193,13 @@ class Acfs::Resource
       #
       # @yield [item] Callback that will be invoked for each item.
       # @yieldparam item [self] Resource.
+      # @yieldparam collection [Acfs::Collection] Collection.
       #
-      def each_item(opts = {}, &block)
+      def each_item(opts = {})
         each_page(opts) do |collection|
-          collection.each(&block)
+          collection.each do |item|
+            yield item, collection
+          end
         end
       end
 

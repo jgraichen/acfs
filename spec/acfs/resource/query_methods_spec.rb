@@ -528,6 +528,13 @@ describe Acfs::Resource::QueryMethods do
 
           expect(indecies).to eq [1, 2, 3, 4, 5]
         end
+
+        it 'should pass the collection to the provided block' do
+          model.each_item do |_item, collection|
+            expect(collection).to be_a Acfs::Collection
+          end
+          Acfs.run
+        end
       end
     end
   end
