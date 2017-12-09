@@ -28,7 +28,7 @@ class Acfs::Resource
     #
     def initialize(*attrs)
       write_attributes self.class.attributes
-      reset_changes
+      clear_changes_information
       super
     end
 
