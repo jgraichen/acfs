@@ -160,14 +160,14 @@ class Acfs::Resource
     # Invoked by method_missing
     #
     def attribute_change(attr)
-      [changed_attributes[attr], send(attr)] if attribute_changed?(attr)
+      [changed_attributes[attr], _read_attribute(attr)] if attribute_changed?(attr)
     end
 
     def attribute_will_change!(attr)
       return if attribute_changed?(attr)
 
       begin
-        value = send(attr)
+        value = _read_attribute(attr)
         value = value.duplicable? ? value.clone : value
       rescue TypeError, NoMethodError
       end
@@ -187,6 +187,10 @@ class Acfs::Resource
     # Remove changes information for the provided attributes.
     def clear_attribute_changes(attributes)
       changed_attributes.except!(*attributes)
+    end
+
+    def _read_attribute(attr)
+      send(attr)
     end
   end
 end
