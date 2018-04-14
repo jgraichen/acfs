@@ -47,7 +47,7 @@ class Acfs::Resource
     #   Attributes and their values.
     #
     def attributes
-      @attributes ||= HashWithIndifferentAccess.new
+      @_attrs ||= HashWithIndifferentAccess.new
     end
 
     # @api public

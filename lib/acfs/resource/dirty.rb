@@ -8,26 +8,14 @@ class Acfs::Resource
 
     # @api private
     #
-    # Resets all changes. Does not touch previous changes.
-    #
     def reset_changes
-      changed_attributes.clear
-    end
-
-    # @api private
-    #
-    # Save current changes as previous changes and reset
-    # current one.
-    #
-    def swap_changes
-      @previously_changed = changes
-      reset_changes
+      clear_changes_information
     end
 
     # @api private
     #
     def save!(*)
-      super.tap {|_| swap_changes }
+      super.tap {|_| changes_applied }
     end
 
     # @api private
@@ -40,7 +28,7 @@ class Acfs::Resource
     # @api private
     #
     def write_raw_attribute(name, value, opts = {})
-      attribute_will_change! name if opts[:change].nil? || opts[:change]
+      attribute_will_change!(name) if opts[:change].nil? || opts[:change]
       super
     end
   end
