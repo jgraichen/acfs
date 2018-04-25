@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+
+* Add Rails 5.2 compatibility
+
 ## 1.1.1
 
 * `each_item`: Pass collection to provided block (#40)
