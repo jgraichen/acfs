@@ -68,8 +68,15 @@ module Acfs
     def initialize(opts = {})
       @errors   = opts.delete :errors
       @resource = opts.delete :resource
-      opts[:message] ||= @errors.map {|k, v| "#{k}: #{v.join ', '}" }.join ', ' if @errors.is_a? Hash
-      opts[:message] ||= @errors.join ', ' if @errors.is_a? Array
+
+      if @errors.is_a?(Hash)
+        opts[:message] ||= @errors.each_pair.map do |k, v|
+          @errors.is_a?(Array) ? "#{k}: #{v.join(', ')}" : "#{k}: #{v}"
+        end.join ', '
+      elsif @errors.is_a?(Array)
+        opts[:message] ||= @errors.join ', '
+      end
+
       super
     end
   end

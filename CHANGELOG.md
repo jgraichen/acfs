@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+* Fix issues with resources errors if response payload differs from the expected `field => [messages]`, such as `field => message` or `[messages]`.
+
 ## 1.2.0
 
 * Add Rails 5.2 compatibility

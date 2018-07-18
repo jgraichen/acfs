@@ -12,10 +12,17 @@ class Acfs::Resource
     end
 
     def remote_errors=(errors)
-      (errors || []).each do |field, errs|
-        errs.each do |err|
-          self.errors.add field.to_sym, err
-          remote_errors.add field.to_sym, err
+      if errors.respond_to?(:each_pair)
+        errors.each_pair do |field, errs|
+          Array(errs).each do |err|
+            self.errors.add field.to_sym, err
+            remote_errors.add field.to_sym, err
+          end
+        end
+      else
+        Array(errors).each do |err|
+          self.errors.add :base, err
+          remote_errors.add :base, err
         end
       end
     end

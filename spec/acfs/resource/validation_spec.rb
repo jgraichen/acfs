@@ -66,14 +66,31 @@ describe Acfs::Resource::Validation do
       after  { Acfs::Stub.disable }
 
       before do
-        Acfs::Stub.resource MyUser, :create, with: {}, return: {errors: {name: ['can\'t be blank']}}, raise: 422
+        Acfs::Stub.resource MyUser, :create,
+          with: {}, return: {errors: errors}, raise: 422
       end
 
       let(:params)   { {} }
       let(:resource) { MyUser.create params }
-      subject { resource }
+      subject { resource.errors.to_hash }
 
-      its(:errors) { expect(subject.errors.to_hash).to eq(name: ['can\'t be blank']) }
+      context 'with `field => [messages]` payload' do
+        let(:errors) { {name: ['cannot be blank']} }
+
+        it { is_expected.to eq(name: ['cannot be blank']) }
+      end
+
+      context 'with `field => message` payload' do
+        let(:errors) { {name: 'cannot be blank'} }
+
+        it { is_expected.to eq(name: ['cannot be blank']) }
+      end
+
+      context 'with `[messages]` payload' do
+        let(:errors) { ['cannot be blank'] }
+
+        it { is_expected.to eq(base: ['cannot be blank']) }
+      end
     end
   end
 
