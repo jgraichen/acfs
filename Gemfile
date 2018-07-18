@@ -19,6 +19,7 @@ gem 'webmock', '~> 3.0'
 group :development do
   gem 'redcarpet', platform: :ruby
   gem 'yard'
+  gem 'rake-release', '~> 1.0'
 end
 
 group :test do
