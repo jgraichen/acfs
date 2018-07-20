@@ -1,12 +1,17 @@
-require 'rake/release/task'
 require 'rspec/core/rake_task'
-
-Rake::Release::Task.new do |spec|
-  spec.sign_tag = true
-end
 
 RSpec::Core::RakeTask.new(:spec)
 task default: :spec
+
+# rubocop:disable HandleExceptions
+begin
+  require 'rake/release/task'
+
+  Rake::Release::Task.new do |spec|
+    spec.sign_tag = true
+  end
+rescue LoadError
+end
 
 # rubocop:disable HandleExceptions
 begin
