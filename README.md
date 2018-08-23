@@ -15,9 +15,7 @@ Acfs covers model and service abstraction, convenient query and filter methods, 
 
 Add this line to your application's Gemfile:
 
-    gem 'acfs', '~> 0.21.0'
-
-**Note:** Acfs is under development. I'll try to avoid changes to the public API but internal APIs may change quite often.
+    gem 'acfs', '~> 1.2'
 
 And then execute:
 
