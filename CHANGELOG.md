@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+* Change default error messages to a more compact representation to ease integration with error reporting services.
+
 ## 1.2.1
 
 * Fix issues with resources errors if response payload differs from the expected `field => [messages]`, such as `field => message` or `[messages]`.
