@@ -17,26 +17,16 @@ module Acfs
 
     def initialize(opts = {})
       @response = opts[:response]
-      message = opts[:message] || 'Received erroneous response'
+      message = opts[:message]
       if response
-        message << ": #{response.code}"
-        if response.data
-          message << "\n  with content:\n    "
-          message << response.data.map {|k, v| "#{k.inspect}: #{v.inspect}" }.join("\n    ")
+        if message
+          message << ':'
+        else
+          message = 'Received'
         end
-        if response.headers.any?
-          message << "\n  with headers:\n    "
-          message << response.headers.map {|k, v| "#{k}: #{v}" }.join("\n    ")
-        end
-        message << "\nbased on request: #{response.request.method.upcase} #{response.request.url} #{response.request.format}"
-        if response.request.data
-          message << "\n  with content:\n    "
-          message << response.request.data.map {|k, v| "#{k.inspect}: #{v.inspect}" }.join("\n    ")
-        end
-        if response.request.headers.any?
-          message << "\n  with headers:\n    "
-          message << response.request.headers.map {|k, v| "#{k}: #{v}" }.join("\n    ")
-        end
+        message << " #{response.code} for #{response.request.method.upcase} #{response.request.url} #{response.request.format}"
+      else
+        message ||= 'Received erroneous response'
       end
       super opts, message
     end
