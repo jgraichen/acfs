@@ -3,7 +3,6 @@
 source "https://rubygems.org"
 
 gem "appraisal"
-gem "coveralls"
 gem "json", "~> 2.1"
 gem "rake"
 gem "rspec", "~> 3.6"
@@ -18,12 +17,15 @@ gem "railties", "~> 4.2.0", require: "rails"
 group :development do
   gem "redcarpet", platform: :ruby
   gem "yard"
+  gem "rake-release", "~> 1.0"
 end
 
 group :test do
   gem "msgpack", "~> 1.1"
   gem "pry"
   gem "pry-byebug"
+  gem "codecov", require: false
+  gem "simplecov", require: false
 end
 
 gemspec path: "../"
