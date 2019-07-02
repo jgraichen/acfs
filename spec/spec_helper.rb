@@ -1,11 +1,14 @@
 require 'rspec'
 require 'webmock/rspec'
 
-if ENV['CI'] || (defined?(:RUBY_ENGINE) && RUBY_ENGINE != 'rbx')
-  require 'coveralls'
-  Coveralls.wear! do
-    add_filter 'spec'
-  end
+require 'simplecov'
+SimpleCov.start do
+  add_filter 'spec'
+end
+
+if ENV['CI']
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
 
 require 'bundler'

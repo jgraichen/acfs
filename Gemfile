@@ -7,7 +7,6 @@ gemspec
 # Development gems
 #
 gem 'appraisal'
-gem 'coveralls'
 gem 'json', '~> 2.1'
 gem 'rake'
 gem 'rspec', '~> 3.6'
@@ -26,4 +25,7 @@ group :test do
   gem 'msgpack', '~> 1.1'
   gem 'pry'
   gem 'pry-byebug'
+
+  gem 'codecov', require: false
+  gem 'simplecov', require: false
 end
