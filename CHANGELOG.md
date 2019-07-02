@@ -1,5 +1,25 @@
 # Changelog
 
+
+
+## Unreleased
+---
+
+### New
+
+### Changes
+
+### Fixes
+
+### Breaks
+
+
+## 1.3.1 - (2019-07-02)
+---
+
+### Fixes
+* Improve URL argument encoding when building resource requests
+
 ## 1.3.0
 
 * Change default error messages to a more compact representation to ease integration with error reporting services.
