@@ -33,7 +33,7 @@ module Acfs
 
     def str
       uri = raw.dup
-      uri.path = URI.escape '/' + struct.map {|s| lookup_arg(s, args) }.join('/')
+      uri.path = '/' + struct.map {|s| lookup_arg(s, args) }.join('/')
       uri.to_s
     end
 
@@ -58,7 +58,7 @@ module Acfs
 
     def lookup_replacement(sym, args)
       value = get_replacement(sym, args).to_s
-      return value unless value.empty?
+      return ::URI.encode_www_form_component(value) unless value.empty?
 
       raise ArgumentError.new "Cannot replace path argument `#{sym}' with empty string."
     end
