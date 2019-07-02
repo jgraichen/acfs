@@ -398,7 +398,7 @@ describe Acfs::Resource::QueryMethods do
           expect(block).not_to receive(:call)
 
           model.find_by! age: 24, &block
-          expect { Acfs.run }.to raise_error
+          expect { Acfs.run }.to raise_error Acfs::ResourceNotFound
         end
       end
     end
