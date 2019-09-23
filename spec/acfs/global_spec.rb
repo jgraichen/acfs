@@ -71,6 +71,50 @@ describe ::Acfs::Global do
       end
       Acfs.run
     end
+
+    context 'with an empty result for a find_by call' do
+      before do
+        stub_request(:get, %r{http://users.example.org/users})
+          .with(query: {id: '2'})
+          .to_return(
+            status: 200,
+            body: '{}',
+            headers: {'Content-Type' => 'application/json'}
+          )
+      end
+
+      it 'invokes once both requests are finished' do
+        user1 = MyUser.find 1
+        user2 = MyUser.find_by id: 2
+
+        expect do |cb|
+          Acfs.on(user1, user2, &cb)
+          Acfs.run
+        end.to yield_with_args(user1, be_nil)
+      end
+
+      it 'invokes once remaining requests are finished' do
+        user1 = MyUser.find 1
+        Acfs.run # Finish the first request
+
+        user2 = MyUser.find_by id: 2
+
+        expect do |cb|
+          Acfs.on(user1, user2, &cb)
+          Acfs.run
+        end.to yield_with_args(user1, be_nil)
+      end
+
+      it 'invokes immediately when all requests have already been finished' do
+        user1 = MyUser.find 1
+        user2 = MyUser.find_by id: 2
+        Acfs.run
+
+        expect do |cb|
+          Acfs.on(user1, user2, &cb)
+        end.to yield_with_args(user1, be_nil)
+      end
+    end
   end
 
   describe '#runner' do

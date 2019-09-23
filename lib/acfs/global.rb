@@ -73,7 +73,7 @@ module Acfs
       end
       return false if block.nil?
 
-      if resource.loaded?
+      if resource.nil? || resource.loaded?
         block.call resource
       else
         resource.__callbacks__ << block
@@ -81,9 +81,17 @@ module Acfs
     end
 
     def on(*resources)
+      # If all resources have already been loaded, we run the callback immediately.
+      if resources.all? {|res| res.nil? || res.loaded? }
+        yield(*resources)
+        return
+      end
+
+      # Otherwise, we add a callback to *each* resource with a guard that ensures
+      # that only the very last resource being loaded executes the callback.
       resources.each do |resource|
         add_callback resource do |_|
-          yield(*resources) unless resources.any? {|res| !res.loaded? }
+          yield(*resources) if resources.all? {|res| res.nil? || res.loaded? }
         end
       end
     end
