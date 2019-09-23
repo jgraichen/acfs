@@ -3,19 +3,19 @@
 
 
 ## Unreleased
----
 
 ### New
 
 ### Changes
 
 ### Fixes
+* Fix Acfs.on callbacks for empty find_by results (#42)
 
 ### Breaks
 
+---
 
 ## 1.3.1 - (2019-07-02)
----
 
 ### Fixes
 * Improve URL argument encoding when building resource requests
