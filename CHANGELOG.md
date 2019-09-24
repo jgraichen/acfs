@@ -3,15 +3,23 @@
 
 
 ## Unreleased
+---
 
 ### New
 
 ### Changes
 
 ### Fixes
-* Fix Acfs.on callbacks for empty find_by results (#42)
 
 ### Breaks
+
+
+## 1.3.2 - (2019-09-24)
+
+
+### Fixes
+* Fix Acfs.on callbacks for empty find_by results (#42)
+
 
 ---
 
