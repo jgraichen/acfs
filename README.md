@@ -3,8 +3,6 @@
 [![Gem Version](https://badge.fury.io/rb/acfs.svg)](http://badge.fury.io/rb/acfs)
 [![Build Status](http://img.shields.io/travis/jgraichen/acfs/master.svg)](https://travis-ci.org/jgraichen/acfs)
 [![Coverage Status](http://img.shields.io/coveralls/jgraichen/acfs/master.svg)](https://coveralls.io/r/jgraichen/acfs)
-[![Code Climate](http://img.shields.io/codeclimate/github/jgraichen/acfs.svg)](https://codeclimate.com/github/jgraichen/acfs)
-[![Dependency Status](http://img.shields.io/gemnasium/jgraichen/acfs.svg)](https://gemnasium.com/jgraichen/acfs)
 [![RubyDoc Documentation](http://img.shields.io/badge/rubydoc-here-blue.svg)](http://rubydoc.info/github/jgraichen/acfs/master/frames)
 
 Acfs is a library to develop API client libraries for single services within a larger service oriented application.
