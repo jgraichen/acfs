@@ -27,7 +27,7 @@ module Acfs
     # @return [undefined]
     #
     def configure(&block)
-      if block.arity > 0
+      if block.arity.positive?
         block.call self
       else
         instance_eval(&block)
@@ -39,8 +39,12 @@ module Acfs
     # @overload locate(service, uri)
     #   Configures URL where a service can be reached.
     #
-    #   @param [Symbol] service Service identity key for service that is reachable under given URL.
-    #   @param [String] uri URL where service is reachable. Will be passed to {URI.parse}.
+    #   @param [Symbol] service
+    #     Service identity key for service that is reachable under given URL.
+    #
+    #   @param [String] uri
+    #     URL where service is reachable. Will be passed to {URI.parse}.
+    #
     #   @return [undefined]
     #
     # @overload locate(service)
@@ -97,18 +101,19 @@ module Acfs
       # @return [Configuration]
       #
       def current
-        @configuration ||= new
+        @current ||= new
       end
 
       # @api private
       #
-      # Swap configuration object with given new one. Must be a {Configuration} object.
+      # Swap configuration object with given new one. Must be
+      # a {Configuration} object.
       #
       # @param [Configuration] configuration
       # @return [undefined]
       #
       def set(configuration)
-        @configuration = configuration if configuration.is_a? Configuration
+        @current = configuration if configuration.is_a? Configuration
       end
     end
   end

@@ -15,6 +15,7 @@ module Acfs
 
       @opts[:with].stringify_keys! if @opts[:with].is_a? Hash
       @opts[:return].stringify_keys! if @opts[:return].is_a? Hash
+
       if @opts[:return].is_a? Array
         @opts[:return].map! {|h| h.stringify_keys! if h.is_a? Hash }
       end
