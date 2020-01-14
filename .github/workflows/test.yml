@@ -8,14 +8,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        ruby: ["2.7", "2.6", "2.5", "2.4", "2.3"]
-        rails: ["6.0", "5.2", "5.1", "5.0", "4.2", "master"]
-        exclude:
-          - { ruby: "2.7", rails: "4.2" }
-          - { ruby: "2.4", rails: "6.0" }
-          - { ruby: "2.4", rails: "master" }
-          - { ruby: "2.3", rails: "6.0" }
-          - { ruby: "2.3", rails: "master" }
+        ruby: ["2.7", "2.6", "2.5"]
+        rails: ["6.0", "5.2"]
 
     steps:
       - uses: actions/checkout@master
