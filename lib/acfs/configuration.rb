@@ -70,7 +70,7 @@ module Acfs
     # @return [undefined]
     #
     def load(filename)
-      config = YAML.safe_load(File.read(filename), aliases: true)
+      config = YAML.safe_load(File.read(filename), [], [], true)
       env    = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
 
       config = config[env] if config.key? env
