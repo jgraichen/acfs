@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs
   class Service
     module Middleware
@@ -5,7 +7,7 @@ module Acfs
         include Enumerable
 
         MUTEX = Mutex.new
-        IDENTITY = -> (i) { i }
+        IDENTITY = ->(i) { i }
 
         attr_reader :middlewares
 
@@ -41,7 +43,7 @@ module Acfs
                 next_middleware.call(klass.call(env, *args))
               end
             else
-              fail "Invalid middleware, doesn't respond to `call`: #{klass.inspect}"
+              raise "Invalid middleware, doesn't respond to `call`: #{klass.inspect}"
             end
           end
         end
@@ -51,7 +53,7 @@ module Acfs
         end
 
         def each
-          middlewares.each { |x| yield x.first }
+          middlewares.each {|x| yield x.first }
         end
 
         def clear

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs
   # @api private
   #
@@ -19,7 +21,7 @@ module Acfs
       @data     = (opts[:data]   || {}).dup
 
       if opts[:url]
-        @url      = opts[:url]
+        @url = opts[:url]
       else
         @location = resource.location(action: @action).extract_from(@params, @data)
         @url      = location.str
@@ -29,11 +31,11 @@ module Acfs
     end
 
     def single?
-      [:read, :update, :delete].include? action
+      %i[read update delete].include? action
     end
 
     def synchronous?
-      [:update, :delete, :create].include? action
+      %i[update delete create].include? action
     end
 
     def id

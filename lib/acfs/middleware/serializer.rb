@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs
   module Middleware
     # A base middleware that does not modify request or response.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Acfs::Resource::Persistence do
@@ -226,8 +228,12 @@ describe Acfs::Resource::Persistence do
 
       it 'should set local errors hash' do
         model.name = ''
-        model.save! rescue nil
-        expect(model.errors.to_hash).to be == {name: %w(required)}
+        begin
+          model.save!
+        rescue StandardError
+          nil
+        end
+        expect(model.errors.to_hash).to be == {name: %w[required]}
       end
     end
 
@@ -265,7 +271,7 @@ describe Acfs::Resource::Persistence do
       it 'should raise an error' do
         expect { model_class.create! data }.to \
           raise_error(::Acfs::InvalidResource) do |error|
-            expect(error.errors).to be == {'name' => %w(required)}
+            expect(error.errors).to be == {'name' => %w[required]}
           end
       end
     end
@@ -295,7 +301,7 @@ describe Acfs::Resource::Persistence do
       end
 
       it 'should contain error hash' do
-        expect(subject.errors.to_hash).to eq name: %w(required)
+        expect(subject.errors.to_hash).to eq name: %w[required]
       end
     end
 

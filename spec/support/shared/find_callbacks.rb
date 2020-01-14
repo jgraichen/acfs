@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples 'a query method with multi-callback support' do
   let(:cb) { Proc.new }
 

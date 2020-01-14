@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Acfs::Resource
   # Provides method to check for loading state of resources.
   # A resource that is created but not yet fetched will be loaded

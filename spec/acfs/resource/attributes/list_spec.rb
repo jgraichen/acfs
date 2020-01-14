@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Acfs::Resource::Attributes::List do
@@ -13,16 +15,16 @@ describe Acfs::Resource::Attributes::List do
 
     context 'with blank string (I)' do
       let(:value) { '' }
-      it { expect(subject.call).to eq Array.new }
+      it { expect(subject.call).to eq [] }
     end
 
     context 'with blank string (II)' do
       let(:value) { "  \t" }
-      it { expect(subject.call).to eq Array.new }
+      it { expect(subject.call).to eq [] }
     end
 
     context 'with array' do
-      let(:value) { %w(abc cde efg) }
+      let(:value) { %w[abc cde efg] }
       it { expect(subject.call).to eq value }
     end
 

@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 module Acfs::Resource::Attributes
-  #
   class Base
     attr_reader :default
 

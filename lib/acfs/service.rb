@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'acfs/service/middleware'
 
 module Acfs
@@ -47,12 +49,16 @@ module Acfs
                         opts[:path].to_s
                       end
 
-               path = (resource_class.name || 'class').pluralize.underscore if path.blank?
+               if path.blank?
+                 path = (resource_class.name || 'class').pluralize.underscore
+               end
 
                resource_class.location_default_path(action, path.strip)
              end
 
-      raise ArgumentError.new "Location for `#{action}' explicit disabled by set to nil." if path.nil?
+      if path.nil?
+        raise ArgumentError.new "Location for `#{action}' explicit disabled by set to nil."
+      end
 
       Location.new [self.class.base_url.to_s, path.to_s].join('/')
     end

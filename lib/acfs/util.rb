@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs
   module Util
     # TODO: Merge wit features in v1.0

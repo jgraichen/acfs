@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs
   # @api private
   #
@@ -6,7 +8,7 @@ module Acfs
   class Location
     attr_reader :arguments, :raw, :struct, :args
 
-    REGEXP = /^:([A-z][A-z0-9_]*)$/
+    REGEXP = /^:([A-z][A-z0-9_]*)$/.freeze
 
     def initialize(uri, args = {})
       @raw       = URI.parse uri
@@ -40,13 +42,15 @@ module Acfs
     def raw_uri
       raw.to_s
     end
-    alias_method :to_s, :raw_uri
+    alias to_s raw_uri
 
     private
 
     def extract_arg(key, hashes)
       hashes.each_with_index do |hash, index|
-        return (index == 0 ? hash.delete(key) : hash.fetch(key)) if hash.key?(key)
+        if hash.key?(key)
+          return (index == 0 ? hash.delete(key) : hash.fetch(key))
+        end
       end
 
       nil

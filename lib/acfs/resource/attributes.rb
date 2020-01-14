@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Acfs::Resource
   #
   # = Acfs Attributes
@@ -176,9 +178,8 @@ class Acfs::Resource
       attributes[name.to_s] = value
     end
 
-    #
     module ClassMethods
-      ATTR_CLASS_BASE = '::Acfs::Resource::Attributes'.freeze
+      ATTR_CLASS_BASE = '::Acfs::Resource::Attributes'
 
       #
       # @api public

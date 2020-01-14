@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs::Resource::Attributes
   # @api public
   #
@@ -9,8 +11,7 @@ module Acfs::Resource::Attributes
   #   end
   #
   class UUID < Base
-    #
-    UUID_REGEXP = /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i
+    UUID_REGEXP = /[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}/i.freeze
 
     # @api public
     #
@@ -37,7 +38,7 @@ module Acfs::Resource::Attributes
       elsif value.to_s =~ UUID_REGEXP
         value
       else
-        raise TypeError.new "Invalid UUID: `#{value.to_s}'"
+        raise TypeError.new "Invalid UUID: `#{value}'"
       end
     end
   end

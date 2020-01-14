@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs
   class Response
     # Method to fetch information about response status.
@@ -11,7 +13,7 @@ module Acfs
         # return response.response_code unless response.nil?
         # 0
       end
-      alias_method :code, :status_code
+      alias code status_code
 
       # Return true if response was successful indicated by
       # response status code.

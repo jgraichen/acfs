@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'uri'
 require 'yaml'
 
@@ -64,7 +66,7 @@ module Acfs
     # @return [undefined]
     #
     def load(filename)
-      config = YAML.load File.read filename
+      config = YAML.safe_load(File.read(filename), aliases: true)
       env    = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
 
       config = config[env] if config.key? env

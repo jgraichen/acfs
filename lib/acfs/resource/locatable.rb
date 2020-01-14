@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Acfs::Resource
   # Provide methods for generation URLs for resources.
   #
@@ -11,7 +13,6 @@ class Acfs::Resource
   module Locatable
     extend ActiveSupport::Concern
 
-    #
     module ClassMethods
       # @overload url(suffix)
       #   @deprecated
@@ -40,7 +41,10 @@ class Acfs::Resource
       #   @return [String] Generated URL.
       #
       def url(suffix = nil, opts = {})
-        opts, suffix = suffix, nil if suffix.is_a? Hash
+        if suffix.is_a? Hash
+          opts = suffix
+          suffix = nil
+        end
 
         opts[:action] = :list if suffix
 
@@ -85,9 +89,9 @@ class Acfs::Resource
       def location_default_path(action, path)
         case action
           when :list, :create
-            return path
+            path
           when :read, :update, :delete
-            return "#{path}/:id"
+            "#{path}/:id"
         end
       end
     end
@@ -109,8 +113,8 @@ class Acfs::Resource
       return nil if need_primary_key? && !primary_key?
 
       self.class.service
-        .location(self.class, opts.reverse_merge(action: :read))
-        .build(attributes).str
+          .location(self.class, opts.reverse_merge(action: :read))
+          .build(attributes).str
     end
 
     # @api private

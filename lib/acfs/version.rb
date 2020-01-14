@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs
   module VERSION
     MAJOR = 1

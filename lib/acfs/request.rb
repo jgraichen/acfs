@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'acfs/request/callbacks'
 
 module Acfs
@@ -29,6 +31,7 @@ module Acfs
     class << self
       def new(*attrs)
         return attrs[0] if attrs[0].is_a? self
+
         super
       end
     end

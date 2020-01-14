@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Acfs::Resource
   # Methods providing the query interface for finding resouces.
   #
@@ -14,7 +16,6 @@ class Acfs::Resource
   module QueryMethods
     extend ActiveSupport::Concern
 
-    #
     module ClassMethods
       # @api public
       #
@@ -89,7 +90,7 @@ class Acfs::Resource
 
         collection
       end
-      alias_method :where, :all
+      alias where all
 
       # @api public
       #
@@ -140,7 +141,7 @@ class Acfs::Resource
             raise Acfs::ResourceNotFound.new message: 'Received erroneous ' \
               "response: no `#{name}` with params #{params} found"
           end
-          block.call m unless block.nil?
+          block&.call m
         end
       end
 
@@ -249,6 +250,7 @@ class Acfs::Resource
 
       def resource_class_lookup(type)
         return self if type.nil?
+
         klass = type.camelize.constantize
 
         unless klass <= self

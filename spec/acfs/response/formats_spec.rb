@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Acfs::Response::Formats do
@@ -9,7 +11,7 @@ describe Acfs::Response::Formats do
   let(:response)  { Acfs::Response.new request, status: status, headers: headers, body: body }
 
   context 'without Content-Type header' do
-    let(:headers)   { {} }
+    let(:headers) { {} }
 
     it "should fallback on 'text/plain'" do
       expect(response.content_type).to be == Mime[:text]

@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+git_source(:github) {|repo| "https://github.com/#{repo}.git" }
 
 gemspec
 
@@ -16,9 +18,11 @@ gem 'webmock', '~> 3.0'
 
 # Doc
 group :development do
-  gem 'redcarpet', platform: :ruby
-  gem 'yard'
   gem 'rake-release', '~> 1.0'
+  gem 'redcarpet', platform: :ruby
+  gem 'yard', '~> 0.9.24'
+
+  gem 'rubocop', '~> 0.79.0'
 end
 
 group :test do

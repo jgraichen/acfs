@@ -1,10 +1,11 @@
+# frozen_string_literal: true
+
 require 'delegate'
 
 require 'acfs/resource/loadable'
 require 'acfs/collections/paginatable'
 
 module Acfs
-  #
   class Collection < ::Delegator
     include Resource::Loadable
     include Acfs::Util::Callbacks

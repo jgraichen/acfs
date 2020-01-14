@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Acfs::Resource
   # Included by Acfs::Model. Allows to configure the service
   # a resource belongs to.
@@ -5,7 +7,6 @@ class Acfs::Resource
   module Service
     extend ActiveSupport::Concern
 
-    #
     module ClassMethods
       # @api public
       #
@@ -35,6 +36,7 @@ class Acfs::Resource
       #
       def service(klass = nil, options = {})
         return (@service = klass.new options) if klass
+
         @service || superclass.service
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rspec'
 require 'webmock/rspec'
 
@@ -17,7 +19,7 @@ Bundler.require(:default, :test)
 require 'acfs'
 require 'webmock/rspec'
 
-Dir[File.expand_path('spec/support/**/*.rb')].each {|f| require f }
+Dir[File.expand_path('spec/support/**/*.rb')].sort.each {|f| require f }
 
 RSpec.configure do |config|
   # ## Mock Framework

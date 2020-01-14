@@ -1,25 +1,23 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 class NullAdapter < Acfs::Adapter::Base
   # Start processing queued requests.
   #
-  def start
-  end
+  def start; end
 
   # Abort running and queued requests.
   #
-  def abort
-  end
+  def abort; end
 
   # Run request right now skipping queue.
   #
-  def run(_)
-  end
+  def run(_); end
 
   # Enqueue request to be run later.
   #
-  def queue(_)
-  end
+  def queue(_); end
 end
 
 class NotificationCollector

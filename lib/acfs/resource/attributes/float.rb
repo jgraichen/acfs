@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs::Resource::Attributes
   # @api public
   #
@@ -21,9 +23,9 @@ module Acfs::Resource::Attributes
 
       case value
         when ::Float then value
-        when "Infinity" then ::Float::INFINITY
-        when "-Infinity" then -::Float::INFINITY
-        when "NaN" then ::Float::NAN
+        when 'Infinity' then ::Float::INFINITY
+        when '-Infinity' then -::Float::INFINITY
+        when 'NaN' then ::Float::NAN
         else Float(value)
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'acfs'
 
 RSpec.configure do |config|

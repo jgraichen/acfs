@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Acfs::Collection do
   let(:model) { MyUser }
 
   describe 'Pagination' do
-    let(:params) { Hash.new }
+    let(:params) { {} }
     let!(:collection) { model.all params }
 
     subject { Acfs.run; collection }
@@ -62,7 +64,7 @@ describe Acfs::Collection do
           .to_return response([{id: 1, name: 'Anon', age: 12, born_at: 'Berlin'}],
             headers: {
               'X-Total-Pages' => '2',
-              'Link'          => '<http://users.example.org/users?page=2>; rel="next"'
+              'Link' => '<http://users.example.org/users?page=2>; rel="next"'
             })
       end
       let!(:req) do
@@ -86,7 +88,7 @@ describe Acfs::Collection do
           .to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
             headers: {
               'X-Total-Pages' => '2',
-              'Link'          => '<http://users.example.org/users>; rel="prev"'
+              'Link' => '<http://users.example.org/users>; rel="prev"'
             })
       end
       let!(:req) do
@@ -110,7 +112,7 @@ describe Acfs::Collection do
           .to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
             headers: {
               'X-Total-Pages' => '2',
-              'Link'          => '<http://users.example.org/users>; rel="first"'
+              'Link' => '<http://users.example.org/users>; rel="first"'
             })
       end
       let!(:req) do
@@ -134,7 +136,7 @@ describe Acfs::Collection do
           .to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
             headers: {
               'X-Total-Pages' => '2',
-              'Link'          => '<http://users.example.org/users?page=12>; rel="last"'
+              'Link' => '<http://users.example.org/users?page=12>; rel="last"'
             })
       end
       let!(:req) do

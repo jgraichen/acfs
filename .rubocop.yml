@@ -1,62 +1,57 @@
-inherit_from: .rubocop_todo.yml
-
 AllCops:
-  Include:
-    - '**/*.gemspec'
-    - '**/Rakefile'
   Exclude:
-    - 'vendor/**'
-    - 'db/schema.rb'
+    - vendor/**
+    - gemfiles/**
+  TargetRubyVersion: 2.3
 
-Style/AlignParameters:
+
+Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
 
-Style/BracesAroundHashParameters:
-  EnforcedStyle: context_dependent
-
-Style/SpaceInsideHashLiteralBraces:
-  EnforcedStyle: no_space
-
-Style/RaiseArgs:
-  EnforcedStyle: compact
-
-Style/Documentation:
-  Enabled: false
-
-Style/SpaceInsideBlockBraces:
-  EnforcedStyle: space
-  EnforcedStyleForEmptyBraces: no_space
-  SpaceBeforeBlockParameters: false
-
-Style/SignalException:
-  EnforcedStyle: only_raise
-
-Style/CaseIndentation:
-  IndentWhenRelativeTo: end
+Layout/CaseIndentation:
+  EnforcedStyle: end
   SupportedStyles:
     - case
     - end
   IndentOneStep: true
 
+Layout/LineLength:
+  Exclude:
+    - spec/**/*_spec.rb
+
+Layout/SpaceInsideBlockBraces:
+  EnforcedStyle: space
+  EnforcedStyleForEmptyBraces: no_space
+  SpaceBeforeBlockParameters: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  EnforcedStyle: no_space
+
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*_spec.rb
+    - '**/*.gemspec'
+
+
+Style/BracesAroundHashParameters:
+  EnforcedStyle: context_dependent
+
 Style/ClassAndModuleChildren:
-  EnforcedStyle: compact
   Enabled: false
 
-Metrics/LineLength:
-  Exclude:
-    - '**/*_spec.rb'
-    - 'spec/factories.rb'
-    - 'config/**/*'
-    - 'db/**/*'
+Style/Documentation:
+  Enabled: false
 
-Metrics/MethodLength:
-  Exclude:
-    - 'db/**/*'
+Style/RaiseArgs:
+  EnforcedStyle: compact
 
 Style/Semicolon:
   Exclude:
-    - '**/*_spec.rb'
+    - spec/**/*_spec.rb
 
-Style/RescueModifier:
-  Exclude:
-    - '**/*_spec.rb'
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/TrivialAccessors:
+  AllowPredicates: true

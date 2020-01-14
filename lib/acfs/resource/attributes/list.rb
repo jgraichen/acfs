@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs::Resource::Attributes
   # @api public
   #

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 Acfs.configure do
   locate :user_service, 'http://users.example.org'

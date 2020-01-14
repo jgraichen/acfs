@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'acfs/response/formats'
 require 'acfs/response/status'
 require 'active_support/core_ext/module/delegation'

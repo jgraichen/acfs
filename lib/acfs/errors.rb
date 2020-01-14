@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs
   # Acfs base error.
   #
@@ -17,17 +19,15 @@ module Acfs
 
     def initialize(opts = {})
       @response = opts[:response]
-      message = opts[:message]
+
       if response
-        if message
-          message << ':'
-        else
-          message = 'Received'
-        end
-        message << " #{response.code} for #{response.request.method.upcase} #{response.request.url} #{response.request.format}"
+        message = (opts[:message] ? opts[:message] + ':' : 'Received') +
+                  " #{response.code} for #{response.request.method.upcase}" \
+                  " #{response.request.url} #{response.request.format}"
       else
-        message ||= 'Received erroneous response'
+        message = opts[:message] || 'Received erroneous response'
       end
+
       super opts, message
     end
   end
@@ -41,8 +41,11 @@ module Acfs
       @stubs     = opts.delete :stubs
       @operation = opts.delete :operation
 
-      super opts, "Ambiguous stubs for #{operation.action} on #{operation.resource}.\n" +
-        stubs.map {|s| "  #{s.opts.pretty_inspect}" }.join
+      message = "Ambiguous stubs for #{operation.action} " \
+                "on #{operation.resource}.\n" +
+                stubs.map {|s| "  #{s.opts.pretty_inspect}" }.join
+
+      super opts, message
     end
   end
 
@@ -51,7 +54,6 @@ module Acfs
   class ResourceNotFound < ErroneousResponse
   end
 
-  #
   class InvalidResource < ErroneousResponse
     attr_reader :errors, :resource
 
@@ -97,7 +99,8 @@ module Acfs
     def initialize(opts = {})
       @base_class    = opts.delete :base_class
       @type_name     = opts.delete :type_name
-      opts[:message] = "Received resource type `#{type_name}` is no subclass of #{base_class}"
+      opts[:message] = "Received resource type `#{type_name}` " \
+                       "is no subclass of #{base_class}"
       super
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Acfs::Request do
@@ -18,7 +20,7 @@ describe Acfs::Request do
       let(:params) { {id: 10} }
 
       it 'should return URL without query' do
-        expect(request.url).to be == "#{url}"
+        expect(request.url).to be == url.to_s
       end
     end
   end

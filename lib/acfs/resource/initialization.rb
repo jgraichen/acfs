@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Acfs::Resource
   #
   # Initialization drop-in for pre-4.0 ActiveModel.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Acfs::Resource
   #
   # Allow to track the persistence state of a model.
@@ -40,7 +42,7 @@ class Acfs::Resource
     def new?
       !loaded?
     end
-    alias_method :new_record?, :new?
+    alias new_record? new?
 
     # @api public
     #
@@ -86,9 +88,9 @@ class Acfs::Resource
       operation((new? ? :create : :update), opts) do |data|
         update_with data
       end
-    rescue ::Acfs::InvalidResource => err
-      self.remote_errors = err.errors
-      raise err
+    rescue ::Acfs::InvalidResource => e
+      self.remote_errors = e.errors
+      raise e
     end
 
     # @api public
@@ -251,6 +253,7 @@ class Acfs::Resource
 
     def check_loaded!(opts = {})
       return if loaded? || opts[:force]
+
       raise ::Acfs::ResourceNotLoaded.new resource: self
     end
   end

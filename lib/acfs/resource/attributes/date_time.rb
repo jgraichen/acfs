@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs::Resource::Attributes
   # @api public
   #
@@ -10,7 +12,6 @@ module Acfs::Resource::Attributes
   #   end
   #
   class DateTime < Base
-
     # @api public
     #
     # Cast given object to DateTime.

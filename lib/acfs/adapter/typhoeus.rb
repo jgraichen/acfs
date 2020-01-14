@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'typhoeus'
 
 module Acfs
@@ -11,7 +13,7 @@ module Acfs
 
       def start
         hydra.run
-      rescue
+      rescue StandardError
         @hydra = nil
         raise
       end
@@ -37,7 +39,7 @@ module Acfs
           method: req.method,
           params: req.params,
           headers: req.headers.merge(
-            'Expect'            => '',
+            'Expect' => '',
             'Transfer-Encoding' => ''
           ),
           body: req.body

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Acfs::Resource::Attributes::Dict do
@@ -13,12 +15,12 @@ describe Acfs::Resource::Attributes::Dict do
 
     context 'with blank string (I)' do
       let(:value) { '' }
-      it { expect(subject.call).to eq Hash.new }
+      it { expect(subject.call).to eq({}) }
     end
 
     context 'with blank string (II)' do
       let(:value) { "  \t" }
-      it { expect(subject.call).to eq Hash.new }
+      it { expect(subject.call).to eq({}) }
     end
 
     context 'with hash' do

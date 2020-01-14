@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 
 def response(data = nil, opts = {})

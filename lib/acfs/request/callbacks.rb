@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs
   class Request
     # Module containing callback handling for Requests.
@@ -43,7 +45,9 @@ module Acfs
       private
 
       def call_callback(res, index)
-        callbacks[index].call res, proc {|bres| call_callback bres, index + 1 } if index < callbacks.size
+        if index < callbacks.size
+          callbacks[index].call res, proc {|bres| call_callback bres, index + 1 }
+        end
       end
     end
   end

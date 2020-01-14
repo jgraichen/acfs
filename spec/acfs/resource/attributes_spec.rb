@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Acfs::Resource::Attributes do
@@ -52,7 +54,7 @@ describe Acfs::Resource::Attributes do
     let(:action) { -> { m.write_attributes(*args) } }
     subject { action }
 
-    it 'should update attributes'  do
+    it 'should update attributes' do
       should change(m, :attributes)
         .from(name: 'The Great John', age: 25)
         .to(name: 'The Great James', age: 25)
@@ -70,7 +72,7 @@ describe Acfs::Resource::Attributes do
 
       it { should_not raise_error }
 
-      it 'should update known attributes and store unknown'  do
+      it 'should update known attributes and store unknown' do
         should change(m, :attributes)
           .from(name: 'The Great John', age: 25)
           .to(name: 'The Great James', age: 25, born_at: 'today')
@@ -85,7 +87,7 @@ describe Acfs::Resource::Attributes do
           expect do
             begin
               subject.call
-            rescue
+            rescue StandardError
               true
             end
           end.to_not change(m, :attributes)
@@ -171,7 +173,7 @@ describe Acfs::Resource::Attributes do
         end
 
         it 'includes superclass attributes' do
-          expect(submodel.attributes.keys).to match_array %w(age born_at)
+          expect(submodel.attributes.keys).to match_array %w[age born_at]
         end
       end
     end

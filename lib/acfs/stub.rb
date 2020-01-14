@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'rack/utils'
 
 module Acfs
   # Global handler for stubbing resources.
   #
   class Stub
-    ACTIONS = [:read, :create, :update, :delete, :list]
+    ACTIONS = %i[read create update delete list].freeze
 
     attr_reader :opts
 
@@ -13,7 +15,9 @@ module Acfs
 
       @opts[:with].stringify_keys! if @opts[:with].is_a? Hash
       @opts[:return].stringify_keys! if @opts[:return].is_a? Hash
-      @opts[:return].map! {|h| h.stringify_keys! if h.is_a? Hash } if @opts[:return].is_a? Array
+      if @opts[:return].is_a? Array
+        @opts[:return].map! {|h| h.stringify_keys! if h.is_a? Hash }
+      end
     end
 
     def accept?(op)
@@ -28,8 +32,13 @@ module Acfs
       case opts.fetch(:match, :inclusion)
         when :legacy
           return true if with.empty? && params.empty? && data.empty?
-          return true if with.reject {|_, v| v.nil? } == params.reject {|_, v| v.nil? }
-          return true if with.reject {|_, v| v.nil? } == data.reject {|_, v| v.nil? }
+          if with.reject {|_, v| v.nil? } == params.reject {|_, v| v.nil? }
+            return true
+          end
+          if with.reject {|_, v| v.nil? } == data.reject {|_, v| v.nil? }
+            return true
+          end
+
           false
         when :inclusion
           with.each_pair.all? do |k, v|
@@ -43,7 +52,9 @@ module Acfs
     end
 
     def called?(count = nil)
-      count = count.count if count.respond_to? :count # For `5.times` Enumerators
+      if count.respond_to? :count
+        count = count.count
+      end # For `5.times` Enumerators
       count.nil? ? calls.any? : calls.size == count
     end
 
@@ -60,8 +71,8 @@ module Acfs
 
         response = Acfs::Response.new op.request,
           headers: opts[:headers] || {},
-          status:  opts[:status] || 200,
-          data:    data || {}
+          status: opts[:status] || 200,
+          data: data || {}
         op.call data, response
       else
         raise ArgumentError.new 'Unsupported stub.'
@@ -72,6 +83,7 @@ module Acfs
 
     def raise_error(op, name, data)
       raise name if name.is_a? Class
+
       data.stringify_keys! if data.respond_to? :stringify_keys!
 
       op.handle_failure ::Acfs::Response.new op.request, status: Rack::Utils.status_code(name), data: data
@@ -83,7 +95,9 @@ module Acfs
       #
       def resource(klass, action, opts = {}, &_block)
         action = action.to_sym
-        raise ArgumentError.new "Unknown action `#{action}`." unless ACTIONS.include? action
+        unless ACTIONS.include? action
+          raise ArgumentError.new "Unknown action `#{action}`."
+        end
 
         Stub.new(opts).tap do |stub|
           stubs[klass]         ||= {}
@@ -128,7 +142,9 @@ module Acfs
 
         accepted_stubs = stubs.select {|stub| stub.accept? op }
 
-        raise AmbiguousStubError.new stubs: accepted_stubs, operation: op if accepted_stubs.size > 1
+        if accepted_stubs.size > 1
+          raise AmbiguousStubError.new stubs: accepted_stubs, operation: op
+        end
 
         accepted_stubs.first
       end
@@ -137,6 +153,7 @@ module Acfs
         stub = stub_for op
         unless stub
           return false if allow_requests?
+
           raise RealRequestsNotAllowedError.new <<-MSG.strip.gsub(/^[ ]{12}/, '')
             No stub found for `#{op.action}' on `#{op.resource.name}' with params `#{op.full_params.inspect}', data `#{op.data.inspect}' and id `#{op.id}'.
 
@@ -159,8 +176,12 @@ module Acfs
             stubs.each do |stub|
               out << "    #{action}"
               out << " with #{stub.opts[:with].inspect}" if stub.opts[:with]
-              out << " and return #{stub.opts[:return].inspect}" if stub.opts[:return]
-              out << " and raise #{stub.opts[:raise].inspect}" if stub.opts[:raise]
+              if stub.opts[:return]
+                out << " and return #{stub.opts[:return].inspect}"
+              end
+              if stub.opts[:raise]
+                out << " and raise #{stub.opts[:raise].inspect}"
+              end
               out << "\n"
             end
           end

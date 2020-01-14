@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'acfs/service/middleware'
 
 module Acfs
@@ -59,7 +61,7 @@ module Acfs
 
       enqueue_operations
       start_all
-    rescue
+    rescue StandardError
       queue.clear
       raise
     end
@@ -87,10 +89,13 @@ module Acfs
 
     def op_request(op)
       return if Acfs::Stub.enabled? && Acfs::Stub.stubbed(op)
+
       req = op.service.prepare op.request
       return unless req.is_a? Acfs::Request
+
       req = prepare req
       return unless req.is_a? Acfs::Request
+
       yield req
     end
   end

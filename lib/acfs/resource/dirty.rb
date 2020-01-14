@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Acfs::Resource
   #
   # Thin wrapper around ActiveModel::Dirty

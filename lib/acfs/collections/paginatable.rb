@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 module Acfs::Collections
-  #
   module Paginatable
     extend ActiveSupport::Concern
 

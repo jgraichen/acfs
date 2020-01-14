@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 class NotificationCollector
@@ -48,7 +50,8 @@ describe ::Acfs::Global do
       stub_request(:get, %r{http://users.example.org/users/\d+}).to_return(
         status: 200,
         body: '{}',
-        headers: {'Content-Type' => 'application/json'})
+        headers: {'Content-Type' => 'application/json'}
+      )
     end
 
     it 'should invoke when both resources' do

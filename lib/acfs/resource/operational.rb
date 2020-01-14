@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Acfs::Resource
   # @api private
   #
@@ -11,7 +13,6 @@ class Acfs::Resource
     extend ActiveSupport::Concern
     delegate :operation, to: :'self.class'
 
-    #
     module ClassMethods
       # Invoke CRUD operation.
       def operation(action, opts = {}, &block)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Acfs
   # Acfs SingletonResources
   #
@@ -71,8 +73,8 @@ module Acfs
       def all
         raise ::Acfs::UnsupportedOperation.new
       end
-      alias_method :find_by, :all
-      alias_method :find_by!, :all
+      alias find_by all
+      alias find_by! all
 
       # @api private
       def location_default_path(_, path)

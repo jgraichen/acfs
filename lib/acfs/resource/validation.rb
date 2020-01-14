@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 class Acfs::Resource
-  #
   module Validation
     def valid?(*args)
       super
@@ -31,6 +32,7 @@ class Acfs::Resource
       unless valid?(new? ? :create : :save)
         raise ::Acfs::InvalidResource.new resource: self, errors: errors.to_a
       end
+
       super
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Acfs::Resource::QueryMethods do
@@ -158,7 +160,8 @@ describe Acfs::Resource::QueryMethods do
         .to_return response [
           {id: 1, type: 'PC'},
           {id: 2, type: 'Computer'},
-          {id: 3, type: 'Mac'}]
+          {id: 3, type: 'Mac'}
+        ]
     end
 
     it 'should invoke multiple callback after all models are loaded' do
@@ -209,7 +212,8 @@ describe Acfs::Resource::QueryMethods do
               .to_return response [
                 {id: 1, type: 'MyUser'},
                 {id: 2, type: 'Computer'},
-                {id: 3, type: 'Mac'}]
+                {id: 3, type: 'Mac'}
+              ]
           end
           it_behaves_like 'with invalid type'
         end
@@ -220,7 +224,8 @@ describe Acfs::Resource::QueryMethods do
               .to_return response [
                 {id: 1, type: 'PC'},
                 {id: 2, type: 'noValidType'},
-                {id: 3, type: 'Mac'}]
+                {id: 3, type: 'Mac'}
+              ]
           end
           it_behaves_like 'with invalid type'
         end
@@ -231,7 +236,8 @@ describe Acfs::Resource::QueryMethods do
               .to_return response [
                 {id: 1, type: 'PC'},
                 {id: 2, type: 'Computer'},
-                {id: 3, type: 42}]
+                {id: 3, type: 42}
+              ]
           end
           it_behaves_like 'with invalid type'
         end
@@ -270,7 +276,8 @@ describe Acfs::Resource::QueryMethods do
             .to_return response [
               {id: 1, name: 'Mike', age: 24},
               {id: 4, type: 'Maria', age: 24},
-              {id: 7, type: 'James', age: 24}]
+              {id: 7, type: 'James', age: 24}
+            ]
         end
 
         it 'should invoke callback after model is loaded' do
@@ -410,25 +417,25 @@ describe Acfs::Resource::QueryMethods do
             .to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => '<http://users.example.org/users?page=2>; rel="next"'
+                'Link' => '<http://users.example.org/users?page=2>; rel="next"'
               })
           stub_request(:get, 'http://users.example.org/users?page=2')
             .to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
+                'Link' => '<http://users.example.org/users?page=3>; rel="next"'
               })
           stub_request(:get, 'http://users.example.org/users?page=3')
             .to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
+                'Link' => '<http://users.example.org/users?page=4>; rel="next"'
               })
           stub_request(:get, 'http://users.example.org/users?page=4')
             .to_return response([{id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => ''
+                'Link' => ''
               })
         end
 
@@ -452,25 +459,25 @@ describe Acfs::Resource::QueryMethods do
             .to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => '<http://users.example.org/users?where=fuu&page=2>; rel="next"'
+                'Link' => '<http://users.example.org/users?where=fuu&page=2>; rel="next"'
               })
           stub_request(:get, 'http://users.example.org/users?where=fuu&page=2')
             .to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
+                'Link' => '<http://users.example.org/users?page=3>; rel="next"'
               })
           stub_request(:get, 'http://users.example.org/users?page=3')
             .to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
+                'Link' => '<http://users.example.org/users?page=4>; rel="next"'
               })
           stub_request(:get, 'http://users.example.org/users?page=4')
             .to_return response([{id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => ''
+                'Link' => ''
               })
         end
 
@@ -496,25 +503,25 @@ describe Acfs::Resource::QueryMethods do
             .to_return response([{id: 1, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => '<http://users.example.org/users?page=2>; rel="next"'
+                'Link' => '<http://users.example.org/users?page=2>; rel="next"'
               })
           stub_request(:get, 'http://users.example.org/users?page=2')
             .to_return response([{id: 2, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => '<http://users.example.org/users?page=3>; rel="next"'
+                'Link' => '<http://users.example.org/users?page=3>; rel="next"'
               })
           stub_request(:get, 'http://users.example.org/users?page=3')
             .to_return response([{id: 3, name: 'Anno', age: 1604, born_at: 'Santa Maria'}, {id: 4, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => '<http://users.example.org/users?page=4>; rel="next"'
+                'Link' => '<http://users.example.org/users?page=4>; rel="next"'
               })
           stub_request(:get, 'http://users.example.org/users?page=4')
             .to_return response([{id: 5, name: 'Anno', age: 1604, born_at: 'Santa Maria'}],
               headers: {
                 'X-Total-Pages' => '4',
-                'Link'          => ''
+                'Link' => ''
               })
         end
 
