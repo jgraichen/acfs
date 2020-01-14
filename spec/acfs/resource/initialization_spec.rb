@@ -6,8 +6,12 @@ describe 'Acfs::Resource::Initialization' do
   let(:model) do
     Class.new(Acfs::Resource).tap do |c|
       c.class_eval do
-        attr_accessor :name, :age
-        private :age=
+        attr_accessor :name
+        attr_reader :age
+
+        private
+
+        attr_writer :age
       end
     end
   end

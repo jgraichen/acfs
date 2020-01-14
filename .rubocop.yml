@@ -28,10 +28,19 @@ Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
 
+Metrics/AbcSize:
+  Enabled: false
+
 Metrics/BlockLength:
   Exclude:
     - spec/**/*_spec.rb
     - '**/*.gemspec'
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
 
 
 Style/BracesAroundHashParameters:
