@@ -1,0 +1,39 @@
+name: Test
+on: push
+jobs:
+  test:
+    name: "Ruby: ${{ matrix.ruby }} Rails: ${{ matrix.rails }}"
+    runs-on: ubuntu-18.04
+
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["2.7", "2.6", "2.5", "2.4", "2.3"]
+        rails: ["6.0", "5.2", "5.1", "5.0", "4.2", "master"]
+        exclude:
+          - { ruby: "2.7", rails: "4.2" }
+          - { ruby: "2.4", rails: "6.0" }
+          - { ruby: "2.4", rails: "master" }
+          - { ruby: "2.3", rails: "6.0" }
+          - { ruby: "2.3", rails: "master" }
+
+    steps:
+      - uses: actions/checkout@master
+      - uses: eregon/use-ruby-action@master
+        with:
+          ruby-version: ${{ matrix.ruby }}
+
+      - uses: actions/cache@v1
+        with:
+          path: .cache/bundle
+          key: v1-${{ matrix.os }}-ruby-${{ matrix.ruby }}-rails-${{ matrix.rails }}
+
+      - name: bundle config
+        run: |
+          bundle config gemfile "$(pwd)/gemfiles/rails_${{ matrix.rails }}.gemfile"
+          bundle config path "$(pwd)/.cache/bundle"
+          bundle config clean true
+          bundle config without development
+
+      - run: bundle install --jobs=4 --retry=3
+      - run: bundle exec rspec --color
