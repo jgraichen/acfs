@@ -43,13 +43,19 @@ Metrics/MethodLength:
   Enabled: false
 
 
-Style/BracesAroundHashParameters:
-  EnforcedStyle: context_dependent
-
 Style/ClassAndModuleChildren:
   Enabled: false
 
 Style/Documentation:
+  Enabled: false
+
+Style/HashEachMethods:
+  Enabled: false
+
+Style/HashTransformKeys:
+  Enabled: false
+
+Style/HashTransformValues:
   Enabled: false
 
 Style/RaiseArgs:
