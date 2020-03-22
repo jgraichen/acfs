@@ -8,6 +8,7 @@
 ### New
 
 ### Changes
+* Improved handling of low-level connection errors and timeouts
 
 ### Fixes
 

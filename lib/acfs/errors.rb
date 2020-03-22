@@ -12,6 +12,24 @@ module Acfs
 
   class UnsupportedOperation < StandardError; end
 
+  class RequestError < Error
+    attr_reader :request
+
+    def initialize(request, message)
+      @request = request
+
+      message = "#{message}: #{request.method.upcase} #{request.url}"
+
+      super message: message
+    end
+  end
+
+  class TimeoutError < RequestError
+    def initialize(request)
+      super(request, "Timeout reached")
+    end
+  end
+
   # Response error containing the responsible response object.
   #
   class ErroneousResponse < Error

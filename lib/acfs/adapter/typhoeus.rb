@@ -45,7 +45,14 @@ module Acfs
           body: req.body
 
         request.on_complete do |response|
-          req.complete! convert_response(req, response)
+          if response.timed_out?
+            raise ::Acfs::TimeoutError.new(req)
+          elsif response.code.zero?
+            # Failed to get HTTP response
+            raise ::Acfs::RequestError.new(req, response.return_message)
+          else
+            req.complete! convert_response(req, response)
+          end
         end
 
         request
