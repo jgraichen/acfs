@@ -14,6 +14,13 @@
 ### Breaks
 
 
+## 1.3.4 - (2020-03-22)
+---
+
+### Fixes
+* Empty package build for Gem release 1.3.3
+
+
 ## 1.3.3 - (2020-03-22)
 ---
 
