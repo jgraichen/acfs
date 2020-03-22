@@ -8,11 +8,17 @@
 ### New
 
 ### Changes
-* Improved handling of low-level connection errors and timeouts
 
 ### Fixes
 
 ### Breaks
+
+
+## 1.3.3 - (2020-03-22)
+---
+
+### Changes
+* Improved handling of low-level connection errors and timeouts
 
 
 ## 1.3.2 - (2019-09-24)
