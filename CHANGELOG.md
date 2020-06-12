@@ -6,14 +6,20 @@
 ---
 
 ### New
-* Use strict TCP keepalive probing by default (5s/5s)
-* Adapter accepts curl request opts
 
 ### Changes
 
 ### Fixes
 
 ### Breaks
+
+
+## 1.4.0 - (2020-06-12)
+---
+
+### New
+* Use strict TCP keepalive probing by default (5s/5s)
+* Adapter accepts curl request opts
 
 
 ## 1.3.4 - (2020-03-22)
