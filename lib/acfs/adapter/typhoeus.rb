@@ -4,11 +4,18 @@ require 'typhoeus'
 
 module Acfs
   module Adapter
+    DEFAULT_OPTIONS = {
+      tcp_keepalive: true,
+      tcp_keepidle: 5,
+      tcp_keepintvl: 5
+    }.freeze
+
     # Adapter for Typhoeus.
     #
     class Typhoeus < Base
-      def initialize(**kwargs)
-        @options = kwargs
+      def initialize(opts: {}, **kwargs)
+        @opts = DEFAULT_OPTIONS.merge(opts)
+        @kwargs = kwargs
       end
 
       def start
@@ -31,11 +38,11 @@ module Acfs
       protected
 
       def hydra
-        @hydra ||= ::Typhoeus::Hydra.new(**@options)
+        @hydra ||= ::Typhoeus::Hydra.new(**@kwargs)
       end
 
       def convert_request(req)
-        request = ::Typhoeus::Request.new req.url,
+        opts = {
           method: req.method,
           params: req.params,
           headers: req.headers.merge(
@@ -43,6 +50,9 @@ module Acfs
             'Transfer-Encoding' => ''
           ),
           body: req.body
+        }
+
+        request = ::Typhoeus::Request.new(req.url, **@opts.merge(opts))
 
         request.on_complete do |response|
           if response.timed_out?

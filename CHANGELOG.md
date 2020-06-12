@@ -6,6 +6,8 @@
 ---
 
 ### New
+* Use strict TCP keepalive probing by default (5s/5s)
+* Adapter accepts curl request opts
 
 ### Changes
 
