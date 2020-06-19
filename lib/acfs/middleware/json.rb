@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'multi_json'
+require 'json'
 
 module Acfs
   module Middleware
@@ -12,11 +12,11 @@ module Acfs
       end
 
       def encode(data)
-        ::MultiJson.dump data
+        ::JSON.dump data
       end
 
       def decode(body)
-        ::MultiJson.load body
+        ::JSON.load body
       end
     end
 
