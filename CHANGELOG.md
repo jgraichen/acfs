@@ -6,14 +6,22 @@
 ---
 
 ### New
-* Error classes for more HTTP error responses: `400`, `401`, `403`, `500`, `502`, `503`, `504`.
 
 ### Changes
-* Replace deprecated MultiJson with core JSON module
 
 ### Fixes
 
 ### Breaks
+
+
+## 1.5.0 - (2020-06-19)
+---
+
+### New
+* Error classes for more HTTP error responses: `400`, `401`, `403`, `500`, `502`, `503`, `504`.
+
+### Changes
+* Replace deprecated MultiJson with core JSON module
 
 
 ## 1.4.0 - (2020-06-12)
