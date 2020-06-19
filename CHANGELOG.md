@@ -6,8 +6,10 @@
 ---
 
 ### New
+* Error classes for more HTTP error responses: `400`, `401`, `403`, `500`, `502`, `503`, `504`.
 
 ### Changes
+* Replace deprecated MultiJson with core JSON module
 
 ### Fixes
 
