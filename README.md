@@ -10,6 +10,7 @@ Acfs is a library to develop API client libraries for single services within a l
 
 Acfs covers model and service abstraction, convenient query and filter methods, full middleware stack for pre-processing requests and responses on a per service level and automatic request queuing and parallel processing. See Usage for more.
 
+
 ## Installation
 
 Add this line to your application's Gemfile:
@@ -23,6 +24,7 @@ And then execute:
 Or install it yourself as:
 
     > gem install acfs
+
 
 ## Usage
 
@@ -145,6 +147,7 @@ Acfs has basic update support using `PUT` requests:
 @user.persisted? # => true
 ```
 
+
 ## Singleton resources
 
 Singletons can be used in Acfs by creating a new resource which inherits from `SingletonResource`:
@@ -183,6 +186,7 @@ my_single = Single.find name: 'Max'
 Acfs.run # sends GET request with param to /single?name=Max
 ```
 
+
 ## Resource Inheritance
 
 Acfs provides a resource inheritance similar to ActiveRecord Single Table Inheritance. If a
@@ -218,6 +222,7 @@ Acfs.run
 @computer[1].class # => Mac
 @computer[2].class # => Pc
 ```
+
 
 ## Stubbing
 
@@ -279,6 +284,7 @@ it 'should find user number one' do
 end
 ```
 
+
 ## Instrumentation
 
 Acfs supports [instrumentation via active support][1].
@@ -296,21 +302,6 @@ Read [official guide][2] to see to to subscribe.
 [1]: http://guides.rubyonrails.org/active_support_instrumentation.html
 [2]: http://guides.rubyonrails.org/active_support_instrumentation.html#subscribing-to-an-event
 
-## Roadmap
-
-* Update
-    * Better new? detection eg. storing ETag from request resources.
-    * Use PATCH for with only changed attributes and `If-Unmodifed-Since`
-      and `If-Match` header fields if resource was surly loaded from service
-      and not created with an id (e.g `User.new id: 5, name: "john"`).
-    * Conflict detection (ETag / If-Unmodified-Since)
-* High level features
-    * Support for custom mime types on client and server side. (`application/vnd.myservice.user.v2+msgpack`)
-    * Server side components
-        * Reusing model definitions for generating responses?
-        * Rails responders providing REST operations with integrated ETag,
-          Modified Headers, conflict detection, ...
-* Documentation
 
 ## Contributing
 
@@ -322,14 +313,9 @@ Read [official guide][2] to see to to subscribe.
 7. Push to the branch (`git push origin my-new-feature`)
 8. Create new Pull Request
 
-## Contributors
-
-* [Nicolas Fricke](https://github.com/nicolas-fricke)
-* [Tino Junge](https://github.com/tino-junge)
-* [Malte Swart](https://github.com/mswart)
 
 ## License
 
 MIT License
 
-Copyright (c) 2013 Jan Graichen. MIT license, see LICENSE for more details.
+Copyright (c) 2013-2020 Jan Graichen. MIT license, see LICENSE for more details.
