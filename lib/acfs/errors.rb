@@ -26,7 +26,7 @@ module Acfs
 
   class TimeoutError < RequestError
     def initialize(request)
-      super(request, "Timeout reached")
+      super(request, 'Timeout reached')
     end
   end
 
@@ -38,13 +38,13 @@ module Acfs
     def initialize(opts = {})
       @response = opts[:response]
 
-      if response
-        message = (opts[:message] ? opts[:message] + ':' : 'Received') +
-                  " #{response.code} for #{response.request.method.upcase}" \
-                  " #{response.request.url} #{response.request.format}"
-      else
-        message = opts[:message] || 'Received erroneous response'
-      end
+      message = if response
+                  (opts[:message] ? opts[:message] + ':' : 'Received') +
+                    " #{response.code} for #{response.request.method.upcase}" \
+                    " #{response.request.url} #{response.request.format}"
+                else
+                  opts[:message] || 'Received erroneous response'
+                end
 
       super opts, message
     end

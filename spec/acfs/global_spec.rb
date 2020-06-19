@@ -122,8 +122,8 @@ describe ::Acfs::Global do
 
   describe '#runner' do
     it 'returns per-thread runner' do
-      runner1 = Thread.new { acfs.runner } .value
-      runner2 = Thread.new { acfs.runner } .value
+      runner1 = Thread.new { acfs.runner }.value
+      runner2 = Thread.new { acfs.runner }.value
 
       expect(runner1).to_not equal runner2
     end

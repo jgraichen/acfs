@@ -68,8 +68,8 @@ module Acfs::Collections
     def setup_params(params)
       @current_page = begin
         Integer params.fetch(:page, 1)
-      rescue ArgumentError
-        params[:page]
+                      rescue ArgumentError
+                        params[:page]
       end
     end
   end

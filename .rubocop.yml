@@ -2,7 +2,7 @@ AllCops:
   Exclude:
     - vendor/**
     - gemfiles/**
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.5
 
 
 Layout/ArgumentAlignment:
@@ -15,9 +15,15 @@ Layout/CaseIndentation:
     - end
   IndentOneStep: true
 
+Layout/EmptyLinesAroundAttributeAccessor:
+  Enabled: true
+
 Layout/LineLength:
   Exclude:
     - spec/**/*_spec.rb
+
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
 
 Layout/SpaceInsideBlockBraces:
   EnforcedStyle: space
@@ -28,19 +34,42 @@ Layout/SpaceInsideHashLiteralBraces:
   EnforcedStyle: no_space
 
 
+Lint/DeprecatedOpenSSLConstant:
+  Enabled: true
+
+Lint/RaiseException:
+  Enabled: true
+
+Lint/StructNewOverride:
+  Enabled: true
+
+
 Metrics/AbcSize:
   Enabled: false
 
 Metrics/BlockLength:
   Exclude:
-    - spec/**/*_spec.rb
+    - spec/**/*.rb
     - '**/*.gemspec'
+
+Metrics/ClassLength:
+  Enabled: false
 
 Metrics/CyclomaticComplexity:
   Enabled: false
 
 Metrics/MethodLength:
   Enabled: false
+
+Metrics/ModuleLength:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+
+Naming/MethodParameterName:
+  AllowedNames: [id, op]
 
 
 Style/ClassAndModuleChildren:
@@ -49,6 +78,9 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Enabled: false
 
+Style/ExponentialNotation:
+  Enabled: true
+
 Style/HashEachMethods:
   Enabled: false
 
@@ -56,6 +88,9 @@ Style/HashTransformKeys:
   Enabled: false
 
 Style/HashTransformValues:
+  Enabled: false
+
+Style/IfUnlessModifier:
   Enabled: false
 
 Style/RaiseArgs:
@@ -67,6 +102,9 @@ Style/Semicolon:
 
 Style/SignalException:
   EnforcedStyle: only_raise
+
+Style/SlicingWithRange:
+  Enabled: true
 
 Style/TrivialAccessors:
   AllowPredicates: true

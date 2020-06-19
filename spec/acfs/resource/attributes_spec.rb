@@ -85,11 +85,9 @@ describe Acfs::Resource::Attributes do
 
         it do
           expect do
-            begin
-              subject.call
-            rescue StandardError
-              true
-            end
+            subject.call
+          rescue StandardError
+            true
           end.to_not change(m, :attributes)
         end
       end

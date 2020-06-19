@@ -49,7 +49,7 @@ module Acfs
     def extract_arg(key, hashes)
       hashes.each_with_index do |hash, index|
         if hash.key?(key)
-          return (index == 0 ? hash.delete(key) : hash.fetch(key))
+          return (index.zero? ? hash.delete(key) : hash.fetch(key))
         end
       end
 
@@ -72,9 +72,9 @@ module Acfs
         args.fetch(sym) do
           if args[:raise].nil? || args[:raise]
             raise ArgumentError.new "URI path argument `#{sym}' missing on `#{self}'. Given: `#{args}.inspect'"
-          else
-            ":#{sym}"
           end
+
+          ":#{sym}"
         end
       end
     end

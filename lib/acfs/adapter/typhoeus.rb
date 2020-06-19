@@ -55,14 +55,14 @@ module Acfs
         request = ::Typhoeus::Request.new(req.url, **@opts.merge(opts))
 
         request.on_complete do |response|
-          if response.timed_out?
-            raise ::Acfs::TimeoutError.new(req)
-          elsif response.code.zero?
+          raise ::Acfs::TimeoutError.new(req) if response.timed_out?
+
+          if response.code.zero?
             # Failed to get HTTP response
             raise ::Acfs::RequestError.new(req, response.return_message)
-          else
-            req.complete! convert_response(req, response)
           end
+
+          req.complete! convert_response(req, response)
         end
 
         request

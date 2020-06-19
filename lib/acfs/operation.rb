@@ -8,6 +8,7 @@ module Acfs
   #
   class Operation
     attr_reader :action, :params, :resource, :data, :callback, :location, :url
+
     delegate :service, to: :resource
     delegate :call, to: :callback
 

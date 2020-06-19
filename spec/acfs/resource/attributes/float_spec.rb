@@ -35,7 +35,7 @@ describe Acfs::Resource::Attributes::Float do
 
     context 'with -Infinity' do
       let(:value) { '-Infinity' }
-      it { expect(subject.call).to eq -::Float::INFINITY }
+      it { expect(subject.call).to eq(-::Float::INFINITY) }
     end
 
     context 'with NaN' do

@@ -48,9 +48,11 @@ class Acfs::Resource
     # @return [HashWithIndifferentAccess{Symbol => Object}]
     #   Attributes and their values.
     #
+    # rubocop:disable Naming/MemoizedInstanceVariableName
     def attributes
       @_attrs ||= HashWithIndifferentAccess.new
     end
+    # rubocop:enable Naming/MemoizedInstanceVariableName
 
     # @api public
     #

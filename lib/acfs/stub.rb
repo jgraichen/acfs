@@ -16,7 +16,7 @@ module Acfs
       @opts[:with].stringify_keys! if @opts[:with].is_a? Hash
       @opts[:return].stringify_keys! if @opts[:return].is_a? Hash
 
-      if @opts[:return].is_a? Array
+      if @opts[:return].is_a?(Array) # rubocop:disable Style/GuardClause
         @opts[:return].map! {|h| h.stringify_keys! if h.is_a? Hash }
       end
     end
@@ -53,9 +53,8 @@ module Acfs
     end
 
     def called?(count = nil)
-      if count.respond_to? :count
-        count = count.count
-      end # For `5.times` Enumerators
+      count = count.count if count.respond_to?(:count)
+
       count.nil? ? calls.any? : calls.size == count
     end
 

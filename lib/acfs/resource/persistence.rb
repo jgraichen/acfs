@@ -244,8 +244,6 @@ class Acfs::Resource
       end
     end
 
-    private
-
     def update_with(data)
       self.attributes = data
       loaded!

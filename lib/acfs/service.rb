@@ -40,21 +40,23 @@ module Acfs
 
       action = opts[:action] || :list
 
-      path = if opts[:path].is_a?(Hash) && opts[:path].key?(action)
-               opts[:path].fetch(action)
-             else
-               path = if opts[:path].is_a?(Hash)
-                        opts[:path][:all].to_s
-                      else
-                        opts[:path].to_s
-                      end
+      path = begin
+        if opts[:path].is_a?(Hash) && opts[:path].key?(action)
+          opts[:path].fetch(action)
+        else
+          path = if opts[:path].is_a?(Hash)
+                   opts[:path][:all].to_s
+                 else
+                   opts[:path].to_s
+                 end
 
-               if path.blank?
-                 path = (resource_class.name || 'class').pluralize.underscore
-               end
+          if path.blank?
+            path = (resource_class.name || 'class').pluralize.underscore
+          end
 
-               resource_class.location_default_path(action, path.strip)
-             end
+          resource_class.location_default_path(action, path.strip)
+        end
+      end
 
       if path.nil?
         raise ArgumentError.new "Location for `#{action}' explicit disabled by set to nil."
@@ -87,7 +89,10 @@ module Acfs
       #
       def base_url
         unless (base = Acfs::Configuration.current.locate identity)
-          raise ArgumentError.new "#{identity} not configured. Add `locate '#{identity.to_s.underscore}', 'http://service.url/'` to your configuration."
+          raise ArgumentError.new \
+            "#{identity} not configured. Add `locate '" \
+            "#{identity.to_s.underscore}', 'http://service.url/'` " \
+            'to your configuration.'
         end
 
         base.to_s

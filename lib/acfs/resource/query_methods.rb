@@ -258,7 +258,7 @@ class Acfs::Resource
         end
 
         klass
-      rescue NameError, NoMethodError
+      rescue NameError
         raise Acfs::ResourceTypeError.new type_name: type, base_class: self
       end
     end
