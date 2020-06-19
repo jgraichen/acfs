@@ -67,11 +67,19 @@ module Acfs
     end
   end
 
-  # Resource not found error raised on a 404 response
-  #
-  class ResourceNotFound < ErroneousResponse
-  end
+  # 400
+  class BadRequest < ErroneousResponse; end
 
+  # 401
+  class Unauthorized < ErroneousResponse; end
+
+  # 403
+  class Forbidden < ErroneousResponse; end
+
+  # 404
+  class ResourceNotFound < ErroneousResponse; end
+
+  # 422
   class InvalidResource < ErroneousResponse
     attr_reader :errors, :resource
 
@@ -90,6 +98,18 @@ module Acfs
       super
     end
   end
+
+  # 500
+  class ServerError < ErroneousResponse; end
+
+  # 502
+  class BadGateway < ErroneousResponse; end
+
+  # 503
+  class ServiceUnavailable < ErroneousResponse; end
+
+  # 504
+  class GatewayTimeout < ErroneousResponse; end
 
   # A ResourceNotLoaded error will be thrown when calling some
   # modifing methods on not loaded resources as it is usally

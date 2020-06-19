@@ -71,10 +71,24 @@ module Acfs
 
     def handle_failure(response)
       case response.code
+        when 400
+          raise ::Acfs::BadRequest.new response: response
+        when 401
+          raise ::Acfs::Unauthorized.new response: response
+        when 403
+          raise ::Acfs::Forbidden.new response: response
         when 404
           raise ::Acfs::ResourceNotFound.new response: response
         when 422
           raise ::Acfs::InvalidResource.new response: response, errors: response.data.try(:[], 'errors')
+        when 500
+          raise ::Acfs::ServerError.new response: response
+        when 502
+          raise ::Acfs::BadGateway.new response: response
+        when 503
+          raise ::Acfs::ServiceUnavailable.new response: response
+        when 504
+          raise ::Acfs::GatewayTimeout.new response: response
         else
           raise ::Acfs::ErroneousResponse.new response: response
       end
