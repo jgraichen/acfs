@@ -25,14 +25,11 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = %w[lib]
 
-  spec.add_runtime_dependency 'actionpack', '>= 4.2'
-  spec.add_runtime_dependency 'activemodel', '>= 4.2'
-  spec.add_runtime_dependency 'activesupport', '>= 4.2'
-
-  # Bundle update w/o version resolves to 0.3.3 ...
-  spec.add_runtime_dependency 'typhoeus', '~> 1.0'
-
+  spec.add_runtime_dependency 'actionpack', '>= 5.2'
+  spec.add_runtime_dependency 'activemodel', '>= 5.2'
+  spec.add_runtime_dependency 'activesupport', '>= 5.2'
   spec.add_runtime_dependency 'rack'
+  spec.add_runtime_dependency 'typhoeus', '~> 1.0'
 
   spec.add_development_dependency 'bundler'
 
