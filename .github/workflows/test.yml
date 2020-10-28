@@ -17,7 +17,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
 
-      - uses: actions/cache@v1
+      - uses: actions/cache@v2
         with:
           path: .cache/bundle
           key: v1-${{ matrix.os }}-ruby-${{ matrix.ruby }}-rails-${{ matrix.rails }}
