@@ -22,7 +22,7 @@ module Acfs::Resource::Attributes
     def cast_value(value)
       if value.blank?
         nil
-      elsif value.acts_like?(:time) || value.acts_like?(:date)
+      elsif !value.is_a?(::String) && value.respond_to?(:to_datetime)
         value.to_datetime
       else
         ::DateTime.iso8601 value

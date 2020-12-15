@@ -2,12 +2,6 @@
 
 class Acfs::Resource
   module Validation
-    def valid?(*args)
-      super
-      remote_errors.each {|f, e| errors.add f, e }
-      errors.empty?
-    end
-
     def remote_errors
       @remote_errors ||= ActiveModel::Errors.new self
     end
@@ -34,6 +28,22 @@ class Acfs::Resource
       end
 
       super
+    end
+
+    if ::ActiveModel.version >= Gem::Version.new('6.1')
+      def valid?(*args)
+        super
+
+        remote_errors.each {|e| errors.add(e.attribute, e.message) }
+        errors.empty?
+      end
+    else
+      def valid?(*args)
+        super
+
+        remote_errors.each {|f, e| errors.add(f, e) }
+        errors.empty?
+      end
     end
   end
 end

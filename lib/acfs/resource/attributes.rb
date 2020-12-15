@@ -244,9 +244,9 @@ class Acfs::Resource
         @local_attributes ||= {}
       end
 
-      def define_attribute(name, type, opts = {})
+      def define_attribute(name, type, **opts)
         name      = name.to_s
-        attribute = type.new opts
+        attribute = type.new(**opts)
 
         local_attributes[name] = attribute
         define_attribute_method name
