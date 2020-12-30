@@ -8,11 +8,17 @@
 ### New
 
 ### Changes
-* Revert back to using `::MultiJson`
 
 ### Fixes
 
 ### Breaks
+
+
+## 1.5.1 - (2020-12-30)
+---
+
+### Changes
+* Revert back to using `::MultiJson`
 
 
 ## 1.5.0 - (2020-06-19)
