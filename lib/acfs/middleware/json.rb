@@ -7,6 +7,12 @@ module Acfs
     # A middleware to encore request data using JSON.
     #
     class JSON < Serializer
+      def initialize(app, encoder: nil, **kwargs)
+        super(app, **kwargs)
+
+        @encoder = encoder || ::JSON
+      end
+
       def mime
         ::Mime[:json]
       end
@@ -17,11 +23,13 @@ module Acfs
         # otherwise be converted to strings by `JSON.dump`.
         data = data.as_json if data.respond_to?(:as_json)
 
-        ::JSON.dump(data)
+        @encoder.dump(data)
       end
 
       def decode(body)
-        ::JSON.parse(body)
+        @encoder.parse(body)
+      rescue StandardError => e
+        raise ::JSON::ParserError.new(e)
       end
     end
 

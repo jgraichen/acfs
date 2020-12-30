@@ -42,6 +42,20 @@ describe Acfs::Middleware::JSON do
         expect(JSON.parse(request.body)).to eq 'a' => 1, 'b' => 2
       end
     end
+
+    context 'with #to_json objects' do
+      let(:data) do
+        Class.new do
+          def to_json(*)
+            '{"a": 1, "b": 2}'
+          end
+        end.new
+      end
+
+      it 'should serialize data with #to_json' do
+        expect(JSON.parse(request.body)).to eq 'a' => 1, 'b' => 2
+      end
+    end
   end
 
   describe 'decode' do
