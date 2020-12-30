@@ -35,6 +35,20 @@ describe Acfs::Middleware::MessagePack do
       it 'should serialize data to MessagePack' do
         expect(MessagePack.unpack(request.body)).to eq data.map(&:stringify_keys)
       end
+
+      context 'with #as_json objects' do
+        let(:data) do
+          Class.new do
+            def as_json
+              {a: 1, b: 2}
+            end
+          end.new
+        end
+
+        it 'should serialize data with #as_json' do
+          expect(MessagePack.unpack(request.body)).to eq 'a' => 1, 'b' => 2
+        end
+      end
     end
   end
 

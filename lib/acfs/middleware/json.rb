@@ -12,11 +12,16 @@ module Acfs
       end
 
       def encode(data)
-        ::JSON.dump data
+        # Improve rails compatibility by manually checking for `#as_json`.
+        # Several objects behave a bit like JSON via `#as_json` but would
+        # otherwise be converted to strings by `JSON.dump`.
+        data = data.as_json if data.respond_to?(:as_json)
+
+        ::JSON.dump(data)
       end
 
       def decode(body)
-        ::JSON.load body
+        ::JSON.parse(body)
       end
     end
 

@@ -28,6 +28,20 @@ describe Acfs::Middleware::JSON do
         expect(JSON.parse(request.body)).to eq data.map(&:stringify_keys)
       end
     end
+
+    context 'with #as_json objects' do
+      let(:data) do
+        Class.new do
+          def as_json
+            {a: 1, b: 2}
+          end
+        end.new
+      end
+
+      it 'should serialize data with #as_json' do
+        expect(JSON.parse(request.body)).to eq 'a' => 1, 'b' => 2
+      end
+    end
   end
 
   describe 'decode' do
