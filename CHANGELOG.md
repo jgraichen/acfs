@@ -7,9 +7,9 @@
 
 ### New
 * Improve Rails #as_json compatibility for additional unknown attributes
-* The JSON serializer (#dump/#load) is configurable on the middleware now. It uses multi_json if that is available.
 
 ### Changes
+* Revert back to using `::MultiJson`
 
 ### Fixes
 

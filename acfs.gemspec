@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'actionpack', '>= 5.2'
   spec.add_runtime_dependency 'activemodel', '>= 5.2'
   spec.add_runtime_dependency 'activesupport', '>= 5.2'
+  spec.add_runtime_dependency 'multi_json', '~> 1.0'
   spec.add_runtime_dependency 'rack'
   spec.add_runtime_dependency 'typhoeus', '~> 1.0'
 

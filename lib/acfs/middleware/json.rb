@@ -1,18 +1,12 @@
 # frozen_string_literal: true
 
-require 'json'
+require 'multi_json'
 
 module Acfs
   module Middleware
     # A middleware to encore request data using JSON.
     #
     class JSON < Serializer
-      def initialize(app, encoder: nil, **kwargs)
-        super(app, **kwargs)
-
-        @encoder = encoder || self.class.encoder
-      end
-
       def mime
         ::Mime[:json]
       end
@@ -23,27 +17,13 @@ module Acfs
         # otherwise be converted to strings by `JSON.dump`.
         data = data.as_json if data.respond_to?(:as_json)
 
-        @encoder.dump(data)
+        ::MultiJson.dump(data)
       end
 
       def decode(body)
-        @encoder.parse(body)
-      rescue StandardError => e
+        ::MultiJson.load(body)
+      rescue ::MultiJson::ParseError => e
         raise ::JSON::ParserError.new(e)
-      end
-
-      class << self
-        attr_writer :encoder
-
-        def encoder
-          @encoder ||= begin
-            if defined?(::MultiJson)
-              ::MultiJson
-            else
-              ::JSON
-            end
-          end
-        end
       end
     end
 
