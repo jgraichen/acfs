@@ -32,11 +32,4 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'typhoeus', '~> 1.0'
 
   spec.add_development_dependency 'bundler'
-
-  if ENV['TRAVIS_BUILD_NUMBER'] && !ENV['TRAVIS_TAG']
-    # Append travis build number for auto-releases
-    # rubocop:disable Gemspec/DuplicatedAssignment
-    spec.version = "#{spec.version}.1.b#{ENV['TRAVIS_BUILD_NUMBER']}"
-    # rubocop:enable Gemspec/DuplicatedAssignment
-  end
 end
