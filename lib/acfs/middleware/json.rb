@@ -10,7 +10,7 @@ module Acfs
       def initialize(app, encoder: nil, **kwargs)
         super(app, **kwargs)
 
-        @encoder = encoder || ::JSON
+        @encoder = encoder || self.class.encoder
       end
 
       def mime
@@ -30,6 +30,20 @@ module Acfs
         @encoder.parse(body)
       rescue StandardError => e
         raise ::JSON::ParserError.new(e)
+      end
+
+      class << self
+        attr_writer :encoder
+
+        def encoder
+          @encoder ||= begin
+            if defined?(::MultiJson)
+              ::MultiJson
+            else
+              ::JSON
+            end
+          end
+        end
       end
     end
 
