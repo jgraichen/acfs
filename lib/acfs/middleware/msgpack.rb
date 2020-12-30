@@ -15,13 +15,6 @@ module Acfs
       end
 
       def encode(data)
-        # Improve rails compatibility by manually checking for `#as_json`. If an
-        # object does not as `#to_msgpack` but an `#as_json` method, we call
-        # that first to get a "simpler" representation.
-        if !data.respond_to?(:to_msgpack) && data.respond_to?(:as_json)
-          data = data.as_json
-        end
-
         ::MessagePack.pack data
       end
 

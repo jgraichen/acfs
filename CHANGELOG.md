@@ -6,7 +6,6 @@
 ---
 
 ### New
-* Improve Rails #as_json compatibility for additional unknown attributes
 
 ### Changes
 * Revert back to using `::MultiJson`
