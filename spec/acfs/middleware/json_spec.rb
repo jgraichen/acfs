@@ -29,20 +29,6 @@ describe Acfs::Middleware::JSON do
       end
     end
 
-    context 'with #as_json objects' do
-      let(:data) do
-        Class.new do
-          def as_json
-            {a: 1, b: 2}
-          end
-        end.new
-      end
-
-      it 'should serialize data with #as_json' do
-        expect(JSON.parse(request.body)).to eq 'a' => 1, 'b' => 2
-      end
-    end
-
     context 'with #to_json objects' do
       let(:data) do
         Class.new do
