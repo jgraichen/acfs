@@ -6,6 +6,7 @@
 ---
 
 ### New
+* Support Ruby 3.0
 * Use keyword arguments in parameters and when calling methods
 
 ### Changes
