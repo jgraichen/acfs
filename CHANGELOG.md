@@ -6,14 +6,20 @@
 ---
 
 ### New
-* Support Ruby 3.0
-* Use keyword arguments in parameters and when calling methods
 
 ### Changes
 
 ### Fixes
 
 ### Breaks
+
+
+## 1.6.0 - (2021-01-07)
+---
+
+### New
+* Support Ruby 3.0
+* Use keyword arguments in parameters and when calling methods
 
 
 ## 1.5.1 - (2020-12-30)
