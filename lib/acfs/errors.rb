@@ -39,7 +39,7 @@ module Acfs
       @response = opts[:response]
 
       message = if response
-                  (opts[:message] ? opts[:message] + ':' : 'Received') +
+                  (opts[:message] ? "#{opts[:message]}:" : 'Received') +
                     " #{response.code} for #{response.request.method.upcase}" \
                     " #{response.request.url} #{response.request.format}"
                 else
@@ -87,12 +87,13 @@ module Acfs
       @errors   = opts.delete :errors
       @resource = opts.delete :resource
 
-      if @errors.is_a?(Hash)
-        opts[:message] ||= @errors.each_pair.map do |k, v|
-          @errors.is_a?(Array) ? "#{k}: #{v.join(', ')}" : "#{k}: #{v}"
-        end.join ', '
-      elsif @errors.is_a?(Array)
-        opts[:message] ||= @errors.join ', '
+      case @errors
+        when Hash
+          opts[:message] ||= @errors.each_pair.map do |k, v|
+            @errors.is_a?(Array) ? "#{k}: #{v.join(', ')}" : "#{k}: #{v}"
+          end.join ', '
+        when Array
+          opts[:message] ||= @errors.join ', '
       end
 
       super

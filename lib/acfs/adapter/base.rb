@@ -5,6 +5,8 @@ module Acfs::Adapter
   # and processing.
   #
   class Base
+    def initialize(*); end
+
     # Start processing queued requests.
     #
     def start; end

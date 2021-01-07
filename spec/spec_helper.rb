@@ -17,7 +17,6 @@ require 'bundler'
 Bundler.require(:default, :test)
 
 require 'acfs'
-require 'webmock/rspec'
 
 Dir[File.expand_path('spec/support/**/*.rb')].sort.each {|f| require f }
 

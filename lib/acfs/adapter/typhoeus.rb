@@ -14,6 +14,8 @@ module Acfs
     #
     class Typhoeus < Base
       def initialize(opts: {}, **kwargs)
+        super
+
         @opts = DEFAULT_OPTIONS.merge(opts)
         @kwargs = kwargs
       end
