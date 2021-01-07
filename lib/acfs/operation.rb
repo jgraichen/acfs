@@ -43,11 +43,11 @@ module Acfs
     end
 
     def full_params
-      (id ? params.merge(id: id) : params).merge location_args
+      (id ? params.merge(id: id) : params).merge(location_vars)
     end
 
-    def location_args
-      location ? location.args : {}
+    def location_vars
+      location ? location.vars : {}
     end
 
     def method

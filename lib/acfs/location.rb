@@ -6,32 +6,31 @@ module Acfs
   # Describes a URL with placeholders.
   #
   class Location
-    attr_reader :arguments, :raw, :struct, :args
+    attr_reader :arguments, :raw, :struct, :vars
 
     REGEXP = /^:([A-z][A-z0-9_]*)$/.freeze
 
-    def initialize(uri, args = {})
+    def initialize(uri, vars = {})
       @raw       = URI.parse uri
-      @args      = args.stringify_keys
+      @vars      = vars
       @struct    = raw.path.split('/').reject(&:empty?).map {|s| s =~ REGEXP ? Regexp.last_match[1].to_sym : s }
       @arguments = struct.select {|s| s.is_a?(Symbol) }
     end
 
-    def build(args)
-      self.class.new(raw.to_s, args.stringify_keys.merge(self.args))
+    def build(vars)
+      self.class.new raw.to_s, vars.stringify_keys.merge(self.vars)
     end
 
     def extract_from(*args)
-      args = {}.tap do |collect|
-        arguments.each {|key| collect[key.to_s] = extract_arg(key, args) }
-      end
+      vars = {}
+      arguments.each {|key| vars[key.to_s] = extract_arg(key, args) }
 
-      build(args)
+      build(vars)
     end
 
     def str
       uri = raw.dup
-      uri.path = "/#{struct.map {|s| lookup_arg(s, args) }.join('/')}"
+      uri.path = "/#{struct.map(&method(:lookup_variable)).join('/')}"
       uri.to_s
     end
 
@@ -52,25 +51,26 @@ module Acfs
       nil
     end
 
-    def lookup_arg(arg, args)
-      arg.is_a?(Symbol) ? lookup_replacement(arg, args) : arg
-    end
+    def lookup_variable(name)
+      return name unless name.is_a?(Symbol)
 
-    def lookup_replacement(sym, args)
-      value = get_replacement(sym, args).to_s
-      return ::URI.encode_www_form_component(value) unless value.empty?
-
-      raise ArgumentError.new "Cannot replace path argument `#{sym}' with empty string."
-    end
-
-    def get_replacement(sym, args)
-      args.fetch(sym.to_s) do
-        if args[:raise].nil? || args[:raise]
-          raise ArgumentError.new "URI path argument `#{sym}' missing on `#{self}'. Given: `#{args}.inspect'"
+      value = vars.fetch(name.to_s) do
+        if @raise.nil? || @raise
+          raise ArgumentError.new <<~ERROR.strip
+            URI path argument `#{name}' missing on `#{self}'. Given: `#{vars}.inspect'
+          ERROR
         end
 
-        ":#{sym}"
+        ":#{name}"
       end
+
+      value = value.to_s.strip
+
+      if value.empty?
+        raise ArgumentError.new "Cannot replace path argument `#{name}' with empty string."
+      end
+
+      ::URI.encode_www_form_component(value)
     end
   end
 end
