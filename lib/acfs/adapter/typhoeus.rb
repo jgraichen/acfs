@@ -13,10 +13,11 @@ module Acfs
     # Adapter for Typhoeus.
     #
     class Typhoeus < Base
-      def initialize(opts: {}, **kwargs)
+      def initialize(**kwargs)
         super
 
-        @opts = DEFAULT_OPTIONS.merge(opts)
+        @opts = DEFAULT_OPTIONS
+        @opts = @opts.merge(opts) if (opts = kwargs.delete(:opts))
         @kwargs = kwargs
       end
 
@@ -54,7 +55,7 @@ module Acfs
           body: req.body
         }
 
-        request = ::Typhoeus::Request.new(req.url, **@opts.merge(opts))
+        request = ::Typhoeus::Request.new(req.url, **@opts, **opts)
 
         request.on_complete do |response|
           raise ::Acfs::TimeoutError.new(req) if response.timed_out?

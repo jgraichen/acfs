@@ -28,34 +28,26 @@ module Acfs
 
     # @api private
     #
-    def initialize(options = {})
+    def initialize(**options)
       @options = options
     end
 
     # @api private
     # @return [Location]
     #
-    def location(resource_class, opts = {})
-      opts.reverse_merge! options
+    def location(resource_class, path: nil, action: :list, **)
+      path ||= options[:path]
 
-      action = opts[:action] || :list
+      if path.is_a?(Hash) && path.key?(action)
+        path = path.fetch(action)
+      else
+        path = path.is_a?(Hash) ? path[:all].to_s : path.to_s
 
-      path = begin
-        if opts[:path].is_a?(Hash) && opts[:path].key?(action)
-          opts[:path].fetch(action)
-        else
-          path = if opts[:path].is_a?(Hash)
-                   opts[:path][:all].to_s
-                 else
-                   opts[:path].to_s
-                 end
-
-          if path.blank?
-            path = (resource_class.name || 'class').pluralize.underscore
-          end
-
-          resource_class.location_default_path(action, path.strip)
+        if path.blank?
+          path = (resource_class.name || 'class').pluralize.underscore
         end
+
+        path = resource_class.location_default_path(action, path.strip)
       end
 
       if path.nil?

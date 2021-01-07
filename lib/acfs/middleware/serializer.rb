@@ -29,7 +29,7 @@ module Acfs
         request.headers['Accept'] = accept.join(',')
 
         request.on_complete do |response, nxt|
-          response.data = decode response.body if mime == response.content_type
+          response.data = decode(response.body) if mime == response.content_type
 
           nxt.call response
         end

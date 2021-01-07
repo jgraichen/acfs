@@ -8,9 +8,9 @@ module Acfs
     class Base
       attr_reader :app, :options
 
-      def initialize(app, options = {})
+      def initialize(app, **opts)
         @app     = app
-        @options = options
+        @options = opts
       end
 
       def call(request)

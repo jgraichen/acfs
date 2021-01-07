@@ -40,7 +40,7 @@ class Acfs::Resource
       #     usually `:list`, `:create`, `:read`, `:update` or`:delete`.
       #   @return [String] Generated URL.
       #
-      def url(suffix = nil, opts = {})
+      def url(suffix = nil, **opts)
         if suffix.is_a? Hash
           opts = suffix
           suffix = nil
@@ -48,7 +48,7 @@ class Acfs::Resource
 
         opts[:action] = :list if suffix
 
-        url  = location(opts).build(opts).str
+        url  = location(**opts).build(**opts).str
         url += "/#{suffix}" if suffix.to_s.present?
         url
       end
@@ -81,8 +81,8 @@ class Acfs::Resource
       #
       # @return [Location] Location object.
       #
-      def location(opts = {})
-        service.location(self, opts)
+      def location(**opts)
+        service.location(self, **opts)
       end
 
       # @api private
@@ -109,12 +109,12 @@ class Acfs::Resource
     # @return [ String ] Generated URL.
     # @see ClassMethods#url
     #
-    def url(opts = {})
+    def url(**opts)
       return nil if need_primary_key? && !primary_key?
 
       self.class.service
-          .location(self.class, opts.reverse_merge(action: :read))
-          .build(attributes).str
+          .location(self.class, **opts, action: :read)
+          .build(**attributes).str
     end
 
     # @api private

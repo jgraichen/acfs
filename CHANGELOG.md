@@ -6,6 +6,7 @@
 ---
 
 ### New
+* Use keyword arguments in parameters and when calling methods
 
 ### Changes
 

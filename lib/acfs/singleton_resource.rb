@@ -27,10 +27,10 @@ module Acfs
     # @return [undefined]
     # @see #delete
     #
-    def delete!(opts = {})
+    def delete!(**opts)
       opts[:params] ||= {}
 
-      operation :delete, opts do |data|
+      operation(:delete, **opts) do |data|
         update_with data
         freeze
       end

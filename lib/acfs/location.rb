@@ -10,19 +10,15 @@ module Acfs
 
     REGEXP = /^:([A-z][A-z0-9_]*)$/.freeze
 
-    def initialize(uri, args = {})
+    def initialize(uri, **args)
       @raw       = URI.parse uri
       @args      = args
       @struct    = raw.path.split('/').reject(&:empty?).map {|s| s =~ REGEXP ? Regexp.last_match[1].to_sym : s }
       @arguments = struct.select {|s| s.is_a?(Symbol) }
     end
 
-    def build(args = {})
-      unless args.is_a?(Hash)
-        raise ArgumentError.new "URI path arguments must be a hash, `#{args.inspect}' given."
-      end
-
-      self.class.new raw.to_s, args.merge(self.args)
+    def build(**args)
+      self.class.new(raw.to_s, **args, **self.args)
     end
 
     def extract_from(*args)
@@ -30,7 +26,7 @@ module Acfs
         arguments.each {|key| collect[key] = extract_arg key, args }
       end
 
-      build args
+      build(**args)
     end
 
     def str

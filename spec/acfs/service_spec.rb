@@ -5,7 +5,7 @@ require 'spec_helper'
 describe Acfs::Service do
   let(:srv_class) { Class.new(Acfs::Service) { identity :test } }
   let(:options) { {} }
-  let(:service) { srv_class.new options }
+  let(:service) { srv_class.new(**options) }
 
   before do
     Acfs::Configuration.current.locate :test, ''

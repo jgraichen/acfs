@@ -16,8 +16,8 @@ class Acfs::Resource
 
     # @api private
     #
-    def save!(*)
-      super.tap {|_| changes_applied }
+    def save!(**kwargs)
+      super(**kwargs).tap {|_| changes_applied }
     end
 
     # @api private

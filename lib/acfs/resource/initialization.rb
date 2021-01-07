@@ -8,7 +8,7 @@ class Acfs::Resource
     #
     # @api public
     #
-    # Initializes a new model with the given `params`. fff
+    # Initializes a new model with the given `params`.
     #
     # @example
     #   class User < Acfs::Resource
@@ -17,15 +17,15 @@ class Acfs::Resource
     #     attribute :age, :integer, default: 18
     #   end
     #
-    #   user = User.new(name: 'bob')
+    #   user = User.new({name: 'bob'})
     #   user.name  # => "bob"
     #   user.email # => "bob@dom.tld"
     #   user.age   # => 18
     #
-    # @param params [Hash{Symbol => Object}] Attributes to set on resource.
+    # @param attributes [Hash{Symbol => Object}] Attributes to set on resource.
     #
-    def initialize(params = {})
-      write_attributes params if params
+    def initialize(attributes = {})
+      write_attributes(attributes) if attributes
     end
   end
 end

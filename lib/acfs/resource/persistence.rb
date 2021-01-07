@@ -57,8 +57,8 @@ class Acfs::Resource
     #   false otherwise.
     # @see #save! See {#save!} for available options.
     #
-    def save(*args)
-      save!(*args)
+    def save(**opts)
+      save!(**opts)
       true
     rescue Acfs::Error
       false
@@ -82,10 +82,10 @@ class Acfs::Resource
     #
     # @see #save
     #
-    def save!(opts = {})
+    def save!(**opts)
       opts[:data] = attributes unless opts[:data]
 
-      operation((new? ? :create : :update), opts) do |data|
+      operation((new? ? :create : :update), **opts) do |data|
         update_with data
       end
     rescue ::Acfs::InvalidResource => e
@@ -109,11 +109,11 @@ class Acfs::Resource
     # @see #attributes=
     # @see #update_attributes!
     #
-    def update_attributes(attrs, opts = {})
-      check_loaded! opts
+    def update_attributes(attrs, **opts)
+      check_loaded!(**opts)
 
       self.attributes = attrs
-      save opts
+      save(**opts)
     end
 
     # @api public
@@ -136,11 +136,11 @@ class Acfs::Resource
     # @see #attributes=
     # @see #update_attributes
     #
-    def update_attributes!(attrs, opts = {})
+    def update_attributes!(attrs, **opts)
       check_loaded! opts
 
       self.attributes = attrs
-      save! opts
+      save!(**opts)
     end
 
     # @api public
@@ -152,8 +152,8 @@ class Acfs::Resource
     # @return [Boolean]
     # @see #delete!
     #
-    def delete(opts = {})
-      delete! opts
+    def delete(**opts)
+      delete!(**opts)
       true
     rescue Acfs::Error
       false
@@ -172,11 +172,11 @@ class Acfs::Resource
     # @return [undefined]
     # @see #delete
     #
-    def delete!(opts = {})
+    def delete!(**opts)
       opts[:params] ||= {}
       opts[:params] = attributes_for_url(:delete).merge opts[:params]
 
-      operation :delete, opts do |data|
+      operation(:delete, **opts) do |data|
         update_with data
         freeze
       end

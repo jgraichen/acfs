@@ -68,7 +68,7 @@ class Acfs::Resource
     # @see #write_attributes Delegates attributes hash to {#write_attributes}.
     #
     def attributes=(attributes)
-      write_attributes attributes
+      write_attributes(attributes)
     end
 
     # @api public
@@ -103,7 +103,7 @@ class Acfs::Resource
     #
     # @see #write_attribute Delegates attribute values to `#write_attribute`.
     #
-    def write_attributes(attributes, opts = {})
+    def write_attributes(attributes, **opts)
       unless attributes.respond_to?(:each) && attributes.respond_to?(:keys)
         return false
       end
@@ -121,12 +121,12 @@ class Acfs::Resource
         if attributes[key].is_a? Proc
           procs[key] = attributes[key]
         else
-          write_local_attribute key, attributes[key], opts
+          write_local_attribute(key, attributes[key], **opts)
         end
       end
 
       procs.each do |key, proc|
-        write_local_attribute key, instance_exec(&proc), opts
+        write_local_attribute(key, instance_exec(&proc), **opts)
       end
 
       true
@@ -200,12 +200,12 @@ class Acfs::Resource
       # @param [Symbol, String, Class] type Attribute
       #   type identifier or type class.
       #
-      def attribute(name, type, opts = {})
+      def attribute(name, type, **opts)
         if type.is_a?(Symbol) || type.is_a?(String)
           type = "#{ATTR_CLASS_BASE}::#{type.to_s.classify}".constantize
         end
 
-        define_attribute name.to_sym, type, opts
+        define_attribute(name.to_sym, type, **opts)
       end
 
       # @api public

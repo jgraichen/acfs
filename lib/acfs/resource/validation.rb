@@ -22,7 +22,7 @@ class Acfs::Resource
       end
     end
 
-    def save!(*_)
+    def save!(**kwargs)
       unless valid?(new? ? :create : :save)
         raise ::Acfs::InvalidResource.new resource: self, errors: errors.to_a
       end

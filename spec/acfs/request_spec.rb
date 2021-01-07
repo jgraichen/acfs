@@ -9,7 +9,7 @@ describe Acfs::Request do
   let(:data)    { nil }
   let(:method)  { :get }
   let(:options) { {method: method, headers: headers, params: params, data: data} }
-  let(:request) { Acfs::Request.new(url, options) }
+  let(:request) { Acfs::Request.new(url, **options) }
 
   describe '#url' do
     it 'should return request URL' do

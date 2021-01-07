@@ -11,12 +11,15 @@ class Acfs::Resource
   #
   module Operational
     extend ActiveSupport::Concern
-    delegate :operation, to: :'self.class'
+
+    def operation(*args, **kwargs, &block)
+      self.class.operation(*args, **kwargs, &block)
+    end
 
     module ClassMethods
       # Invoke CRUD operation.
-      def operation(action, opts = {}, &block)
-        Acfs.runner.process ::Acfs::Operation.new self, action, opts, &block
+      def operation(action, **opts, &block)
+        Acfs.runner.process ::Acfs::Operation.new(self, action, **opts, &block)
       end
     end
   end

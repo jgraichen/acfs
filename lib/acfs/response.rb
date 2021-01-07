@@ -19,12 +19,12 @@ module Acfs
     #         :response_body, :response_headers, :response_code, :headers,
     #         to: :response
 
-    def initialize(request, data = {})
+    def initialize(request, **opts)
       @request  = request
-      @status   = data[:status]  || 0
-      @headers  = data[:headers] || {}
-      @body     = data[:body]    || ''
-      @data     = data[:data]    || nil
+      @status   = opts[:status]  || 0
+      @headers  = opts[:headers] || {}
+      @body     = opts[:body]    || ''
+      @data     = opts[:data]    || nil
     end
   end
 end

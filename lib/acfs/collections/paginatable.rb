@@ -5,7 +5,7 @@ module Acfs::Collections
     extend ActiveSupport::Concern
 
     included do
-      def self.operation(_action, opts = {}, &_block)
+      def self.operation(_action, **opts, &_block)
         opts[:url]
       end
 

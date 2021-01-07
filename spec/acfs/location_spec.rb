@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe ::Acfs::Location do
-  let(:location) { described_class.new(uri, args) }
+  let(:location) { described_class.new(uri, **args) }
   let(:uri)      { 'http://localhost/users/:id' }
   let(:args)     { {id: 4} }
 

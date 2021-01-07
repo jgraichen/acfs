@@ -12,7 +12,7 @@ module Acfs
     delegate :service, to: :resource
     delegate :call, to: :callback
 
-    def initialize(resource, action, opts = {}, &block)
+    def initialize(resource, action, **opts, &block)
       @resource = resource
       @action   = action.to_sym
 
@@ -21,9 +21,7 @@ module Acfs
       @params   = (opts[:params] || {}).dup
       @data     = (opts[:data]   || {}).dup
 
-      if opts[:url]
-        @url = opts[:url]
-      else
+      unless (@url = opts[:url])
         @location = resource.location(action: @action).extract_from(@params, @data)
         @url      = location.str
       end

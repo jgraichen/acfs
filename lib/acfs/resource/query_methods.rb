@@ -56,7 +56,7 @@ class Acfs::Resource
       #
       #   @return [Collection] Collection of requested resources.
       #
-      def find(id_or_ids, opts = {}, &block)
+      def find(id_or_ids, **opts, &block)
         if id_or_ids.respond_to? :each
           find_multiple id_or_ids, opts, &block
         else
@@ -81,7 +81,7 @@ class Acfs::Resource
         collection = ::Acfs::Collection.new self
         collection.__callbacks__ << block if block
 
-        operation :list, opts.merge(params: params) do |data, response|
+        operation(:list, **opts, params: params) do |data, response|
           data.each {|obj| collection << create_resource(obj) }
           collection.process_response response
           collection.loaded!
@@ -109,7 +109,7 @@ class Acfs::Resource
       def find_by(params, &block)
         Acfs::Util::ResourceDelegator.new(new).tap do |m|
           m.__callbacks__ << block unless block.nil?
-          operation :list, params: params do |data|
+          operation(:list, params: params) do |data|
             if data.empty?
               m.__setobj__ nil
             else
@@ -214,7 +214,7 @@ class Acfs::Resource
 
         model.__callbacks__ << block unless block.nil?
 
-        operation :read, opts do |data|
+        operation(:read, **opts) do |data|
           model.__setobj__ create_resource data, origin: model.__getobj__
           model.__invoke__
         end
@@ -228,7 +228,7 @@ class Acfs::Resource
 
           counter = 0
           ids.each_with_index do |id, index|
-            find_single id, opts do |resource|
+            find_single(id, opts) do |resource|
               collection[index] = resource
               if (counter += 1) == ids.size
                 collection.loaded!
@@ -239,11 +239,11 @@ class Acfs::Resource
         end
       end
 
-      def create_resource(data, opts = {})
+      def create_resource(data, **opts)
         type = data.delete 'type'
         klass = resource_class_lookup(type)
         (opts[:origin].is_a?(klass) ? opts[:origin] : klass.new).tap do |m|
-          m.write_attributes data, opts
+          m.write_attributes(data, **opts)
           m.loaded!
         end
       end

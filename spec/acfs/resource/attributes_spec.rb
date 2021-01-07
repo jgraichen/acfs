@@ -48,10 +48,10 @@ describe Acfs::Resource::Attributes do
         write_attribute :name, "The Great #{name}"
       end
     end
-    let(:args) { [params] }
     let(:params) { {name: 'James'} }
+    let(:opts) { {} }
     let(:m) { model.new }
-    let(:action) { -> { m.write_attributes(*args) } }
+    let(:action) { -> { m.write_attributes(params, **opts) } }
     subject { action }
 
     it 'should update attributes' do
@@ -79,7 +79,7 @@ describe Acfs::Resource::Attributes do
       end
 
       context 'with unknown: :raise option' do
-        let(:args) { [params, {unknown: :raise}] }
+        let(:opts) { {unknown: :raise} }
 
         it { should raise_error(ArgumentError, /unknown attribute/i) }
 

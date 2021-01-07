@@ -34,8 +34,8 @@ class Acfs::Resource
       #   @param options [Object] Option delegated to
       #     service class initializer.
       #
-      def service(klass = nil, options = {})
-        return (@service = klass.new options) if klass
+      def service(klass = nil, **options)
+        return (@service = klass.new(**options)) if klass
 
         @service || superclass.service
       end

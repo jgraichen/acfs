@@ -7,18 +7,16 @@ module Acfs
     # Log requests and responses.
     #
     class Logger < Base
-      def initialize(app, options = {})
+      attr_reader :logger
+
+      def initialize(app, **opts)
         super
-        @logger = options[:logger] if options[:logger]
+        @logger = options[:logger] || ::Logger.new($stdout)
       end
 
       def response(res, nxt)
         logger.info "[ACFS] #{res.request.method.to_s.upcase} #{res.request.url} -> #{res.status}"
         nxt.call res
-      end
-
-      def logger
-        @logger ||= ::Logger.new $stdout
       end
     end
   end

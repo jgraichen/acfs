@@ -11,7 +11,7 @@ module Acfs
     attr_reader :url, :headers, :params, :data, :method, :operation
 
     include Request::Callbacks
-    def initialize(url, options = {}, &block)
+    def initialize(url, **options, &block)
       @url = URI.parse(url.to_s).tap do |_url|
         @data    = options.delete(:data) || nil
         @format  = options.delete(:format) || :json
@@ -27,14 +27,6 @@ module Acfs
 
     def data?
       !data.nil?
-    end
-
-    class << self
-      def new(*attrs)
-        return attrs[0] if attrs[0].is_a? self
-
-        super
-      end
     end
   end
 end
