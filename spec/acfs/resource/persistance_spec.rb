@@ -101,12 +101,12 @@ describe Acfs::Resource::Persistence do
     let!(:model) { model_class.find 1 }
 
     describe '#update_attributes' do
-      subject { -> { model.update_attributes name: 'John' } }
+      subject { -> { model.update_attributes({name: 'John'}) } }
       it { expect { subject.call }.to raise_error Acfs::ResourceNotLoaded }
     end
 
     describe '#update_attributes!' do
-      subject { -> { model.update_attributes! name: 'John' } }
+      subject { -> { model.update_attributes!({name: 'John'}) } }
       it { expect { subject.call }.to raise_error Acfs::ResourceNotLoaded }
     end
   end
@@ -179,18 +179,18 @@ describe Acfs::Resource::Persistence do
       before { model; Acfs.run }
 
       it 'should set attributes' do
-        model.update_attributes name: 'Idefix'
+        model.update_attributes({name: 'Idefix'})
         expect(model.attributes.symbolize_keys).to eq id: 1, name: 'Idefix', age: 12
       end
 
       it 'should save resource' do
-        expect(model.__getobj__).to receive(:save).with({})
-        model.update_attributes name: 'Idefix'
+        expect(model.__getobj__).to receive(:save)
+        model.update_attributes({name: 'Idefix'})
       end
 
-      it 'should pass second hash to save' do
+      it 'should kwargs to save' do
         expect(model.__getobj__).to receive(:save).with(bla: 'blub')
-        model.update_attributes({name: 'Idefix'}, {bla: 'blub'})
+        model.update_attributes({name: 'Idefix'}, bla: 'blub')
       end
     end
 
@@ -199,18 +199,18 @@ describe Acfs::Resource::Persistence do
       before { model; Acfs.run }
 
       it 'should set attributes' do
-        model.update_attributes! name: 'Idefix'
+        model.update_attributes!({name: 'Idefix'})
         expect(model.attributes.symbolize_keys).to eq id: 1, name: 'Idefix', age: 12
       end
 
       it 'should save resource' do
-        expect(model.__getobj__).to receive(:save!).with({})
-        model.update_attributes! name: 'Idefix'
+        expect(model.__getobj__).to receive(:save!)
+        model.update_attributes!({name: 'Idefix'})
       end
 
       it 'should pass second hash to save' do
         expect(model.__getobj__).to receive(:save!).with(bla: 'blub')
-        model.update_attributes!({name: 'Idefix'}, {bla: 'blub'})
+        model.update_attributes!({name: 'Idefix'}, bla: 'blub')
       end
     end
   end
