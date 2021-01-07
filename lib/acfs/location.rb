@@ -10,23 +10,23 @@ module Acfs
 
     REGEXP = /^:([A-z][A-z0-9_]*)$/.freeze
 
-    def initialize(uri, **args)
+    def initialize(uri, args = {})
       @raw       = URI.parse uri
-      @args      = args
+      @args      = args.stringify_keys
       @struct    = raw.path.split('/').reject(&:empty?).map {|s| s =~ REGEXP ? Regexp.last_match[1].to_sym : s }
       @arguments = struct.select {|s| s.is_a?(Symbol) }
     end
 
-    def build(**args)
-      self.class.new(raw.to_s, **args, **self.args)
+    def build(args)
+      self.class.new(raw.to_s, args.stringify_keys.merge(self.args))
     end
 
     def extract_from(*args)
       args = {}.tap do |collect|
-        arguments.each {|key| collect[key] = extract_arg key, args }
+        arguments.each {|key| collect[key.to_s] = extract_arg(key, args) }
       end
 
-      build(**args)
+      build(args)
     end
 
     def str
@@ -65,13 +65,11 @@ module Acfs
 
     def get_replacement(sym, args)
       args.fetch(sym.to_s) do
-        args.fetch(sym) do
-          if args[:raise].nil? || args[:raise]
-            raise ArgumentError.new "URI path argument `#{sym}' missing on `#{self}'. Given: `#{args}.inspect'"
-          end
-
-          ":#{sym}"
+        if args[:raise].nil? || args[:raise]
+          raise ArgumentError.new "URI path argument `#{sym}' missing on `#{self}'. Given: `#{args}.inspect'"
         end
+
+        ":#{sym}"
       end
     end
   end

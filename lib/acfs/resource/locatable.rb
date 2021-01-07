@@ -46,9 +46,12 @@ class Acfs::Resource
           suffix = nil
         end
 
-        opts[:action] = :list if suffix
+        kwargs = {}
+        kwargs[:path] = opts[:path] if opts.key?(:path)
+        kwargs[:action] = opts.delete(:action) if opts.key?(:action)
+        kwargs[:action] = :list if suffix
 
-        url  = location(**opts).build(**opts).str
+        url  = location(**kwargs).build(opts.stringify_keys).str
         url += "/#{suffix}" if suffix.to_s.present?
         url
       end
@@ -114,7 +117,7 @@ class Acfs::Resource
 
       self.class.service
           .location(self.class, **opts, action: :read)
-          .build(**attributes).str
+          .build(attributes).str
     end
 
     # @api private
