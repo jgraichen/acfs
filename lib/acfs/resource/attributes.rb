@@ -108,12 +108,11 @@ class Acfs::Resource
         return false
       end
 
-      if opts.fetch(:unknown, :ignore) == :raise
-        if (attributes.keys.map(&:to_s) - self.class.attributes.keys).any?
-          missing = attributes.keys - self.class.attributes.keys
-          missing.map!(&:inspect)
-          raise ArgumentError.new "Unknown attributes: #{missing.join(', ')}"
-        end
+      if opts.fetch(:unknown, :ignore) == :raise &&
+         (attributes.keys.map(&:to_s) - self.class.attributes.keys).any?
+        missing = attributes.keys - self.class.attributes.keys
+        missing.map!(&:inspect)
+        raise ArgumentError.new "Unknown attributes: #{missing.join(', ')}"
       end
 
       procs = {}
@@ -265,7 +264,7 @@ end
 
 # Load attribute type classes.
 #
-Dir[File.dirname(__FILE__) + '/attributes/*.rb'].sort.each do |path|
+Dir[File.join(__dir__, 'attributes/*.rb')].sort.each do |path|
   filename = File.basename(path)
   require "acfs/resource/attributes/#{filename}"
 end

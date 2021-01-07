@@ -22,7 +22,7 @@ module Acfs
     end
 
     def accept?(op)
-      return opts[:with].call op if opts[:with].respond_to? :call
+      return opts[:with].call(op) if opts[:with].respond_to?(:call)
 
       params = op.full_params.stringify_keys
       data   = op.data.stringify_keys
@@ -84,9 +84,13 @@ module Acfs
     def raise_error(op, name, data)
       raise name if name.is_a? Class
 
-      data.stringify_keys! if data.respond_to? :stringify_keys!
+      data.stringify_keys! if data.respond_to?(:stringify_keys!)
 
-      op.handle_failure ::Acfs::Response.new op.request, status: Rack::Utils.status_code(name), data: data
+      op.handle_failure ::Acfs::Response.new(
+        op.request,
+        status: Rack::Utils.status_code(name),
+        data: data
+      )
     end
 
     class << self
@@ -154,12 +158,14 @@ module Acfs
         unless stub
           return false if allow_requests?
 
-          raise RealRequestsNotAllowedError.new <<-MSG.strip.gsub(/^[ ]{12}/, '')
-            No stub found for `#{op.action}' on `#{op.resource.name}' with params `#{op.full_params.inspect}', data `#{op.data.inspect}' and id `#{op.id}'.
+          raise RealRequestsNotAllowedError.new <<~ERROR
+            No stub found for `#{op.action}' on `#{op.resource.name}' \
+            with params `#{op.full_params.inspect}', data `#{op.data.inspect}' \
+            and id `#{op.id}'.
 
             Available stubs:
             #{pretty_print}
-          MSG
+          ERROR
         end
 
         stub.call op

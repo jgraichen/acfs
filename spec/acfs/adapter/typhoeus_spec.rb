@@ -19,7 +19,7 @@ describe Acfs::Adapter::Typhoeus do
     adapter.queue request1
     adapter.queue request2
 
-    expect { adapter.start }.to raise_error(/404\-[12]/)
+    expect { adapter.start }.to raise_error(/404-[12]/)
     expect { adapter.start }.to_not raise_error
   end
 

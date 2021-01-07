@@ -131,8 +131,7 @@ module Acfs
   # parent resource. Check if the type is set to the correct
   # Acfs::Resource Name
   class ResourceTypeError < Error
-    attr_reader :base_class
-    attr_reader :type_name
+    attr_reader :base_class, :type_name
 
     def initialize(opts = {})
       @base_class    = opts.delete :base_class
