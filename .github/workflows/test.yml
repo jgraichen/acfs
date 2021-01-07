@@ -13,6 +13,7 @@ jobs:
 
     env:
       BUNDLE_GEMFILE: gemfiles/rails_${{ matrix.rails }}.gemfile
+      RUBYOPT: -W:deprecated
 
     steps:
       - uses: actions/checkout@master
