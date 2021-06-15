@@ -22,7 +22,7 @@ group :development do
   gem 'redcarpet', platform: :ruby
   gem 'yard', '~> 0.9.24'
 
-  gem 'rubocop', '~> 1.16.0'
+  gem 'rubocop', '~> 1.17.0'
 end
 
 group :test do
