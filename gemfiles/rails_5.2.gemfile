@@ -18,7 +18,7 @@ group :development do
   gem "rake-release", "~> 1.0"
   gem "redcarpet", platform: :ruby
   gem "yard", "~> 0.9.24"
-  gem "rubocop", "~> 1.5.0"
+  gem "rubocop-config", ref: "v7", git: "https://github.com/jgraichen/rubocop-config.git"
 end
 
 group :test do
