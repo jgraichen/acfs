@@ -8,14 +8,16 @@
 
 Acfs is a library to develop API client libraries for single services within a larger service oriented application.
 
-Acfs covers model and service abstraction, convenient query and filter methods, full middleware stack for pre-processing requests and responses on a per service level and automatic request queuing and parallel processing. See Usage for more.
+Acfs covers model and service abstraction, convenient query and filter methods, full middleware stack for pre-processing requests and responses, as well as automatic request queuing and parallel processing.
 
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'acfs', '~> 1.3'
+```ruby
+gem 'acfs', '~> 1.7'
+```
 
 And then execute:
 
@@ -121,7 +123,7 @@ Acfs.run # This call will fire all request as parallel as possible.
 @friends[0].name # => "Miraculix"
 ```
 
-Use `.find_by` to get first element only. `.find_by` will call the `index`-Action and return the first resource. Optionally passed params will be sent as `GET` parameters and can be used for filtering in the service's controller.
+Use `.find_by` to get first element only. `.find_by` will call the `index`-Action and return the first resource. Optionally passed parameters will be sent as `GET` parameters and can be used for filtering in the service's controller.
 ```ruby
 @user = User.find_by age: 24
 
@@ -179,7 +181,7 @@ my_single.save # sends PUT request to /single
 my_single.delete # sends DELETE request to /single
 ```
 
-You also can pass parameters to the find call, these will sent as GET params to the index action:
+You also can pass parameters to the find call. They will be sent as query parameters to the index action:
 
 ```ruby
 my_single = Single.find name: 'Max'
@@ -189,9 +191,7 @@ Acfs.run # sends GET request with param to /single?name=Max
 
 ## Resource Inheritance
 
-Acfs provides a resource inheritance similar to ActiveRecord Single Table Inheritance. If a
-`type` attribute exists and is a valid subclass of your resource they will be converted
-to you subclassed resources:
+Acfs provides a resource inheritance similar to ActiveRecord Single Table Inheritance. If a `type` attribute exists and is a valid subclass of your resource they will be converted to you subclassed resources:
 
 ```ruby
 class Computer < Acfs::Resource
@@ -202,8 +202,7 @@ class Pc < Computer end
 class Mac < Computer end
 ```
 
-With the following response on `GET /computers` the collection will contain the appropriate
-subclass resources:
+With the following response on `GET /computers` the collection will contain the appropriate subclass resources:
 
 ```json
 [
@@ -287,9 +286,7 @@ end
 
 ## Instrumentation
 
-Acfs supports [instrumentation via active support][1].
-
-Acfs expose to following events
+Acfs supports [instrumentation via active support][1] and exposes the following events:
 
 * `acfs.operation.complete(operation, response)`: Acfs operation completed
 * `acfs.runner.sync_run(operation)`: Run operation right now skipping queue.
@@ -297,7 +294,7 @@ Acfs expose to following events
 * `acfs.before_run`: directly before `acfs.run`
 * `acfs.run`: Run all queued operations.
 
-Read [official guide][2] to see to to subscribe.
+Read the [official guide][2] on how to subscribe to these events.
 
 [1]: http://guides.rubyonrails.org/active_support_instrumentation.html
 [2]: http://guides.rubyonrails.org/active_support_instrumentation.html#subscribing-to-an-event
@@ -318,4 +315,4 @@ Read [official guide][2] to see to to subscribe.
 
 MIT License
 
-Copyright (c) 2013-2020 Jan Graichen. MIT license, see LICENSE for more details.
+Copyright (c) 2013-2022 Jan Graichen. MIT license, see LICENSE for more details.

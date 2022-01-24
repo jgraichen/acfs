@@ -6,6 +6,7 @@
 ---
 
 ### New
+* Support for Ruby 3.1 and Rails 7.0
 
 ### Changes
 
