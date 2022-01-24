@@ -7,7 +7,7 @@ module Acfs
     DEFAULT_OPTIONS = {
       tcp_keepalive: true,
       tcp_keepidle: 5,
-      tcp_keepintvl: 5
+      tcp_keepintvl: 5,
     }.freeze
 
     # Adapter for Typhoeus.
@@ -52,9 +52,9 @@ module Acfs
           params: req.params,
           headers: req.headers.merge(
             'Expect' => '',
-            'Transfer-Encoding' => ''
+            'Transfer-Encoding' => '',
           ),
-          body: req.body
+          body: req.body,
         }
 
         request = ::Typhoeus::Request.new(req.url, **@opts, **opts)

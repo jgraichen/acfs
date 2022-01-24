@@ -71,7 +71,7 @@ module Acfs
     def add_callback(resource, &block)
       unless resource.respond_to?(:__callbacks__)
         raise ArgumentError.new 'Given resource is not an Acfs resource ' \
-          "delegator but a: #{resource.class.name}"
+                                "delegator but a: #{resource.class.name}"
       end
       return false if block.nil?
 

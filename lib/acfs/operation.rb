@@ -56,7 +56,7 @@ module Acfs
 
     def request
       request = ::Acfs::Request.new url, method: method, params: params,
-                                         data: data, operation: self
+        data: data, operation: self
       request.on_complete do |response|
         ::ActiveSupport::Notifications.instrument 'acfs.operation.complete',
           operation: self,

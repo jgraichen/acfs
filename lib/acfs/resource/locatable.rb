@@ -116,8 +116,8 @@ class Acfs::Resource
       return nil if need_primary_key? && !primary_key?
 
       self.class.service
-          .location(self.class, **opts, action: :read)
-          .build(attributes).str
+        .location(self.class, **opts, action: :read)
+        .build(attributes).str
     end
 
     # @api private

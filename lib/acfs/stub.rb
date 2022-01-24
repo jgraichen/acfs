@@ -21,11 +21,11 @@ module Acfs
       end
     end
 
-    def accept?(op)
-      return opts[:with].call(op) if opts[:with].respond_to?(:call)
+    def accept?(operation)
+      return opts[:with].call(operation) if opts[:with].respond_to?(:call)
 
-      params = op.full_params.stringify_keys
-      data   = op.data.stringify_keys
+      params = operation.full_params.stringify_keys
+      data   = operation.data.stringify_keys
       with   = opts[:with]
 
       return true if with.nil?
@@ -33,10 +33,10 @@ module Acfs
       case opts.fetch(:match, :inclusion)
         when :legacy
           return true if with.empty? && params.empty? && data.empty?
-          if with.reject {|_, v| v.nil? } == params.reject {|_, v| v.nil? }
+          if with.compact == params.compact
             return true
           end
-          if with.reject {|_, v| v.nil? } == data.reject {|_, v| v.nil? }
+          if with.compact == data.compact
             return true
           end
 
@@ -58,22 +58,25 @@ module Acfs
       count.nil? ? calls.any? : calls.size == count
     end
 
-    def call(op)
-      calls << op
+    def call(operation)
+      calls << operation
 
       err  = opts[:raise]
       data = opts[:return]
 
       if err
-        raise_error op, err, opts[:return]
+        raise_error(operation, err, opts[:return])
       elsif data
-        data = data.call(op) if data.respond_to?(:call)
+        data = data.call(operation) if data.respond_to?(:call)
 
-        response = Acfs::Response.new op.request,
+        response = Acfs::Response.new(
+          operation.request,
           headers: opts[:headers] || {},
           status: opts[:status] || 200,
-          data: data || {}
-        op.call data, response
+          data: data || {},
+        )
+
+        operation.call(data, response)
       else
         raise ArgumentError.new 'Unsupported stub.'
       end
@@ -81,15 +84,17 @@ module Acfs
 
     private
 
-    def raise_error(op, name, data)
+    def raise_error(operation, name, data)
       raise name if name.is_a? Class
 
       data.stringify_keys! if data.respond_to?(:stringify_keys!)
 
-      op.handle_failure ::Acfs::Response.new(
-        op.request,
-        status: Rack::Utils.status_code(name),
-        data: data
+      operation.handle_failure(
+        ::Acfs::Response.new(
+          operation.request,
+          status: Rack::Utils.status_code(name),
+          data: data,
+        ),
       )
     end
 
@@ -140,35 +145,35 @@ module Acfs
         @stubs ||= {}
       end
 
-      def stub_for(op)
-        return false unless (classes = stubs[op.resource])
-        return false unless (stubs = classes[op.action])
+      def stub_for(operation)
+        return false unless (classes = stubs[operation.resource])
+        return false unless (stubs = classes[operation.action])
 
-        accepted_stubs = stubs.select {|stub| stub.accept? op }
+        accepted_stubs = stubs.select {|stub| stub.accept?(operation) }
 
         if accepted_stubs.size > 1
-          raise AmbiguousStubError.new stubs: accepted_stubs, operation: op
+          raise AmbiguousStubError.new(stubs: accepted_stubs, operation: operation)
         end
 
         accepted_stubs.first
       end
 
-      def stubbed(op)
-        stub = stub_for op
+      def stubbed(operation)
+        stub = stub_for(operation)
         unless stub
           return false if allow_requests?
 
           raise RealRequestsNotAllowedError.new <<~ERROR
-            No stub found for `#{op.action}' on `#{op.resource.name}' \
-            with params `#{op.full_params.inspect}', data `#{op.data.inspect}' \
-            and id `#{op.id}'.
+            No stub found for `#{operation.action}' on `#{operation.resource.name}' \
+            with params `#{operation.full_params.inspect}', data `#{operation.data.inspect}' \
+            and id `#{operation.id}'.
 
             Available stubs:
             #{pretty_print}
           ERROR
         end
 
-        stub.call op
+        stub.call(operation)
         true
       end
 

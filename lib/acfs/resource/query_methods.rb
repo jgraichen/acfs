@@ -139,7 +139,7 @@ class Acfs::Resource
         find_by params do |m|
           if m.nil?
             raise Acfs::ResourceNotFound.new message: 'Received erroneous ' \
-              "response: no `#{name}` with params #{params} found"
+                                                      "response: no `#{name}` with params #{params} found"
           end
           block&.call m
         end

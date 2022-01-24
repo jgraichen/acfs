@@ -17,16 +17,16 @@ module Acfs
     # Process an operation. Synchronous operations will be run
     # and parallel operations will be queued.
     #
-    def process(op)
-      ::ActiveSupport::Notifications.instrument 'acfs.operation.before_process', operation: op
-      op.synchronous? ? run(op) : enqueue(op)
+    def process(operation)
+      ::ActiveSupport::Notifications.instrument('acfs.operation.before_process', operation: operation)
+      operation.synchronous? ? run(operation) : enqueue(operation)
     end
 
     # Run operation right now skipping queue.
     #
-    def run(op)
-      ::ActiveSupport::Notifications.instrument 'acfs.runner.sync_run', operation: op do
-        op_request(op) {|req| adapter.run req }
+    def run(operation)
+      ::ActiveSupport::Notifications.instrument('acfs.runner.sync_run', operation: operation) do
+        operation_request(operation) {|req| adapter.run req }
       end
     end
 
@@ -38,12 +38,12 @@ module Acfs
 
     # Enqueue operation to be run later.
     #
-    def enqueue(op)
-      ::ActiveSupport::Notifications.instrument 'acfs.runner.enqueue', operation: op do
+    def enqueue(operation)
+      ::ActiveSupport::Notifications.instrument('acfs.runner.enqueue', operation: operation) do
         if running?
-          op_request(op) {|req| adapter.queue req }
+          operation_request(operation) {|req| adapter.queue req }
         else
-          queue << op
+          queue << operation
         end
       end
     end
@@ -82,15 +82,15 @@ module Acfs
     end
 
     def enqueue_operations
-      while (op = queue.shift)
-        op_request(op) {|req| adapter.queue req }
+      while (operation = queue.shift)
+        operation_request(operation) {|req| adapter.queue req }
       end
     end
 
-    def op_request(op)
-      return if Acfs::Stub.enabled? && Acfs::Stub.stubbed(op)
+    def operation_request(operation)
+      return if Acfs::Stub.enabled? && Acfs::Stub.stubbed(operation)
 
-      req = op.service.prepare op.request
+      req = operation.service.prepare(operation.request)
       return unless req.is_a? Acfs::Request
 
       req = prepare req
