@@ -35,7 +35,7 @@ module Acfs::Resource::Attributes
     def cast_value(value)
       if value.blank?
         nil
-      elsif value.to_s =~ UUID_REGEXP
+      elsif UUID_REGEXP.match?(value.to_s)
         value
       else
         raise TypeError.new "Invalid UUID: `#{value}'"

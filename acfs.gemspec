@@ -16,6 +16,8 @@ Gem::Specification.new do |spec|
     An abstract API base client for service oriented application.
   SUMMARY
 
+  spec.metadata['rubygems_mfa_required'] = 'true'
+
   spec.files = Dir['**/*'].grep(%r{
     ^((bin|lib|test|spec|features)/|
     .*\.gemspec|.*LICENSE.*|.*README.*|.*CHANGELOG.*)

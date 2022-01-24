@@ -5,7 +5,7 @@ module Acfs
   #
   class Error < StandardError
     def initialize(opts = {}, message = nil)
-      opts.merge! message: message if message
+      opts[:message] = message if message
       super opts[:message]
     end
   end

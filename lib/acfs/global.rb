@@ -76,7 +76,7 @@ module Acfs
       return false if block.nil?
 
       if resource.nil? || resource.loaded?
-        block.call resource
+        yield resource
       else
         resource.__callbacks__ << block
       end

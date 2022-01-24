@@ -21,7 +21,7 @@ module Acfs
       # @return [ Acfs::Request ] The request itself.
       #
       def on_complete(&block)
-        callbacks.insert 0, block if block_given?
+        callbacks.insert 0, block if block
         self
       end
 

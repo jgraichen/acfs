@@ -210,7 +210,7 @@ class Acfs::Resource
         model = Acfs::Util::ResourceDelegator.new new
 
         opts[:params] ||= {}
-        opts[:params].merge! id: id unless id.nil?
+        opts[:params][:id] = id unless id.nil?
 
         model.__callbacks__ << block unless block.nil?
 

@@ -28,7 +28,7 @@ module Acfs
     #
     def configure(&block)
       if block.arity.positive?
-        block.call self
+        yield self
       else
         instance_eval(&block)
       end

@@ -30,7 +30,7 @@ module Acfs
 
     def str
       uri = raw.dup
-      uri.path = "/#{struct.map(&method(:lookup_variable)).join('/')}"
+      uri.path = "/#{struct.map {|s| lookup_variable(s) }.join('/')}"
       uri.to_s
     end
 

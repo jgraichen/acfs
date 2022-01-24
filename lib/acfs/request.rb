@@ -22,7 +22,7 @@ module Acfs
 
       @operation = options.delete(:operation) || nil
 
-      on_complete(&block) if block_given?
+      on_complete(&block) if block
     end
 
     def data?
