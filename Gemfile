@@ -22,7 +22,7 @@ group :development do
   gem 'redcarpet', platform: :ruby
   gem 'yard', '~> 0.9.24'
 
-  gem 'rubocop', '~> 1.25.0'
+  gem 'rubocop-config', github: 'jgraichen/rubocop-config', ref: 'v7'
 end
 
 group :test do

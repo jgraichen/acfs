@@ -1,110 +1,26 @@
+# vim: ft=yaml
+
+inherit_from: .rubocop_todo.yml
+inherit_gem:
+  rubocop-config: default.yml
+
 AllCops:
-  Exclude:
-    - vendor/**
-    - gemfiles/**
   TargetRubyVersion: 2.5
-
-
-Layout/ArgumentAlignment:
-  EnforcedStyle: with_fixed_indentation
-
-Layout/CaseIndentation:
-  EnforcedStyle: end
-  SupportedStyles:
-    - case
-    - end
-  IndentOneStep: true
-
-Layout/EmptyLinesAroundAttributeAccessor:
-  Enabled: true
-
-Layout/LineLength:
-  Exclude:
-    - spec/**/*_spec.rb
-
-Layout/SpaceAroundMethodCallOperator:
-  Enabled: true
-
-Layout/SpaceInsideBlockBraces:
-  EnforcedStyle: space
-  EnforcedStyleForEmptyBraces: no_space
-  SpaceBeforeBlockParameters: false
-
-Layout/SpaceInsideHashLiteralBraces:
-  EnforcedStyle: no_space
-
-
-Lint/DeprecatedOpenSSLConstant:
-  Enabled: true
-
-Lint/RaiseException:
-  Enabled: true
-
-Lint/StructNewOverride:
-  Enabled: true
-
-
-Metrics/AbcSize:
-  Enabled: false
+  SuggestExtensions: False
 
 Metrics/BlockLength:
   Exclude:
-    - spec/**/*.rb
-    - '**/*.gemspec'
-
-Metrics/ClassLength:
-  Enabled: false
-
-Metrics/CyclomaticComplexity:
-  Enabled: false
-
-Metrics/MethodLength:
-  Enabled: false
+    - "**/*.gemspec"
+    - "spec/**/*.rb"
 
 Metrics/ModuleLength:
-  Enabled: false
+  Enabled: False
 
-Metrics/PerceivedComplexity:
-  Enabled: false
+Lint/ShadowingOuterLocalVariable:
+  Enabled: False
 
+RSpec/MultipleMemoizedHelpers:
+  Enabled: False
 
-Naming/MethodParameterName:
-  AllowedNames: [id, op]
-
-
-Style/ClassAndModuleChildren:
-  Enabled: false
-
-Style/Documentation:
-  Enabled: false
-
-Style/ExponentialNotation:
-  Enabled: true
-
-Style/HashEachMethods:
-  Enabled: false
-
-Style/HashTransformKeys:
-  Enabled: false
-
-Style/HashTransformValues:
-  Enabled: false
-
-Style/IfUnlessModifier:
-  Enabled: false
-
-Style/RaiseArgs:
-  EnforcedStyle: compact
-
-Style/Semicolon:
-  Exclude:
-    - spec/**/*_spec.rb
-
-Style/SignalException:
-  EnforcedStyle: only_raise
-
-Style/SlicingWithRange:
-  Enabled: true
-
-Style/TrivialAccessors:
-  AllowPredicates: true
+RSpec/NestedGroups:
+  Enabled: False

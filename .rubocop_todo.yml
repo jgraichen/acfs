@@ -1,0 +1,33 @@
+# vim: ft=yaml
+
+# Offense count: 2
+RSpec/AnyInstance:
+  Exclude:
+    - "spec/acfs/runner_spec.rb"
+
+# Offense count: 6
+RSpec/ImplicitBlockExpectation:
+  Exclude:
+    - "spec/acfs/resource/attributes/date_time_spec.rb"
+    - "spec/acfs/resource/attributes/dict_spec.rb"
+    - "spec/acfs/resource/attributes/float_spec.rb"
+    - "spec/acfs/resource/attributes/integer_spec.rb"
+    - "spec/acfs/resource/attributes/uuid_spec.rb"
+
+# Offense count: 24
+# Configuration parameters: .
+# SupportedStyles: have_received, receive
+RSpec/MessageSpies:
+  EnforcedStyle: receive
+
+# Offense count: 3
+RSpec/StubbedMock:
+  Exclude:
+    - "spec/acfs/global_spec.rb"
+    - "spec/acfs/runner_spec.rb"
+
+# Offense count: 2
+# Configuration parameters: IgnoreNameless, IgnoreSymbolicNames.
+RSpec/VerifiedDoubles:
+  Exclude:
+    - "spec/acfs/global_spec.rb"
