@@ -16,8 +16,10 @@ module Acfs
       def initialize(**kwargs)
         super
 
+        extra_opts = kwargs.delete(:opts)
+
         @opts = DEFAULT_OPTIONS
-        @opts = @opts.merge(opts) if (opts = kwargs.delete(:opts))
+        @opts = @opts.merge(extra_opts) if extra_opts
         @kwargs = kwargs
       end
 
