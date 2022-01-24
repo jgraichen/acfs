@@ -1,8 +1,7 @@
 # Acfs - *API client for services*
 
 [![Gem Version](https://img.shields.io/gem/v/acfs?logo=ruby)](https://rubygems.org/gems/acfs)
-[![Build Status](https://img.shields.io/travis/jgraichen/acfs/master?logo=travis)](https://travis-ci.org/jgraichen/acfs)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jgraichen/acfs/Test/master?logo=github)](https://github.com/jgraichen/acfs/actions?query=branch%3Amaster)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jgraichen/acfs/test?logo=github)](https://github.com/jgraichen/acfs/actions)
 [![Coverage Status](http://img.shields.io/coveralls/jgraichen/acfs/master.svg)](https://coveralls.io/r/jgraichen/acfs)
 [![RubyDoc Documentation](http://img.shields.io/badge/rubydoc-here-blue.svg)](http://rubydoc.info/github/jgraichen/acfs/master/frames)
 
