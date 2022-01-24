@@ -12,6 +12,7 @@ describe Acfs::SingletonResource do
     end
 
     let(:action) { ->(cb) { model.find(&cb) } }
-    it_should_behave_like 'a query method with multi-callback support'
+
+    it_behaves_like 'a query method with multi-callback support'
   end
 end

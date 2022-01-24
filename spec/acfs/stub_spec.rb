@@ -7,8 +7,9 @@ class SpecialCustomError < StandardError; end
 describe Acfs::Stub do
   let(:stub) { Class.new(Acfs::Stub) }
 
-  before(:all) { Acfs::Stub.enable }
-  after(:all) { Acfs::Stub.disable }
+  before(:all) { Acfs::Stub.enable } # rubocop:disable RSpec/BeforeAfterAll
+
+  after(:all) { Acfs::Stub.disable } # rubocop:disable RSpec/BeforeAfterAll
 
   before do
     Acfs::Stub.allow_requests = false
@@ -16,16 +17,18 @@ describe Acfs::Stub do
 
   describe '#called?' do
     context 'without specified number' do
-      let!(:operation) { Acfs::Stub.resource MyUser, :read, with: {id: 1}, return: {id: 1, name: 'John Smith', age: 32} }
+      let!(:operation) do
+        Acfs::Stub.resource MyUser, :read, with: {id: 1}, return: {id: 1, name: 'John Smith', age: 32}
+      end
 
-      it 'should allow to test if stub was called' do
+      it 'allows to test if stub was called' do
         MyUser.find 1
         Acfs.run
 
         expect(operation).to be_called
       end
 
-      it 'should allow to test if stub was called a specific number of times' do
+      it 'allows to test if stub was called a specific number of times' do
         MyUser.find 1
         Acfs.run
 
@@ -44,7 +47,7 @@ describe Acfs::Stub do
         Acfs::Stub.resource MyUser, :read, with: {id: 1}, raise: :not_found
       end
 
-      it 'should raise error' do
+      it 'raises error' do
         MyUser.find 1
 
         expect { Acfs.run }.to raise_error(Acfs::AmbiguousStubError)
@@ -58,23 +61,23 @@ describe Acfs::Stub do
         Acfs::Stub.resource MyUser, :read, with: {id: 3}, raise: :not_found
       end
 
-      it 'should allow to stub resource reads' do
+      it 'allows to stub resource reads' do
         user = MyUser.find 1
         Acfs.run
 
-        expect(user.id).to be == 1
-        expect(user.name).to be == 'John Smith'
-        expect(user.age).to be == 32
+        expect(user.id).to eq 1
+        expect(user.name).to eq 'John Smith'
+        expect(user.age).to eq 32
       end
 
       context 'with error' do
-        it 'should allow to raise errors' do
+        it 'allows to raise errors' do
           MyUser.find 2
 
           expect { Acfs.run }.to raise_error(SpecialCustomError)
         end
 
-        it 'should allow to raise symbolic errors' do
+        it 'allows to raise symbolic errors' do
           MyUser.find 3
 
           expect { Acfs.run }.to raise_error(Acfs::ResourceNotFound)
@@ -87,7 +90,7 @@ describe Acfs::Stub do
           Acfs::Stub.resource Computer, :read, with: {id: 2}, return: {id: 2, type: 'Mac'}
         end
 
-        it 'should create inherited type' do
+        it 'creates inherited type' do
           pc = Computer.find 1
           mac = Computer.find 2
 
@@ -101,18 +104,26 @@ describe Acfs::Stub do
 
     context 'with create action' do
       before do
-        Acfs::Stub.resource Session, :create, with: {ident: 'john@exmaple.org', password: 's3cr3t'}, return: {id: 'longhash', user: 1}
-        Acfs::Stub.resource Session, :create, with: ->(op) { op.data[:ident] == 'john@exmaple.org' && op.data[:password] == 'wrong' }, raise: 422
+        lmbd = lambda {|op|
+          op.data[:ident] == 'john@exmaple.org' && op.data[:password] == 'wrong'
+        }
+
+        Acfs::Stub.resource Session, :create,
+          with: {ident: 'john@exmaple.org', password: 's3cr3t'},
+          return: {id: 'longhash', user: 1}
+        Acfs::Stub.resource Session, :create,
+          with: lmbd,
+          raise: 422
       end
 
-      it 'should allow stub resource creation' do
+      it 'allows stub resource creation' do
         session = Session.create! ident: 'john@exmaple.org', password: 's3cr3t'
 
-        expect(session.id).to be == 'longhash'
-        expect(session.user).to be == 1
+        expect(session.id).to eq 'longhash'
+        expect(session.user).to eq 1
       end
 
-      it 'should allow to raise error' do
+      it 'allows to raise error' do
         expect do
           Session.create! ident: 'john@exmaple.org', password: 'wrong'
         end.to raise_error(::Acfs::InvalidResource)
@@ -125,14 +136,14 @@ describe Acfs::Stub do
           return: [{id: 1, name: 'John Smith', age: 32}, {id: 2, name: 'Anon', age: 12}]
       end
 
-      it 'should return collection' do
+      it 'returns collection' do
         users = MyUser.all
         Acfs.run
 
         expect(users).to have(2).items
       end
 
-      it 'should return defined resources' do
+      it 'returns defined resources' do
         users = MyUser.all
         Acfs.run
 
@@ -148,7 +159,7 @@ describe Acfs::Stub do
             return: [{id: 1, type: 'PC'}, {id: 2, type: 'Mac'}]
         end
 
-        it 'should create inherited type' do
+        it 'creates inherited type' do
           computers = Computer.all
           Acfs.run
 
@@ -158,6 +169,11 @@ describe Acfs::Stub do
       end
 
       context 'with header' do
+        subject do
+          Acfs.run
+          comments
+        end
+
         before do
           Acfs::Stub.resource Comment, :list,
             return: [{id: 1, text: 'Foo'}, {id: 2, text: 'Bar'}],
@@ -168,40 +184,40 @@ describe Acfs::Stub do
         let(:headers) do
           {
             'X-Total-Pages' => '2',
-            'X-Total-Count' => '10'
+            'X-Total-Count' => '10',
           }
         end
-        subject { Acfs.run; comments }
 
-        its(:total_pages) { should eq 2 }
-        its(:total_count) { should eq 10 }
+        its(:total_pages) { is_expected.to eq 2 }
+        its(:total_count) { is_expected.to eq 10 }
       end
     end
 
     context 'with update action' do
       before do
         Acfs::Stub.resource MyUser, :read, with: {id: 1}, return: {id: 1, name: 'John Smith', age: 32}
-        Acfs::Stub.resource MyUser, :update, with: {id: 1, name: 'John Smith', age: 22}, return: {id: 1, name: 'John Smith', age: 23}
+        Acfs::Stub.resource MyUser, :update, with: {id: 1, name: 'John Smith', age: 22},
+          return: {id: 1, name: 'John Smith', age: 23}
         Acfs::Stub.resource MyUser, :update, with: {id: 1, name: 'John Smith', age: 0}, raise: 422
       end
 
       let!(:update_stub) do
         Acfs::Stub.resource MyUser, :update,
           with: {id: 1, name: 'Jane Smith'},
-          return: ->(op) { Hash[op.data.map {|k, v| [k, v.to_s.upcase] }] }
+          return: ->(op) { op.data.map {|k, v| [k, v.to_s.upcase] }.to_h }
       end
 
-      it 'should allow stub resource update' do
+      it 'allows stub resource update' do
         user = MyUser.find 1
         Acfs.run
 
         user.age = 22
         user.save!
 
-        expect(user.age).to be == 23
+        expect(user.age).to eq 23
       end
 
-      it 'should allow to raise error' do
+      it 'allows to raise error' do
         user = MyUser.find 1
         Acfs.run
 
@@ -213,7 +229,7 @@ describe Acfs::Stub do
         end.to raise_error(::Acfs::InvalidResource)
       end
 
-      it 'should match partial :with' do
+      it 'matches partial :with' do
         user = MyUser.find 1
         Acfs.run
 
@@ -224,7 +240,7 @@ describe Acfs::Stub do
         expect(update_stub).to be_called
       end
 
-      it 'should process response body' do
+      it 'processes response body' do
         user = MyUser.find 1
         Acfs.run
 
@@ -233,18 +249,6 @@ describe Acfs::Stub do
         user.save!
 
         expect(user.name).to eq 'JANE SMITH'
-      end
-    end
-
-    context 'with create action' do
-      before do
-        Acfs::Stub.resource MyUser, :create, with: {name: 'John Smith', age: 0}, raise: 422
-      end
-
-      it 'should allow to raise error' do
-        expect do
-          MyUser.create! name: 'John Smith', age: 0
-        end.to raise_error(::Acfs::InvalidResource)
       end
     end
   end
@@ -256,9 +260,9 @@ describe Acfs::Stub do
         stub_request(:get, 'http://users.example.org/users/2').to_return response(id: 2, name: 'John', age: 26)
       end
 
-      it 'should allow real requests' do
+      it 'allows real requests' do
         @user = MyUser.find 2
-        expect { Acfs.run }.to_not raise_error
+        expect { Acfs.run }.not_to raise_error
       end
     end
 
@@ -267,7 +271,7 @@ describe Acfs::Stub do
         Acfs::Stub.allow_requests = false
       end
 
-      it 'should not allow real requests' do
+      it 'does not allow real requests' do
         @user = MyUser.find 2
         expect { Acfs.run }.to raise_error(Acfs::RealRequestsNotAllowedError)
       end
@@ -279,7 +283,7 @@ describe Acfs::Stub do
 
     context 'with a match in params' do
       let(:op) do
-        double('operation').tap do |op|
+        instance_double('Acfs::Operation').tap do |op|
           allow(op).to receive(:full_params).and_return(id: 1337, blub: 'abc')
           allow(op).to receive(:data).and_return({})
         end
@@ -292,7 +296,7 @@ describe Acfs::Stub do
 
     context 'with a match in data' do
       let(:op) do
-        double('operation').tap do |op|
+        instance_double('Acfs::Operation').tap do |op|
           allow(op).to receive(:full_params).and_return({})
           allow(op).to receive(:data).and_return(id: 1337, blub: 'abc')
         end
@@ -305,7 +309,7 @@ describe Acfs::Stub do
 
     context 'with no match in params nor data' do
       let(:op) do
-        double('operation').tap do |op|
+        instance_double('Acfs::Operation').tap do |op|
           allow(op).to receive(:full_params).and_return(id: 1337)
           allow(op).to receive(:data).and_return({})
         end
@@ -318,7 +322,7 @@ describe Acfs::Stub do
 
     context 'with a wrong match' do
       let(:op) do
-        double('operation').tap do |op|
+        instance_double('Acfs::Operation').tap do |op|
           allow(op).to receive(:full_params).and_return(id: 1337, blub: 'abc')
           allow(op).to receive(:data).and_return({})
         end
@@ -331,7 +335,7 @@ describe Acfs::Stub do
 
     context 'with a missing match' do
       let(:op) do
-        double('operation').tap do |op|
+        instance_double('Acfs::Operation').tap do |op|
           allow(op).to receive(:full_params).and_return(id: 1337, blub: 'abc')
           allow(op).to receive(:data).and_return({})
         end

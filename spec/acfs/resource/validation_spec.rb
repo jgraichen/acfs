@@ -10,61 +10,70 @@ describe Acfs::Resource::Validation do
     context 'with valid attributes' do
       subject { model }
 
-      it { should be_valid }
+      it { is_expected.to be_valid }
     end
 
     context 'with invalid attributes' do
-      let(:params) { {name: 'invname'} }
       subject { model }
 
-      it { should_not be_valid }
+      let(:params) { {name: 'invname'} }
+
+      it { is_expected.not_to be_valid }
     end
 
     context 'on resource with service side errors' do
+      subject(:resource) { MyUser.create(params) }
+
       before { Acfs::Stub.enable }
+
       after  { Acfs::Stub.disable }
 
       before do
         Acfs::Stub.resource MyUser, :create, return: {errors: {name: ['can\'t be blank']}}, raise: 422
       end
 
-      let(:params)   { {} }
-      let(:resource) { MyUser.create params }
-      subject { resource }
+      let(:params) { {} }
 
-      it { should_not be_valid }
+      it { is_expected.not_to be_valid }
 
-      it 'should not override errors' do
-        subject.valid?
-        expect(subject.errors.to_hash).to eq(name: ['can\'t be blank'])
+      it 'does not override errors' do
+        resource.valid?
+        expect(resource.errors.to_hash).to eq(name: ['can\'t be blank'])
       end
     end
   end
 
   describe '#errors' do
     context 'with valid attributes' do
-      let(:params) { {name: 'john smith', age: 24} }
-      before { model.valid? }
       subject { model.errors }
 
-      it { should be_empty }
+      let(:params) { {name: 'john smith', age: 24} }
+
+      before { model.valid? }
+
+      it { is_expected.to be_empty }
     end
 
     context 'with invalid attributes' do
+      subject(:errors) { model.errors }
+
       let(:params) { {name: 'john'} }
+
       before { model.valid? }
-      subject { model.errors }
 
-      it { should_not be_empty }
-      it { should have(2).items }
+      it { is_expected.not_to be_empty }
+      it { is_expected.to have(2).items }
 
-      it 'should contain a list of error messages' do
-        expect(subject.to_hash).to eq age: ["can't be blank"], name: ['is invalid']
+      it 'contains a list of error messages' do
+        expect(errors.to_hash).to eq age: ["can't be blank"], name: ['is invalid']
       end
     end
 
     context 'server side errors' do
+      subject { resource.errors.to_hash }
+
       before { Acfs::Stub.enable }
+
       after  { Acfs::Stub.disable }
 
       before do
@@ -74,7 +83,6 @@ describe Acfs::Resource::Validation do
 
       let(:params)   { {} }
       let(:resource) { MyUser.create params }
-      subject { resource.errors.to_hash }
 
       context 'with `field => [messages]` payload' do
         let(:errors) { {name: ['cannot be blank']} }
@@ -97,33 +105,32 @@ describe Acfs::Resource::Validation do
   end
 
   describe '#save!' do
-    subject { -> { model.save! } }
+    subject(:save) { -> { model.save! } }
+
     before { allow(model).to receive(:operation) }
 
     context 'with invalid attributes' do
       let(:params) { {name: 'john'} }
 
-      it { expect { subject.call }.to raise_error Acfs::InvalidResource }
+      it { expect { save.call }.to raise_error Acfs::InvalidResource }
     end
 
     context 'on new resource' do
-      it 'should validate with `create` context' do
+      it 'validates with `create` context' do
         expect(model).to receive(:valid?).with(:create).and_call_original
-        subject.call
+        save.call
       end
     end
 
     context 'on changed resource' do
       before { model.loaded! }
+
       let(:model) { super().tap {|m| m.id = 1 } }
 
-      it 'should validate with `save` context' do
+      it 'validates with `save` context' do
         expect(model).to receive(:valid?).with(:save).and_call_original
-        subject.call
+        save.call
       end
     end
-  end
-
-  describe 'validates with context' do
   end
 end

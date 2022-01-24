@@ -28,7 +28,8 @@ describe ::Acfs::Global do
       before do
         ::ActiveSupport::Notifications.subscribe 'acfs.run', collector
       end
-      it 'should trigger event' do
+
+      it 'triggers event' do
         Acfs.run
         expect(collector.events).to have(1).items
       end
@@ -38,7 +39,8 @@ describe ::Acfs::Global do
       before do
         ::ActiveSupport::Notifications.subscribe 'acfs.reset', collector
       end
-      it 'should trigger event' do
+
+      it 'triggers event' do
         Acfs.reset
         expect(collector.events).to have(1).items
       end
@@ -50,11 +52,11 @@ describe ::Acfs::Global do
       stub_request(:get, %r{http://users.example.org/users/\d+}).to_return(
         status: 200,
         body: '{}',
-        headers: {'Content-Type' => 'application/json'}
+        headers: {'Content-Type' => 'application/json'},
       )
     end
 
-    it 'should invoke when both resources' do
+    it 'invokes when both resources' do
       user1 = MyUser.find 1
       user2 = MyUser.find 2
 
@@ -64,7 +66,7 @@ describe ::Acfs::Global do
       end.to yield_with_args(user1, user2)
     end
 
-    it 'should invoke when both resources when loaded' do
+    it 'invokes when both resources when loaded' do
       user1 = MyUser.find 1
       user2 = MyUser.find 2
 
@@ -82,7 +84,7 @@ describe ::Acfs::Global do
           .to_return(
             status: 200,
             body: '{}',
-            headers: {'Content-Type' => 'application/json'}
+            headers: {'Content-Type' => 'application/json'},
           )
       end
 
@@ -125,7 +127,7 @@ describe ::Acfs::Global do
       runner1 = Thread.new { acfs.runner }.value
       runner2 = Thread.new { acfs.runner }.value
 
-      expect(runner1).to_not equal runner2
+      expect(runner1).not_to equal runner2
     end
 
     it 'uses configurated adapter' do

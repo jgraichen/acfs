@@ -12,15 +12,15 @@ describe Acfs::Request do
   let(:request) { Acfs::Request.new(url, **options) }
 
   describe '#url' do
-    it 'should return request URL' do
-      expect(request.url).to be == url
+    it 'returns request URL' do
+      expect(request.url).to eq url
     end
 
     context 'with parameters' do
       let(:params) { {id: 10} }
 
-      it 'should return URL without query' do
-        expect(request.url).to be == url.to_s
+      it 'returns URL without query' do
+        expect(request.url).to eq url.to_s
       end
     end
   end
@@ -28,8 +28,8 @@ describe Acfs::Request do
   describe '#headers' do
     let(:headers) { {'Accept' => 'application/json'} }
 
-    it 'should return request headers' do
-      expect(request.headers).to be == headers
+    it 'returns request headers' do
+      expect(request.headers).to eq headers
     end
   end
 
@@ -37,43 +37,39 @@ describe Acfs::Request do
     context 'when nil given' do
       let(:method) { nil }
 
-      it 'should default to :get' do
-        expect(request.method).to be == :get
+      it 'defaults to :get' do
+        expect(request.method).to eq :get
       end
     end
 
-    it 'should return request method' do
-      expect(request.method).to be == method
+    it 'returns request method' do
+      expect(request.method).to eq method
     end
   end
 
   describe '#params' do
     let(:params) { {id: 10} }
 
-    it 'should return request headers' do
-      expect(request.params).to be == params
+    it 'returns request headers' do
+      expect(request.params).to eq params
     end
   end
 
   describe '#data' do
     let(:data) { {id: 10, name: 'Anon'} }
 
-    it 'should return request data' do
-      expect(request.data).to be == data
+    it 'returns request data' do
+      expect(request.data).to eq data
     end
-  end
 
-  describe '#data' do
     context 'with data' do
-      let(:data) { {id: 10, name: 'Anon'} }
-
       it { expect(request).to be_data }
     end
 
     context 'without data' do
       let(:data) { nil }
 
-      it { expect(request).to_not be_data }
+      it { expect(request).not_to be_data }
     end
   end
 end

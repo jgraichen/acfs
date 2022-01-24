@@ -13,8 +13,8 @@ describe Acfs::Response::Formats do
   context 'without Content-Type header' do
     let(:headers) { {} }
 
-    it "should fallback on 'text/plain'" do
-      expect(response.content_type).to be == Mime[:text]
+    it "fallbacks on 'text/plain'" do
+      expect(response.content_type).to eq Mime[:text]
     end
   end
 
@@ -22,13 +22,13 @@ describe Acfs::Response::Formats do
     let(:mime_type) { 'application/json' }
 
     describe '#content_type' do
-      it 'should return Mime::JSON' do
-        expect(response.content_type).to be == Mime[:json]
+      it 'returns Mime::JSON' do
+        expect(response.content_type).to eq Mime[:json]
       end
     end
 
     describe '#json?' do
-      it 'should return true' do
+      it 'returns true' do
         expect(response).to be_json
       end
     end
@@ -37,13 +37,13 @@ describe Acfs::Response::Formats do
       let(:mime_type) { 'application/json; charset=utf8' }
 
       describe '#content_type' do
-        it 'should return Mime::JSON' do
-          expect(response.content_type).to be == Mime[:json]
+        it 'returns Mime::JSON' do
+          expect(response.content_type).to eq Mime[:json]
         end
       end
 
       describe '#json?' do
-        it 'should return true' do
+        it 'returns true' do
           expect(response).to be_json
         end
       end

@@ -4,16 +4,28 @@ require 'spec_helper'
 
 describe Acfs::Resource::Persistence do
   let(:model_class) { MyUser }
+
+  let!(:patch_stub) do
+    stub_request(:put, 'http://users.example.org/users/1')
+      .with(body: '{"id":1,"name":"Idefix","age":12}')
+      .to_return response(id: 1, name: 'Idefix', age: 12)
+  end
+
+  let!(:post_stub) do
+    stub_request(:post, 'http://users.example.org/users')
+      .with(body: '{"id":null,"name":"Idefix","age":12}')
+      .to_return response(id: 5, name: 'Idefix', age: 12)
+  end
+
+  let!(:delete_stub) do
+    stub_request(:delete, 'http://users.example.org/users/1')
+      .with(body: '{}')
+      .to_return response({id: 1, name: 'Idefix', age: 12}, {status: 200})
+  end
+
   before do
-    @get_stub = stub_request(:get, 'http://users.example.org/users/1').to_return response(id: 1, name: 'Anon', age: 12)
-
-    @patch_stub = stub_request(:put, 'http://users.example.org/users/1')
-                  .with(body: '{"id":1,"name":"Idefix","age":12}')
-                  .to_return response(id: 1, name: 'Idefix', age: 12)
-
-    @post_stub = stub_request(:post, 'http://users.example.org/users')
-                 .with(body: '{"id":null,"name":"Idefix","age":12}')
-                 .to_return response(id: 5, name: 'Idefix', age: 12)
+    stub_request(:get, 'http://users.example.org/users/1')
+      .to_return response(id: 1, name: 'Anon', age: 12)
 
     stub_request(:post, 'http://users.example.org/users')
       .with(body: '{"id":null,"name":"Anon","age":null}')
@@ -26,41 +38,38 @@ describe Acfs::Resource::Persistence do
     stub_request(:post, 'http://users.example.org/users')
       .with(body: '{"id":null,"name":null,"age":12}')
       .to_return response({errors: {name: ['required']}}, {status: 422})
-
-    @del = stub_request(:delete, 'http://users.example.org/users/1')
-           .with(body: '{}')
-           .to_return response({id: 1, name: 'Idefix', age: 12}, {status: 200})
   end
 
   context 'new model' do
     let(:model) { model_class.new }
 
-    it { expect(model).to_not be_persisted }
+    it { expect(model).not_to be_persisted }
     it { expect(model).to be_new }
 
     describe '#save!' do
       context 'when modified' do
         let(:model) { model_class.find 1 }
+
         before do
           model
           Acfs.run
           model.name = 'Idefix'
         end
 
-        it 'should PUT to model URL' do
+        it 'PUTS to model URL' do
           model.save!
 
-          expect(@patch_stub).to have_been_requested
+          expect(patch_stub).to have_been_requested
         end
       end
 
       context 'when new' do
         let(:model) { model_class.new name: 'Idefix', age: 12 }
 
-        it 'should POST to collection URL' do
+        it 'POSTS to collection URL' do
           model.save!
 
-          expect(@post_stub).to have_been_requested
+          expect(post_stub).to have_been_requested
         end
 
         context 'with unknown attributes' do
@@ -71,17 +80,17 @@ describe Acfs::Resource::Persistence do
           end
           let(:model) { model_class.new name: 'Idefix', born_at: 'Berlin' }
 
-          it 'should POST to collection URL' do
+          it 'POSTS to collection URL' do
             model.save!
             expect(req).to have_been_requested
           end
 
-          it 'should still have unknown attribute' do
+          it 'stills have unknown attribute' do
             model.save!
             expect(model.attributes).to include 'born_at' => 'Berlin'
           end
 
-          it 'should include server send unknown attribute' do
+          it 'includes server send unknown attribute' do
             model.save!
             expect(model.attributes).to include 'wuff' => 'woa'
           end
@@ -93,7 +102,7 @@ describe Acfs::Resource::Persistence do
       before { model.save! }
 
       it { expect(model).to be_persisted }
-      it { expect(model).to_not be_new }
+      it { expect(model).not_to be_new }
     end
   end
 
@@ -101,46 +110,63 @@ describe Acfs::Resource::Persistence do
     let!(:model) { model_class.find 1 }
 
     describe '#update_attributes' do
-      subject { -> { model.update_attributes({name: 'John'}) } }
-      it { expect { subject.call }.to raise_error Acfs::ResourceNotLoaded }
+      it 'to raise error' do
+        expect do
+          model.update_attributes({name: 'John'})
+        end.to raise_error Acfs::ResourceNotLoaded
+      end
     end
 
     describe '#update_attributes!' do
-      subject { -> { model.update_attributes!({name: 'John'}) } }
-      it { expect { subject.call }.to raise_error Acfs::ResourceNotLoaded }
+      it 'to raise error' do
+        expect do
+          model.update_attributes!({name: 'John'})
+        end.to raise_error Acfs::ResourceNotLoaded
+      end
     end
   end
 
   context 'loaded model' do
     context 'without changes' do
       let(:model) { model_class.find 1 }
-      before { model; Acfs.run }
+
+      before do
+        model
+        Acfs.run
+      end
 
       it { expect(model).to be_persisted }
-      it { expect(model).to_not be_new }
+      it { expect(model).not_to be_new }
     end
 
     context 'with changes' do
       let(:model) { model_class.find 1 }
-      before { model; Acfs.run; model.name = 'dhh' }
+
+      before do
+        model
+        Acfs.run
+        model.name = 'dhh'
+      end
 
       it { expect(model).to be_persisted }
-      it { expect(model).to_not be_new }
+      it { expect(model).not_to be_new }
     end
 
     describe '#delete!' do
       let(:model) { model_class.find 1 }
-      let(:before_acfs_run) {}
 
       describe 'normal delete actions' do
-        before { model; Acfs.run }
-
-        it 'should trigger DELETE request' do
-          model.delete!
-          expect(@del).to have_been_requested
+        before do
+          model
+          Acfs.run
         end
 
-        it 'should be frozen after DELETE' do
+        it 'triggers DELETE request' do
+          model.delete!
+          expect(delete_stub).to have_been_requested
+        end
+
+        it 'is frozen after DELETE' do
           model.delete!
           expect(model.__getobj__).to be_frozen
         end
@@ -149,46 +175,54 @@ describe Acfs::Resource::Persistence do
       describe 'correct URL generation' do
         let(:model_class) { PathArguments }
         let(:model) { model_class.find 1, params: {required_arg: 'some_value'} }
+        let(:resource_url) { 'http://users.example.org/some_value/users/1' }
 
-        before :each do
-          resource_url = 'http://users.example.org/some_value/users/1'
-          @my_get_stub = stub_request(:get, resource_url)
-                         .to_return response(id: 1, required_arg: 'some_value')
-          @my_delete_stub = stub_request(:delete, resource_url)
-                            .with(body: '{}')
-                            .to_return response({id: 1, required_arg: 'some_value'}, {status: 200})
+        let!(:delete_stub) do
+          stub_request(:delete, resource_url)
+            .with(body: '{}')
+            .to_return response({id: 1, required_arg: 'some_value'}, {status: 200})
+        end
+
+        before do
+          stub_request(:get, resource_url)
+            .to_return response(id: 1, required_arg: 'some_value')
+
           model
           Acfs.run
         end
 
-        it 'should not raise an error on URL generation' do
+        it 'does not raise an error on URL generation' do
           expect do
             model.delete!
           end.not_to raise_error
         end
 
-        it 'should request the delete' do
+        it 'requests the delete' do
           model.delete!
-          expect(@my_delete_stub).to have_been_requested
+          expect(delete_stub).to have_been_requested
         end
       end
     end
 
     describe '#update_atributes!' do
       let(:model) { model_class.find 1 }
-      before { model; Acfs.run }
 
-      it 'should set attributes' do
+      before do
+        model
+        Acfs.run
+      end
+
+      it 'sets attributes' do
         model.update_attributes({name: 'Idefix'})
         expect(model.attributes.symbolize_keys).to eq id: 1, name: 'Idefix', age: 12
       end
 
-      it 'should save resource' do
+      it 'saves resource' do
         expect(model.__getobj__).to receive(:save)
         model.update_attributes({name: 'Idefix'})
       end
 
-      it 'should kwargs to save' do
+      it 'kwargses to save' do
         expect(model.__getobj__).to receive(:save).with(bla: 'blub')
         model.update_attributes({name: 'Idefix'}, bla: 'blub')
       end
@@ -196,19 +230,23 @@ describe Acfs::Resource::Persistence do
 
     describe '#update_atributes' do
       let(:model) { model_class.find 1 }
-      before { model; Acfs.run }
 
-      it 'should set attributes' do
+      before do
+        model
+        Acfs.run
+      end
+
+      it 'sets attributes' do
         model.update_attributes!({name: 'Idefix'})
         expect(model.attributes.symbolize_keys).to eq id: 1, name: 'Idefix', age: 12
       end
 
-      it 'should save resource' do
+      it 'saves resource' do
         expect(model.__getobj__).to receive(:save!)
         model.update_attributes!({name: 'Idefix'})
       end
 
-      it 'should pass second hash to save' do
+      it 'passes second hash to save' do
         expect(model.__getobj__).to receive(:save!).with(bla: 'blub')
         model.update_attributes!({name: 'Idefix'}, bla: 'blub')
       end
@@ -218,7 +256,11 @@ describe Acfs::Resource::Persistence do
   describe '.save!' do
     context 'with invalid data validated on server side' do
       let(:model) { model_class.find 1 }
-      before { model; Acfs.run }
+
+      before do
+        model
+        Acfs.run
+      end
 
       before do
         stub_request(:put, 'http://users.example.org/users/1')
@@ -226,7 +268,7 @@ describe Acfs::Resource::Persistence do
           .to_return response({errors: {name: ['required']}}, {status: 422})
       end
 
-      it 'should set local errors hash' do
+      it 'sets local errors hash' do
         model.name = ''
         begin
           model.save!
@@ -236,30 +278,19 @@ describe Acfs::Resource::Persistence do
         expect(model.errors.to_hash).to be == {name: %w[required]}
       end
     end
-
-    context 'hash modification on iteration in ActiveModel when errors on field is nil' do
-      let(:model) { model_class.find 1 }
-      before { model; Acfs.run }
-
-      before do
-        stub_request(:put, 'http://users.example.org/users/1')
-          .with(body: '{"id":1,"name":"","age":12}')
-          .to_return response({errors: {name: ['required']}}, {status: 422})
-      end
-    end
   end
 
   describe '.create!' do
     context 'with valid data' do
       let(:data) { {name: 'Idefix', age: 12} }
 
-      it 'should create new resource' do
+      it 'creates new resource' do
         model = model_class.create! data
         expect(model.name).to be == 'Idefix'
         expect(model.age).to be == 12
       end
 
-      it 'should be persisted' do
+      it 'is persisted' do
         model = model_class.create! data
         expect(model).to be_persisted
       end
@@ -268,7 +299,7 @@ describe Acfs::Resource::Persistence do
     context 'with invalid data' do
       let(:data) { {name: nil, age: 12} }
 
-      it 'should raise an error' do
+      it 'raises an error' do
         expect { model_class.create! data }.to \
           raise_error(::Acfs::InvalidResource) do |error|
             expect(error.errors).to be == {'name' => %w[required]}
@@ -278,44 +309,45 @@ describe Acfs::Resource::Persistence do
   end
 
   describe '.create' do
-    subject { model_class.create data }
+    subject(:model) { model_class.create data }
 
     context 'with valid data' do
       let(:data) { {name: 'Idefix', age: 12} }
 
-      it 'should create new resource' do
-        expect(subject.name).to be == 'Idefix'
-        expect(subject.age).to be == 12
+      it 'creates new resource' do
+        expect(model.name).to be == 'Idefix'
+        expect(model.age).to be == 12
       end
 
-      it 'should be persisted' do
-        expect(subject).to be_persisted
+      it 'is persisted' do
+        expect(model).to be_persisted
       end
     end
 
     context 'with invalid data' do
       let(:data) { {name: nil, age: 12} }
 
-      it 'should return not persisted resource' do
-        expect(subject).to_not be_persisted
+      it 'returns not persisted resource' do
+        expect(model).not_to be_persisted
       end
 
-      it 'should contain error hash' do
-        expect(subject.errors.to_hash).to eq name: %w[required]
+      it 'contains error hash' do
+        expect(model.errors.to_hash).to eq name: %w[required]
       end
     end
 
     context 'with additional data' do
-      let!(:req) do
+      before do
         stub_request(:post, 'http://users.example.org/users')
           .with(body: '{"id":null,"name":"Anon","age":9,"born_at":"today"}')
           .to_return response(id: 5, name: 'Anon', age: 9)
       end
+
       let(:data) { {age: 9, born_at: 'today'} }
 
-      it 'should store them in attributes' do
-        expect(subject.attributes).to eq 'id' => 5, 'name' => 'Anon',
-                                         'age' => 9, 'born_at' => 'today'
+      it 'stores them in attributes' do
+        expect(model.attributes).to eq 'id' => 5, 'name' => 'Anon',
+          'age' => 9, 'born_at' => 'today'
       end
     end
   end

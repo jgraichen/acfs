@@ -9,12 +9,12 @@ describe Acfs::Resource::Attributes do
   describe '#initialize' do
     before { model.attribute :name, :string, default: 'John' }
 
-    it 'should have attribute list' do
+    it 'has attribute list' do
       expect(model.new.attributes).to include(:name)
     end
 
-    it 'should set default attributes' do
-      expect(model.new.name).to be == 'John'
+    it 'sets default attributes' do
+      expect(model.new.name).to eq 'John'
     end
 
     context 'with dynamic default value' do
@@ -23,8 +23,8 @@ describe Acfs::Resource::Attributes do
         model.attribute :mail, :string, default: -> { "#{name}@srv.tld" }
       end
 
-      it 'should set dynamic default attributes' do
-        expect(model.new.mail).to be == 'John@srv.tld'
+      it 'sets dynamic default attributes' do
+        expect(model.new.mail).to eq 'John@srv.tld'
       end
     end
   end
@@ -35,12 +35,14 @@ describe Acfs::Resource::Attributes do
       model.attribute :age, :integer, default: 25
     end
 
-    it 'should return hash of all attributes' do
+    it 'returns hash of all attributes' do
       expect(model.new.attributes).to eq(name: 'John', age: 25)
     end
   end
 
   describe '#write_attributes' do
+    subject(:action) { -> { m.write_attributes(params, **opts) } }
+
     before do
       model.attribute :name, :string, default: 'John'
       model.attribute :age, :integer, default: 25
@@ -48,14 +50,13 @@ describe Acfs::Resource::Attributes do
         write_attribute :name, "The Great #{name}"
       end
     end
+
     let(:params) { {name: 'James'} }
     let(:opts) { {} }
     let(:m) { model.new }
-    let(:action) { -> { m.write_attributes(params, **opts) } }
-    subject { action }
 
-    it 'should update attributes' do
-      should change(m, :attributes)
+    it 'updates attributes' do
+      expect(action).to change(m, :attributes)
         .from(name: 'The Great John', age: 25)
         .to(name: 'The Great James', age: 25)
     end
@@ -63,17 +64,17 @@ describe Acfs::Resource::Attributes do
     context 'without non-hash params' do
       let(:params) { 'James' }
 
-      it { should_not change(m, :attributes) }
-      its(:call) { should eq false }
+      it { expect(action).not_to change(m, :attributes) }
+      it { expect(action.call).to eq false }
     end
 
     context 'with unknown attributes' do
       let(:params) { {name: 'James', born_at: 'today'} }
 
-      it { should_not raise_error }
+      it { expect(action).not_to raise_error }
 
-      it 'should update known attributes and store unknown' do
-        should change(m, :attributes)
+      it 'updates known attributes and store unknown' do
+        expect(action).to change(m, :attributes)
           .from(name: 'The Great John', age: 25)
           .to(name: 'The Great James', age: 25, born_at: 'today')
       end
@@ -81,14 +82,14 @@ describe Acfs::Resource::Attributes do
       context 'with unknown: :raise option' do
         let(:opts) { {unknown: :raise} }
 
-        it { should raise_error(ArgumentError, /unknown attribute/i) }
+        it { expect(action).to raise_error(ArgumentError, /unknown attribute/i) }
 
         it do
           expect do
-            subject.call
+            action.call
           rescue StandardError
             true
-          end.to_not change(m, :attributes)
+          end.not_to change(m, :attributes)
         end
       end
     end
@@ -97,15 +98,15 @@ describe Acfs::Resource::Attributes do
   describe '#_getter_' do
     before { model.attribute :name, :string, default: 'John' }
 
-    it 'should return value' do
+    it 'returns value' do
       mo = model.new
       mo.name = 'Paul'
 
-      expect(mo.name).to be == 'Paul'
+      expect(mo.name).to eq 'Paul'
     end
 
-    it 'should return default value' do
-      expect(model.new.name).to be == 'John'
+    it 'returns default value' do
+      expect(model.new.name).to eq 'John'
     end
   end
 
@@ -115,49 +116,49 @@ describe Acfs::Resource::Attributes do
       model.attribute :age, :integer, default: '25'
     end
 
-    it 'should set value' do
+    it 'sets value' do
       o = model.new
       o.name = 'Paul'
 
-      expect(o.name).to be == 'Paul'
+      expect(o.name).to eq 'Paul'
     end
 
-    it 'should update attributes hash' do
+    it 'updates attributes hash' do
       o = model.new
       o.name = 'Johannes'
 
-      expect(o.attributes['name']).to be == 'Johannes'
+      expect(o.attributes['name']).to eq 'Johannes'
     end
 
-    it 'should cast values' do
+    it 'casts values' do
       o = model.new
       o.age = '28'
 
-      expect(o.age).to be == 28
+      expect(o.age).to eq 28
     end
   end
 
   describe 'class' do
     describe '#attributes' do
-      it 'should add an attribute to model attribute list' do
+      it 'adds an attribute to model attribute list' do
         model.send :attribute, :name, :string
 
         expect(model.attributes.symbolize_keys).to eq name: nil
       end
 
-      it 'should accept a default value' do
+      it 'accepts a default value' do
         model.send :attribute, :name, :string, default: 'John'
 
         expect(model.attributes.symbolize_keys).to eq name: 'John'
       end
 
-      it 'should accept a symbolic type' do
+      it 'accepts a symbolic type' do
         model.send :attribute, :age, :integer, default: '12'
 
         expect(model.attributes.symbolize_keys).to eq age: 12
       end
 
-      it 'should accept a class type' do
+      it 'accepts a class type' do
         model.send :attribute, :age, Acfs::Resource::Attributes::Integer,
           default: '12'
 

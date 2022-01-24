@@ -13,19 +13,19 @@ describe Acfs::Service::Middleware do
   describe '.use' do
     let(:options) { {abc: 'cde'} }
 
-    it 'should add middleware to list' do
+    it 'adds middleware to list' do
       srv_class.use middleware
 
       expect(srv_class.middleware).to include(middleware)
     end
 
-    it 'should add middleware to stack' do
+    it 'adds middleware to stack' do
       srv_class.use middleware
 
       expect(srv_class.middleware.build(1)).to be_a(middleware)
     end
 
-    it 'should instantiate middleware object' do
+    it 'instantiates middleware object' do
       expect(middleware).to receive(:new).with(anything, options)
 
       srv_class.use middleware, options

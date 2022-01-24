@@ -20,7 +20,7 @@ describe Acfs::Adapter::Typhoeus do
     adapter.queue request2
 
     expect { adapter.start }.to raise_error(/404-[12]/)
-    expect { adapter.start }.to_not raise_error
+    expect { adapter.start }.not_to raise_error
   end
 
   it 'raises timeout' do

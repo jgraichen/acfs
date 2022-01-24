@@ -4,6 +4,7 @@ require 'spec_helper'
 
 describe Acfs::Resource::Locatable do
   let(:model) { MyUser }
+
   before do
     stub_request(:get, 'http://users.example.org/users/1')
       .to_return response id: 1, name: 'Anon', age: 12
@@ -12,63 +13,67 @@ describe Acfs::Resource::Locatable do
   end
 
   describe '.url' do
-    it 'should return URL' do
-      expect(model.url).to be == 'http://users.example.org/users'
+    it 'returns URL' do
+      expect(model.url).to eq 'http://users.example.org/users'
     end
 
-    it 'should return URL with id path part if specified' do
-      expect(model.url(5)).to be == 'http://users.example.org/users/5'
+    it 'returns URL with id path part if specified' do
+      expect(model.url(5)).to eq 'http://users.example.org/users/5'
     end
 
     context 'with attribute in path' do
       let(:model) { Profile }
 
-      it 'should replace placeholder' do
+      it 'replaces placeholder' do
         expect(model.url(user_id: 1))
           .to eq 'http://users.example.org/users/1/profile'
       end
 
       context 'without attributes' do
-        it 'should raise an error if attribute is missing' do
+        it 'raises an error if attribute is missing' do
           expect { model.url }.to raise_error ArgumentError
         end
       end
     end
 
     describe 'custom paths' do
+      subject(:location) { Session.location(action: action) }
+
       let(:model) { Session }
-      let(:location) { Session.location action: action }
-      subject { location }
 
       context ':list location' do
         let(:action) { :list }
 
         its(:raw_uri) do
-          should eq 'http://users.example.org/users/:user_id/sessions'
+          is_expected.to eq 'http://users.example.org/users/:user_id/sessions'
         end
       end
 
       context ':create location' do
         let(:action) { :create }
-        its(:raw_uri) { should eq 'http://users.example.org/sessions' }
+
+        its(:raw_uri) { is_expected.to eq 'http://users.example.org/sessions' }
       end
 
       context ':read location' do
         let(:action) { :read }
-        its(:raw_uri) { should eq 'http://users.example.org/sessions/:id' }
+
+        its(:raw_uri) { is_expected.to eq 'http://users.example.org/sessions/:id' }
       end
 
       context ':update location' do
         let(:action) { :update }
+
         its(:raw_uri) do
-          expect { subject }.to raise_error ArgumentError, /update.*disabled/
+          expect { location }.to raise_error ArgumentError, /update.*disabled/
         end
       end
 
       context ':delete location' do
         let(:action) { :delete }
+
         its(:raw_uri) do
-          should eq 'http://users.example.org/users/:user_id/sessions/del/:id'
+          is_expected.to eq 'http://users.example.org/users/:user_id/sessions/del/:id'
         end
       end
     end
@@ -78,20 +83,20 @@ describe Acfs::Resource::Locatable do
     context 'new resource' do
       let(:m) { model.new }
 
-      it 'should return nil' do
+      it 'returns nil' do
         expect(m.url).to be_nil
       end
 
       context 'new resource with id' do
         let(:m) { model.new id: 475 }
 
-        it 'should return resource URL' do
+        it 'returns resource URL' do
           expect(m.url).to eq 'http://users.example.org/users/475'
         end
       end
 
       context 'with attribute in path' do
-        it 'should return nil' do
+        it 'returns nil' do
           expect(m.url).to be_nil
         end
       end
@@ -99,9 +104,10 @@ describe Acfs::Resource::Locatable do
 
     context 'loaded resource' do
       let(:m) { model.find 1 }
+
       before { m && Acfs.run }
 
-      it "should return resource's URL" do
+      it "returns resource's URL" do
         expect(m.url).to eq 'http://users.example.org/users/1'
       end
 
@@ -109,7 +115,7 @@ describe Acfs::Resource::Locatable do
         let(:model) { Profile }
         let(:m) { model.find user_id: 1 }
 
-        it "should return resource's URL" do
+        it "returns resource's URL" do
           expect(m.url).to eq 'http://users.example.org/users/2/profile'
         end
       end

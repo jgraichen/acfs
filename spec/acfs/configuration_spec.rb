@@ -4,11 +4,16 @@ require 'spec_helper'
 
 describe Acfs::Configuration do
   let(:cfg) { Acfs::Configuration.new }
-  before { @configuration = Acfs::Configuration.current.dup }
-  after { Acfs::Configuration.set @configuration }
+
+  around do |example|
+    configuration = Acfs::Configuration.current.dup
+    example.run
+  ensure
+    Acfs::Configuration.set(configuration)
+  end
 
   describe 'Acfs.configure' do
-    it 'should invoke configure on current configuration' do
+    it 'invokes configure on current configuration' do
       expect(Acfs::Configuration.current).to receive(:configure).once.and_call_original
 
       Acfs.configure do |c|
@@ -18,26 +23,31 @@ describe Acfs::Configuration do
   end
 
   describe '.load' do
-    it 'should be able to load YAML' do
+    it 'is able to load YAML' do
       cfg.configure do
         load 'spec/fixtures/config.yml'
       end
 
-      expect(cfg.locate(UserService).to_s).to be == 'http://localhost:3001/'
-      expect(cfg.locate(CommentService).to_s).to be == 'http://localhost:3002/'
+      expect(cfg.locate(UserService).to_s).to eq 'http://localhost:3001/'
+      expect(cfg.locate(CommentService).to_s).to eq 'http://localhost:3002/'
     end
 
     context 'with RACK_ENV' do
-      before { @env = ENV['RACK_ENV']; ENV['RACK_ENV'] = 'production' }
-      after  { ENV['RACK_ENV'] = @env }
+      around do |example|
+        env = ENV['RACK_ENV']
+        ENV['RACK_ENV'] = 'production'
+        example.run
+      ensure
+        ENV['RACK_ENV'] = env
+      end
 
-      it 'should load ENV block' do
+      it 'loads ENV block' do
         cfg.configure do
           load 'spec/fixtures/config.yml'
         end
 
-        expect(cfg.locate(UserService).to_s).to be == 'http://user.example.org/'
-        expect(cfg.locate(CommentService).to_s).to be == 'http://comment.example.org/'
+        expect(cfg.locate(UserService).to_s).to eq 'http://user.example.org/'
+        expect(cfg.locate(CommentService).to_s).to eq 'http://comment.example.org/'
       end
     end
   end
@@ -45,7 +55,7 @@ describe Acfs::Configuration do
   describe '#adapter' do
     let(:object) { Object.new }
 
-    it 'should be a accessor' do
+    it 'is a accessor' do
       cfg.adapter = object
       expect(cfg.adapter).to eq object
     end

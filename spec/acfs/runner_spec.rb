@@ -48,7 +48,7 @@ describe ::Acfs::Runner do
     end
 
     describe '#process' do
-      it 'should trigger event' do
+      it 'triggers event' do
         runner.process ::Acfs::Operation.new MyUser, :read, params: {id: 0}
         expect(collector.events).to have(1).items
         expect(collector2.events).to have(1).items
@@ -56,7 +56,7 @@ describe ::Acfs::Runner do
     end
 
     describe '#run' do
-      it 'should trigger event' do
+      it 'triggers event' do
         runner.run ::Acfs::Operation.new MyUser, :read, params: {id: 0}
         expect(collector.events).to have(1).items
         expect(collector2.events).to have(0).items
@@ -64,7 +64,7 @@ describe ::Acfs::Runner do
     end
 
     describe '#enqueue' do
-      it 'should trigger event' do
+      it 'triggers event' do
         runner.enqueue ::Acfs::Operation.new MyUser, :read, params: {id: 0}
         expect(collector.events).to have(1).items
         expect(collector2.events).to have(0).items
@@ -76,18 +76,20 @@ describe ::Acfs::Runner do
     before do
       expect_any_instance_of(UserService).to receive(:prepare).and_return nil
     end
-    it 'it should not do requests when a middleware aborted' do
-      expect(adapter).to_not receive :run
+
+    it 'does not do requests when a middleware aborted' do
+      expect(adapter).not_to receive :run
       runner.run ::Acfs::Operation.new MyUser, :read, params: {id: 0}
     end
   end
 
   describe '#enqueue' do
     before do
-      expect_any_instance_of(UserService).to receive(:prepare).and_return nil
+      expect_any_instance_of(UserService).to receive(:prepare).and_return(nil)
     end
-    it 'it should not do requests when a middleware aborted' do
-      expect(adapter).to_not receive :queue
+
+    it 'does not do requests when a middleware aborted' do
+      expect(adapter).not_to receive(:queue)
       runner.enqueue ::Acfs::Operation.new MyUser, :read, params: {id: 0}
       runner.start
     end

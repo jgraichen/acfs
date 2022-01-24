@@ -16,15 +16,15 @@ describe Acfs::Middleware::JSON do
 
   describe 'encode' do
     context 'with not serialized request' do
-      it 'should set Content-Type' do
+      it 'sets Content-Type' do
         expect(request.headers['Content-Type']).to eq 'application/json'
       end
 
-      it 'should append Accept header' do
+      it 'appends Accept header' do
         expect(request.headers['Accept']).to eq 'application/json;q=1'
       end
 
-      it 'should serialize data to JSON' do
+      it 'serializes data to JSON' do
         expect(JSON.parse(request.body)).to eq data.map(&:stringify_keys)
       end
     end
@@ -38,7 +38,7 @@ describe Acfs::Middleware::JSON do
         end.new
       end
 
-      it 'should serialize data with #to_json' do
+      it 'serializes data with #to_json' do
         expect(JSON.parse(request.body)).to eq 'a' => 1, 'b' => 2
       end
     end
@@ -49,10 +49,10 @@ describe Acfs::Middleware::JSON do
       let(:headers) { {'Content-Type' => 'application/json; charset=utf-8'} }
       let(:body)    { data.to_json }
 
-      it 'should decode body data' do
+      it 'decodes body data' do
         request.complete! response
 
-        expect(response.data).to be == data.map(&:stringify_keys)
+        expect(response.data).to eq data.map(&:stringify_keys)
       end
     end
 
@@ -60,7 +60,7 @@ describe Acfs::Middleware::JSON do
       let(:headers) { {'Content-Type' => 'application/json'} }
       let(:body)    { data.to_json[4..-4] }
 
-      it 'should raise an error' do
+      it 'raises an error' do
         expect { request.complete! response }.to raise_error(::JSON::ParserError)
       end
     end
@@ -69,7 +69,7 @@ describe Acfs::Middleware::JSON do
       let(:headers) { {'Content-Type' => 'application/text'} }
       let(:body)    { data.to_json }
 
-      it 'should not decode non-JSON encoded responses' do
+      it 'does not decode non-JSON encoded responses' do
         request.complete! response
 
         expect(response.data).to be_nil

@@ -14,18 +14,18 @@ describe Acfs::Response::Status do
     context 'when given' do
       let(:status) { 200 }
 
-      it 'should return status code' do
-        expect(response.code).to be == 200
-        expect(response.status_code).to be == 200
+      it 'returns status code' do
+        expect(response.code).to eq 200
+        expect(response.status_code).to eq 200
       end
     end
 
     context 'when nil' do
       let(:status) { nil }
 
-      it 'should return zero' do
-        expect(response.code).to be == 0
-        expect(response.status_code).to be == 0
+      it 'returns zero' do
+        expect(response.code).to eq 0
+        expect(response.status_code).to eq 0
       end
     end
   end
@@ -33,38 +33,45 @@ describe Acfs::Response::Status do
   describe '#success?' do
     context 'with success status code' do
       let(:status) { 200 }
+
       it { expect(response).to be_success }
     end
 
     context 'with error status code' do
       let(:status) { 500 }
-      it { expect(response).to_not be_success }
+
+      it { expect(response).not_to be_success }
     end
 
     context 'with zero status code' do
       let(:status) { nil }
-      it { expect(response).to_not be_success }
+
+      it { expect(response).not_to be_success }
     end
   end
 
   describe '#modified?' do
     context 'with success status code' do
       let(:status) { 200 }
+
       it { expect(response).to be_modified }
     end
 
     context 'with not modified status code' do
       let(:status) { 304 }
-      it { expect(response).to_not be_modified }
+
+      it { expect(response).not_to be_modified }
     end
 
     context 'with error status code' do
       let(:status) { 500 }
+
       it { expect(response).to be_modified }
     end
 
     context 'with zero status code' do
       let(:status) { nil }
+
       it { expect(response).to be_modified }
     end
   end

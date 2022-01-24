@@ -45,7 +45,7 @@ class Session < Acfs::Resource
   service UserService, path: {
     list: 'users/:user_id/sessions',
     delete: 'users/:user_id/sessions/del/:id',
-    update: nil
+    update: nil,
   }
 
   attribute :id, :string

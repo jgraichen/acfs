@@ -17,20 +17,19 @@ describe 'Acfs::Resource::Initialization' do
   end
 
   describe '#initialize' do
-    it 'should allow to set attributes with initializer' do
+    it 'allows to set attributes with initializer' do
       m = model.new name: 'John'
       expect(m.name).to eq 'John'
     end
 
-    it 'should raise error when attributes with private setters are given' do
+    it 'raises error when attributes with private setters are given' do
       expect { model.new age: 25 }.to raise_error(NoMethodError)
     end
   end
 
   describe '#persisted?' do
-    subject { model.new.persisted? }
-    it 'should be false' do
-      should be false
+    it 'is false' do
+      expect(model.new.persisted?).to be false
     end
   end
 end

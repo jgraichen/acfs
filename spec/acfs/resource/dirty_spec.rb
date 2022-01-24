@@ -4,6 +4,7 @@ require 'spec_helper'
 
 describe Acfs::Resource::Dirty do
   let(:model) { MyUser.new }
+
   before do
     stub_request(:get, 'http://users.example.org/users/1')
       .to_return response id: 1, name: 'Anon', age: 12
@@ -23,21 +24,23 @@ describe Acfs::Resource::Dirty do
 
       context 'and saving' do
         before { user.save }
-        it { expect(user).to_not be_changed }
+
+        it { expect(user).not_to be_changed }
       end
     end
 
     context 'after model load' do
       let(:user) { MyUser.find 1 }
+
       before { user && Acfs.run }
 
-      it { expect(user).to_not be_changed }
+      it { expect(user).not_to be_changed }
     end
 
     context 'after model new without attrs' do
       let(:user) { MyUser.new }
 
-      it { expect(user).to_not be_changed }
+      it { expect(user).not_to be_changed }
     end
 
     context 'after model new with attrs' do

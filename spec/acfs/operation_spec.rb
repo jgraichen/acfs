@@ -5,8 +5,9 @@ require 'spec_helper'
 describe ::Acfs::Operation do
   let(:operation) { described_class.new MyUser, :read, params: {id: 0} }
 
-  context '#request' do
+  describe '#request' do
     subject { operation.request }
-    its(:operation) { should eq operation }
+
+    its(:operation) { is_expected.to eq operation }
   end
 end

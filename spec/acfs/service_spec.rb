@@ -14,23 +14,24 @@ describe Acfs::Service do
   describe '#initialize' do
     let(:options) { {path: 'abc', key: 'value'} }
 
-    it 'should set options' do
+    it 'sets options' do
       expect(service.options).to eq(options)
     end
   end
 
   describe '#location' do
     let(:resource) { Class.new }
+
     before { allow(resource).to receive(:location_default_path, &proc {|_a, p| p }) }
 
-    it 'should extract resource path name from given class' do
+    it 'extracts resource path name from given class' do
       expect(service.location(resource).to_s).to eq('/classes')
     end
 
     context 'with path options' do
       let(:options) { {path: 'abc'} }
 
-      it 'should have custom resource path' do
+      it 'has custom resource path' do
         expect(service.location(resource).to_s).to eq('/abc')
       end
     end
@@ -41,7 +42,7 @@ describe Acfs::Service do
       Acfs::Configuration.current.locate :test, 'http://abc.de/api/v1'
     end
 
-    it 'should return configured URI for service' do
+    it 'returns configured URI for service' do
       expect(srv_class.base_url).to eq('http://abc.de/api/v1')
     end
   end

@@ -248,9 +248,9 @@ it 'should find user number one' do
   user = MyUser.find 1
   Acfs.run
 
-  expect(user.id).to be == 1
-  expect(user.name).to be == 'John Smith'
-  expect(user.age).to be == 32
+  expect(user.id).to eq 1
+  expect(user.name).to eq 'John Smith'
+  expect(user.age).to eq 32
 
   expect(@stub).to be_called
   expect(@stub).to_not be_called 5.times
@@ -265,8 +265,8 @@ end
 it 'should allow stub resource creation' do
   session = Session.create! ident: 'john@exmaple.org', password: 's3cr3t'
 
-  expect(session.id).to be == 'longhash'
-  expect(session.user).to be == 1
+  expect(session.id).to eq 'longhash'
+  expect(session.user).to eq 1
 end
 ```
 
