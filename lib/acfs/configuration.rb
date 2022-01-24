@@ -70,8 +70,8 @@ module Acfs
     # @return [undefined]
     #
     def load(filename)
-      config = YAML.safe_load(File.read(filename), [], [], true)
-      env    = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
+      config = load_yaml_file(filename)
+      env = ENV['RACK_ENV'] || ENV['RAILS_ENV'] || 'development'
 
       config = config[env] if config.key? env
       config.each do |key, value|
@@ -114,6 +114,16 @@ module Acfs
       #
       def set(configuration)
         @current = configuration if configuration.is_a? Configuration
+      end
+    end
+
+    private
+
+    def load_yaml_file(path)
+      if YAML.respond_to?(:safe_load_file)
+        YAML.safe_load_file(path, aliases: true)
+      else
+        YAML.safe_load(File.read(path), [], [], true)
       end
     end
   end
