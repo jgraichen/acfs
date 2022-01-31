@@ -6,13 +6,19 @@
 ---
 
 ### New
-* Support for Ruby 3.1 and Rails 7.0
 
 ### Changes
 
 ### Fixes
 
 ### Breaks
+
+
+## 1.7.0 - (2022-01-24)
+---
+
+### New
+* Support for Ruby 3.1 and Rails 7.0
 
 
 ## 1.6.0 - (2021-01-07)
