@@ -12,8 +12,8 @@ class Acfs::Resource
   module Operational
     extend ActiveSupport::Concern
 
-    def operation(*args, **kwargs, &block)
-      self.class.operation(*args, **kwargs, &block)
+    def operation(...)
+      self.class.operation(...)
     end
 
     module ClassMethods

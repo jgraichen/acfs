@@ -27,7 +27,7 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = %w[lib]
 
-  spec.required_ruby_version = '>= 2.5.0'
+  spec.required_ruby_version = '>= 2.7.0'
 
   spec.add_runtime_dependency 'actionpack', '>= 5.2'
   spec.add_runtime_dependency 'activemodel', '>= 5.2'

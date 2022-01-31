@@ -12,6 +12,7 @@
 ### Fixes
 
 ### Breaks
+* Require Ruby 2.7
 
 
 ## 1.7.0 - (2022-01-24)
