@@ -30,6 +30,6 @@ group :test do
   gem 'pry'
   gem 'pry-byebug'
 
-  gem 'codecov', require: false
-  gem 'simplecov', require: false
+  gem 'simplecov'
+  gem 'simplecov-cobertura'
 end
