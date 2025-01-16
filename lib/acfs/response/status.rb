@@ -9,7 +9,7 @@ module Acfs
       # request was not executed or failed on client side.
       #
       def status_code
-        return @status.to_i if defined? :@status
+        @status.to_i if defined?(@status)
         # return response.response_code unless response.nil?
         # 0
       end

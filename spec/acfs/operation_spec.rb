@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-describe ::Acfs::Operation do
+describe Acfs::Operation do
   let(:operation) { described_class.new MyUser, :read, params: {id: 0} }
 
   describe '#request' do

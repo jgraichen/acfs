@@ -126,7 +126,7 @@ describe Acfs::Stub do
       it 'allows to raise error' do
         expect do
           Session.create! ident: 'john@exmaple.org', password: 'wrong'
-        end.to raise_error(::Acfs::InvalidResource)
+        end.to raise_error(Acfs::InvalidResource)
       end
     end
 
@@ -226,7 +226,7 @@ describe Acfs::Stub do
 
         expect do
           user.save!
-        end.to raise_error(::Acfs::InvalidResource)
+        end.to raise_error(Acfs::InvalidResource)
       end
 
       it 'matches partial :with' do
@@ -283,9 +283,8 @@ describe Acfs::Stub do
 
     context 'with a match in params' do
       let(:op) do
-        instance_double('Acfs::Operation').tap do |op|
-          allow(op).to receive(:full_params).and_return(id: 1337, blub: 'abc')
-          allow(op).to receive(:data).and_return({})
+        instance_double(Acfs::Operation).tap do |op|
+          allow(op).to receive_messages(full_params: {id: 1337, blub: 'abc'}, data: {})
         end
       end
 
@@ -296,9 +295,8 @@ describe Acfs::Stub do
 
     context 'with a match in data' do
       let(:op) do
-        instance_double('Acfs::Operation').tap do |op|
-          allow(op).to receive(:full_params).and_return({})
-          allow(op).to receive(:data).and_return(id: 1337, blub: 'abc')
+        instance_double(Acfs::Operation).tap do |op|
+          allow(op).to receive_messages(full_params: {}, data: {id: 1337, blub: 'abc'})
         end
       end
 
@@ -309,9 +307,8 @@ describe Acfs::Stub do
 
     context 'with no match in params nor data' do
       let(:op) do
-        instance_double('Acfs::Operation').tap do |op|
-          allow(op).to receive(:full_params).and_return(id: 1337)
-          allow(op).to receive(:data).and_return({})
+        instance_double(Acfs::Operation).tap do |op|
+          allow(op).to receive_messages(full_params: {id: 1337}, data: {})
         end
       end
 
@@ -322,9 +319,8 @@ describe Acfs::Stub do
 
     context 'with a wrong match' do
       let(:op) do
-        instance_double('Acfs::Operation').tap do |op|
-          allow(op).to receive(:full_params).and_return(id: 1337, blub: 'abc')
-          allow(op).to receive(:data).and_return({})
+        instance_double(Acfs::Operation).tap do |op|
+          allow(op).to receive_messages(full_params: {id: 1337, blub: 'abc'}, data: {})
         end
       end
 
@@ -335,9 +331,8 @@ describe Acfs::Stub do
 
     context 'with a missing match' do
       let(:op) do
-        instance_double('Acfs::Operation').tap do |op|
-          allow(op).to receive(:full_params).and_return(id: 1337, blub: 'abc')
-          allow(op).to receive(:data).and_return({})
+        instance_double(Acfs::Operation).tap do |op|
+          allow(op).to receive_messages(full_params: {id: 1337, blub: 'abc'}, data: {})
         end
       end
 

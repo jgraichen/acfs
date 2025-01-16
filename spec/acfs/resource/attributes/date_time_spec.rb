@@ -11,19 +11,19 @@ describe Acfs::Resource::Attributes::DateTime do
     context 'with nil' do
       let(:value) { nil }
 
-      it { expect(cast.call).to eq nil }
+      it { expect(cast.call).to be_nil }
     end
 
     context 'with empty string' do
       let(:value) { '' }
 
-      it { expect(cast.call).to eq nil }
+      it { expect(cast.call).to be_nil }
     end
 
     context 'with blank string' do
       let(:value) { "  \t" }
 
-      it { expect(cast.call).to eq nil }
+      it { expect(cast.call).to be_nil }
     end
 
     context 'with DateTime' do

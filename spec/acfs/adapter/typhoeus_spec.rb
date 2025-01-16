@@ -29,7 +29,7 @@ describe Acfs::Adapter::Typhoeus do
     request = Acfs::Request.new 'http://example.org'
     adapter.queue request
 
-    expect { adapter.run(request) }.to raise_error(::Acfs::TimeoutError) do |err|
+    expect { adapter.run(request) }.to raise_error(Acfs::TimeoutError) do |err|
       expect(err.message).to eq 'Timeout reached: GET http://example.org'
     end
   end
@@ -40,7 +40,7 @@ describe Acfs::Adapter::Typhoeus do
     request = Acfs::Request.new 'http://should-never-exists.example.org'
     adapter.queue request
 
-    expect { adapter.run(request) }.to raise_error(::Acfs::RequestError) do |err|
+    expect { adapter.run(request) }.to raise_error(Acfs::RequestError) do |err|
       expect(err.message).to eq 'Couldn\'t resolve host name: GET http://should-never-exists.example.org'
     end
   end
@@ -48,7 +48,7 @@ describe Acfs::Adapter::Typhoeus do
   it 'passes arguments to typhoeus hydra' do
     value = {key: 1, key2: 2}
 
-    expect(::Typhoeus::Hydra).to receive(:new).with(value)
+    expect(Typhoeus::Hydra).to receive(:new).with(value)
 
     described_class.new(**value).send :hydra
   end

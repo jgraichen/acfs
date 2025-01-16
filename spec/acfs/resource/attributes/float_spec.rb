@@ -11,7 +11,7 @@ describe Acfs::Resource::Attributes::Float do
     context 'with nil' do
       let(:value) { nil }
 
-      it { expect(cast.call).to eq nil }
+      it { expect(cast.call).to be_nil }
     end
 
     context 'with blank string (I)' do
@@ -35,13 +35,13 @@ describe Acfs::Resource::Attributes::Float do
     context 'with Infinity' do
       let(:value) { 'Infinity' }
 
-      it { expect(cast.call).to eq ::Float::INFINITY }
+      it { expect(cast.call).to eq Float::INFINITY }
     end
 
     context 'with -Infinity' do
       let(:value) { '-Infinity' }
 
-      it { expect(cast.call).to eq(-::Float::INFINITY) }
+      it { expect(cast.call).to eq(-Float::INFINITY) }
     end
 
     context 'with NaN' do

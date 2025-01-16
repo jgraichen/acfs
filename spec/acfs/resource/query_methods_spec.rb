@@ -333,7 +333,7 @@ describe Acfs::Resource::QueryMethods do
       let(:model) { Single }
 
       it '.find_by should not be defined' do
-        expect { model.find_by }.to raise_error ::Acfs::UnsupportedOperation
+        expect { model.find_by }.to raise_error Acfs::UnsupportedOperation
       end
     end
   end

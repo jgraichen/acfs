@@ -13,7 +13,7 @@ describe Acfs::Resource::Dirty do
   end
 
   it 'includes ActiveModel::Dirty' do
-    model.is_a? ActiveModel::Dirty
+    expect(model).to be_a ActiveModel::Dirty
   end
 
   describe '#changed?' do

@@ -30,26 +30,26 @@ class NotificationCollector
   end
 end
 
-describe ::Acfs::Runner do
-  let(:adapter) { ::NullAdapter.new }
-  let(:runner) { ::Acfs::Runner.new adapter }
+describe Acfs::Runner do
+  let(:adapter) { NullAdapter.new }
+  let(:runner) { Acfs::Runner.new adapter }
   let(:collector) { NotificationCollector.new }
   let(:collector2) { NotificationCollector.new }
 
   after do
-    ::ActiveSupport::Notifications.notifier = \
-      ::ActiveSupport::Notifications::Fanout.new
+    ActiveSupport::Notifications.notifier =
+      ActiveSupport::Notifications::Fanout.new
   end
 
   describe '#instrumentation' do
     before do
-      ::ActiveSupport::Notifications.subscribe(/^acfs\.runner/, collector)
-      ::ActiveSupport::Notifications.subscribe(/^acfs\.operation/, collector2)
+      ActiveSupport::Notifications.subscribe(/^acfs\.runner/, collector)
+      ActiveSupport::Notifications.subscribe(/^acfs\.operation/, collector2)
     end
 
     describe '#process' do
       it 'triggers event' do
-        runner.process ::Acfs::Operation.new MyUser, :read, params: {id: 0}
+        runner.process Acfs::Operation.new MyUser, :read, params: {id: 0}
         expect(collector.events).to have(1).items
         expect(collector2.events).to have(1).items
       end
@@ -57,7 +57,7 @@ describe ::Acfs::Runner do
 
     describe '#run' do
       it 'triggers event' do
-        runner.run ::Acfs::Operation.new MyUser, :read, params: {id: 0}
+        runner.run Acfs::Operation.new MyUser, :read, params: {id: 0}
         expect(collector.events).to have(1).items
         expect(collector2.events).to have(0).items
       end
@@ -65,7 +65,7 @@ describe ::Acfs::Runner do
 
     describe '#enqueue' do
       it 'triggers event' do
-        runner.enqueue ::Acfs::Operation.new MyUser, :read, params: {id: 0}
+        runner.enqueue Acfs::Operation.new MyUser, :read, params: {id: 0}
         expect(collector.events).to have(1).items
         expect(collector2.events).to have(0).items
       end
@@ -79,7 +79,7 @@ describe ::Acfs::Runner do
 
     it 'does not do requests when a middleware aborted' do
       expect(adapter).not_to receive :run
-      runner.run ::Acfs::Operation.new MyUser, :read, params: {id: 0}
+      runner.run Acfs::Operation.new MyUser, :read, params: {id: 0}
     end
   end
 
@@ -90,7 +90,7 @@ describe ::Acfs::Runner do
 
     it 'does not do requests when a middleware aborted' do
       expect(adapter).not_to receive(:queue)
-      runner.enqueue ::Acfs::Operation.new MyUser, :read, params: {id: 0}
+      runner.enqueue Acfs::Operation.new MyUser, :read, params: {id: 0}
       runner.start
     end
   end

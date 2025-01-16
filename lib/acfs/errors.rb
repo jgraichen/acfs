@@ -6,7 +6,7 @@ module Acfs
   class Error < StandardError
     def initialize(opts = {}, message = nil)
       opts[:message] = message if message
-      super opts[:message]
+      super(opts[:message])
     end
   end
 
@@ -20,7 +20,7 @@ module Acfs
 
       message = "#{message}: #{request.method.upcase} #{request.url}"
 
-      super message: message
+      super(message: message)
     end
   end
 
@@ -40,13 +40,13 @@ module Acfs
 
       message = if response
                   (opts[:message] ? "#{opts[:message]}:" : 'Received') +
-                    " #{response.code} for #{response.request.method.upcase}" \
-                    " #{response.request.url} #{response.request.format}"
+                    " #{response.code} for #{response.request.method.upcase} " \
+                    "#{response.request.url} #{response.request.format}"
                 else
                   opts[:message] || 'Received erroneous response'
                 end
 
-      super opts, message
+      super(opts, message)
     end
   end
 
@@ -63,7 +63,7 @@ module Acfs
                 "on #{operation.resource}.\n" +
                 stubs.map {|s| "  #{s.opts.pretty_inspect}" }.join
 
-      super opts, message
+      super(opts, message)
     end
   end
 

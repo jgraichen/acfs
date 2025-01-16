@@ -45,7 +45,7 @@ describe Acfs::Middleware::MessagePack do
     it 'decodes body data' do
       request.complete! response
 
-      expect(response.data).to be == data.map(&:stringify_keys)
+      expect(response.data).to eq data.map(&:stringify_keys)
     end
   end
 

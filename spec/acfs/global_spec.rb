@@ -12,11 +12,11 @@ class NotificationCollector
   end
 end
 
-describe ::Acfs::Global do
-  let(:adapter) { ::NullAdapter.new }
+describe Acfs::Global do
+  let(:adapter) { NullAdapter.new }
   let(:runner) { double 'runner' }
   let(:collector) { NotificationCollector.new }
-  let(:acfs) { Object.new.tap {|o| o.extend ::Acfs::Global } }
+  let(:acfs) { Object.new.tap {|o| o.extend Acfs::Global } }
 
   describe 'instrumentation' do
     before do
@@ -26,7 +26,7 @@ describe ::Acfs::Global do
 
     describe '#run' do
       before do
-        ::ActiveSupport::Notifications.subscribe 'acfs.run', collector
+        ActiveSupport::Notifications.subscribe 'acfs.run', collector
       end
 
       it 'triggers event' do
@@ -37,7 +37,7 @@ describe ::Acfs::Global do
 
     describe '#reset' do
       before do
-        ::ActiveSupport::Notifications.subscribe 'acfs.reset', collector
+        ActiveSupport::Notifications.subscribe 'acfs.reset', collector
       end
 
       it 'triggers event' do

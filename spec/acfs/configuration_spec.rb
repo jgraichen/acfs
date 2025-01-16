@@ -34,7 +34,7 @@ describe Acfs::Configuration do
 
     context 'with RACK_ENV' do
       around do |example|
-        env = ENV['RACK_ENV']
+        env = ENV.fetch('RACK_ENV', nil)
         ENV['RACK_ENV'] = 'production'
         example.run
       ensure

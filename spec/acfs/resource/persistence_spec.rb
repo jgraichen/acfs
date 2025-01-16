@@ -275,7 +275,7 @@ describe Acfs::Resource::Persistence do
         rescue StandardError
           nil
         end
-        expect(model.errors.to_hash).to be == {name: %w[required]}
+        expect(model.errors.to_hash).to eq({name: %w[required]})
       end
     end
   end
@@ -286,8 +286,8 @@ describe Acfs::Resource::Persistence do
 
       it 'creates new resource' do
         model = model_class.create! data
-        expect(model.name).to be == 'Idefix'
-        expect(model.age).to be == 12
+        expect(model.name).to eq 'Idefix'
+        expect(model.age).to eq 12
       end
 
       it 'is persisted' do
@@ -301,8 +301,8 @@ describe Acfs::Resource::Persistence do
 
       it 'raises an error' do
         expect { model_class.create! data }.to \
-          raise_error(::Acfs::InvalidResource) do |error|
-            expect(error.errors).to be == {'name' => %w[required]}
+          raise_error(Acfs::InvalidResource) do |error|
+            expect(error.errors).to eq({'name' => %w[required]})
           end
       end
     end
@@ -315,8 +315,8 @@ describe Acfs::Resource::Persistence do
       let(:data) { {name: 'Idefix', age: 12} }
 
       it 'creates new resource' do
-        expect(model.name).to be == 'Idefix'
-        expect(model.age).to be == 12
+        expect(model.name).to eq 'Idefix'
+        expect(model.age).to eq 12
       end
 
       it 'is persisted' do

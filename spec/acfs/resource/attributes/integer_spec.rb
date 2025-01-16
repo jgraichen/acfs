@@ -11,7 +11,7 @@ describe Acfs::Resource::Attributes::Integer do
     context 'with nil' do
       let(:value) { nil }
 
-      it { expect(cast.call).to eq nil }
+      it { expect(cast.call).to be_nil }
     end
 
     context 'with empty string' do

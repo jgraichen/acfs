@@ -65,7 +65,7 @@ describe Acfs::Resource::Attributes do
       let(:params) { 'James' }
 
       it { expect(action).not_to change(m, :attributes) }
-      it { expect(action.call).to eq false }
+      it { expect(action.call).to be false }
     end
 
     context 'with unknown attributes' do

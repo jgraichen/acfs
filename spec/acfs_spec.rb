@@ -77,12 +77,12 @@ describe 'Acfs' do
       stub = stub_request(:post, 'http://users.example.org/singles').to_return response(score: 250, user_id: 5)
 
       single = Single.new user_id: 5, score: 250
-      expect(single.new?).to eq true
+      expect(single.new?).to be true
 
       single.save
       expect(stub).to have_been_requested
 
-      expect(single.new?).to eq false
+      expect(single.new?).to be false
       expect(single.user_id).to eq 5
       expect(single.score).to eq 250
     end
@@ -126,7 +126,7 @@ describe 'Acfs' do
       single = Single.find user_id: 5
       Acfs.run
 
-      expect(single.new?).to eq false
+      expect(single.new?).to be false
 
       single.delete
 
@@ -134,7 +134,7 @@ describe 'Acfs' do
     end
 
     it 'raises error when calling .all' do
-      expect { Single.all }.to raise_error ::Acfs::UnsupportedOperation
+      expect { Single.all }.to raise_error Acfs::UnsupportedOperation
     end
   end
 

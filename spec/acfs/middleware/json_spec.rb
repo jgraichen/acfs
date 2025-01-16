@@ -61,7 +61,7 @@ describe Acfs::Middleware::JSON do
       let(:body)    { data.to_json[4..-4] }
 
       it 'raises an error' do
-        expect { request.complete! response }.to raise_error(::JSON::ParserError)
+        expect { request.complete! response }.to raise_error(JSON::ParserError)
       end
     end
 

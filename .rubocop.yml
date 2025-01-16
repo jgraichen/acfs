@@ -24,3 +24,11 @@ RSpec/MultipleMemoizedHelpers:
 
 RSpec/NestedGroups:
   Enabled: False
+
+# False positive since Acfs responses ain't Rails responses
+RSpecRails/HaveHttpStatus:
+  Enabled: False
+
+# False positive since Acfs responses ain't Rails responses
+RSpecRails/HttpStatus:
+  Enabled: False
