@@ -5,15 +5,6 @@ RSpec/AnyInstance:
   Exclude:
     - "spec/acfs/runner_spec.rb"
 
-# Offense count: 6
-RSpec/ImplicitBlockExpectation:
-  Exclude:
-    - "spec/acfs/resource/attributes/date_time_spec.rb"
-    - "spec/acfs/resource/attributes/dict_spec.rb"
-    - "spec/acfs/resource/attributes/float_spec.rb"
-    - "spec/acfs/resource/attributes/integer_spec.rb"
-    - "spec/acfs/resource/attributes/uuid_spec.rb"
-
 # Offense count: 24
 # Configuration parameters: .
 # SupportedStyles: have_received, receive

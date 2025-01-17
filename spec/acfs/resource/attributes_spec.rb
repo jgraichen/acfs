@@ -41,7 +41,7 @@ describe Acfs::Resource::Attributes do
   end
 
   describe '#write_attributes' do
-    subject(:action) { -> { m.write_attributes(params, **opts) } }
+    subject(:action) { m.write_attributes(params, **opts) }
 
     before do
       model.attribute :name, :string, default: 'John'
@@ -56,7 +56,7 @@ describe Acfs::Resource::Attributes do
     let(:m) { model.new }
 
     it 'updates attributes' do
-      expect(action).to change(m, :attributes)
+      expect { action }.to change(m, :attributes)
         .from(name: 'The Great John', age: 25)
         .to(name: 'The Great James', age: 25)
     end
@@ -64,17 +64,17 @@ describe Acfs::Resource::Attributes do
     context 'without non-hash params' do
       let(:params) { 'James' }
 
-      it { expect(action).not_to change(m, :attributes) }
-      it { expect(action.call).to be false }
+      it { expect { action }.not_to change(m, :attributes) }
+      it { expect(action).to be false }
     end
 
     context 'with unknown attributes' do
       let(:params) { {name: 'James', born_at: 'today'} }
 
-      it { expect(action).not_to raise_error }
+      it { expect { action }.not_to raise_error }
 
       it 'updates known attributes and store unknown' do
-        expect(action).to change(m, :attributes)
+        expect { action }.to change(m, :attributes)
           .from(name: 'The Great John', age: 25)
           .to(name: 'The Great James', age: 25, born_at: 'today')
       end
@@ -82,11 +82,11 @@ describe Acfs::Resource::Attributes do
       context 'with unknown: :raise option' do
         let(:opts) { {unknown: :raise} }
 
-        it { expect(action).to raise_error(ArgumentError, /unknown attribute/i) }
+        it { expect { action }.to raise_error(ArgumentError, /unknown attribute/i) }
 
         it do
           expect do
-            action.call
+            action
           rescue StandardError
             true
           end.not_to change(m, :attributes)

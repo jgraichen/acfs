@@ -37,6 +37,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
+  config.raise_errors_for_deprecations!
+
   config.before do
     Acfs.runner.clear
     Acfs::Stub.clear

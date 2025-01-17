@@ -6,36 +6,36 @@ describe Acfs::Resource::Attributes::Dict do
   let(:type) { Acfs::Resource::Attributes::Dict.new }
 
   describe '#cast' do
-    subject(:cast) { -> { type.cast value } }
+    subject(:cast) { type.cast value }
 
     context 'with nil' do
       let(:value) { nil }
 
-      it { expect(cast.call).to be_nil }
+      it { expect(cast).to be_nil }
     end
 
     context 'with blank string (I)' do
       let(:value) { '' }
 
-      it { expect(cast.call).to eq({}) }
+      it { expect(cast).to eq({}) }
     end
 
     context 'with blank string (II)' do
       let(:value) { "  \t" }
 
-      it { expect(cast.call).to eq({}) }
+      it { expect(cast).to eq({}) }
     end
 
     context 'with hash' do
       let(:value) { {3 => true, abc: 4} }
 
-      it { expect(cast.call).to eq value }
+      it { expect(cast).to eq value }
     end
 
     context 'with non hashable object' do
       let(:value) { Object.new }
 
-      it { is_expected.to raise_error TypeError }
+      it { expect { cast }.to raise_error TypeError }
     end
 
     context 'with hashable object (I)' do
@@ -47,7 +47,7 @@ describe Acfs::Resource::Attributes::Dict do
         end.new
       end
 
-      it { expect(cast.call).to eq id: value.object_id }
+      it { expect(cast).to eq id: value.object_id }
     end
 
     context 'with hashable object (II)' do
@@ -59,7 +59,7 @@ describe Acfs::Resource::Attributes::Dict do
         end.new
       end
 
-      it { expect(cast.call).to eq id: value.object_id }
+      it { expect(cast).to eq id: value.object_id }
     end
 
     context 'with serializable object' do
@@ -71,13 +71,13 @@ describe Acfs::Resource::Attributes::Dict do
         end.new
       end
 
-      it { expect(cast.call).to eq id: value.object_id }
+      it { expect(cast).to eq id: value.object_id }
     end
 
     context 'with hash subclass object' do
       let(:value) { HashWithIndifferentAccess.new test: :foo }
 
-      it { expect(cast.call).to be value }
+      it { expect(cast).to be value }
     end
   end
 end
