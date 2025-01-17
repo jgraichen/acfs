@@ -42,7 +42,7 @@
 
 ### Changes
 
-- Revert back to using `::MultiJson`
+- Revert to using `::MultiJson`
 
 ## 1.5.0 - (2020-06-19)
 
@@ -54,7 +54,7 @@
 
 ### Changes
 
-- Replace deprecated MultiJson with core JSON module
+- Replace deprecated `MultiJson` with core JSON module
 
 ## 1.4.0 - (2020-06-12)
 
@@ -62,7 +62,7 @@
 
 ### New
 
-- Use strict TCP keepalive probing by default (5s/5s)
+- Use strict TCP keep alive probing by default (5s/5s)
 - Adapter accepts curl request opts
 
 ## 1.3.4 - (2020-03-22)
@@ -85,7 +85,7 @@
 
 ### Fixes
 
-- Fix Acfs.on callbacks for empty find_by results (#42)
+- Fix `Acfs.on` callbacks for empty `find_by` results (#42)
 
 ---
 
@@ -121,13 +121,13 @@
 
 ## 1.0.0
 
-- Switch to first non-development major as it's long time used in production.
+- Switch to first non-development major as its long time used in production.
 - Fix NewRelic RPM inference with middleware stack inherited from `ActionDispatch::MiddlewareStack`.
 
 ## 0.48.0
 
 - Remove #attribute_types broke since f7e4109 (Sep 2013, v0.23)
-- Fix attribute inheritance on subclassing broken since commit 7cf1d11 (Apr 2014, v0.43)
+- Fix attribute inheritance on child classes broken since commit 7cf1d11 (Apr 2014, v0.43)
 
 ## 0.47.0
 
@@ -140,13 +140,12 @@
 ## 0.45.0
 
 - Fetching multiple records (`find(ary)`) is stable now, but untested (#38)
-- Middleware stack is build on ActionDispatch::MiddlewareStack now
-- Deprecate legacy middleware names (xyEncoder, xyDecoder)
+- Middleware stack is build on `ActionDispatch::MiddlewareStack` now
+- Deprecate legacy middleware names (`xyEncoder`, `xyDecoder`)
 
 ## 0.44.0
 
-- Add option to configure adapter creation and pass option to typhoeus adapter e.g.
-  limiting concurrency.
+- Add option to configure adapter creation and pass option to `typhoeus` adapter e.g. limiting concurrency.
 
 ## 0.43.2
 
@@ -176,7 +175,7 @@
 
 ## 0.39.0
 
-- Add new event acfs.operation.before_process
+- Add new event `acfs.operation.before_process`
 
 ## 0.38.0
 
@@ -185,7 +184,7 @@
 
 ## 0.37.0
 
-- Add Acfs.on
+- Add `Acfs.on`
 
 ## 0.36.0
 
@@ -228,7 +227,7 @@
 
 ## 0.29.1
 
-- Fix: rescue NameError and NoMethodError on invalid type
+- Fix: rescue `NameError` and `NoMethodError` on invalid type
 
 ## 0.29.0
 
@@ -255,7 +254,7 @@
 ## 0.24.0
 
 - Fix issues with stubs using type inheritance
-- Allow '1' as true value for bool attributes (Tino Junge)
+- Allow '1' as true value for boolean attributes (Tino Junge)
 
 ## 0.23.2
 
@@ -276,7 +275,7 @@
 
 ## 0.22.1
 
-- Fix hash modification on iteration bug on ActiveModel::Errors due to string keys in error hash
+- Fix hash modification on iteration bug on `ActiveModel::Errors` due to string keys in error hash
 
 ## 0.22.0
 
@@ -299,10 +298,10 @@
 
 ## 0.19.0
 
-- Add support for DateTime and Float attribute types
+- Add support for `DateTime` and `Float` attribute types
 - Add experimental list attribute type
 - Allow block usage in stub `with` option
-- Allow to test if operation stubs were called and how often
+- Allow testing if operation stubs were called and how often
 - Fix bug on operation stubs
 
 ## 0.18.0
@@ -331,7 +330,7 @@
 ## 0.12.0
 
 - Add JRuby support
-- Improve handling of error respones (422)
+- Improve handling of error responses (422)
 
 ## 0.11.0
 
@@ -350,8 +349,8 @@
 
 - Add save operation (PUT and POST)
 - Add JSON and MessagePack encoder middlewares for encoding request data
-- ActiveModel::Dirty
-- Add persistant state methods
+- `ActiveModel::Dirty`
+- Add persistent state methods
 
 ## 0.7.0
 
@@ -359,33 +358,33 @@
 
 ## 0.6.0
 
-- Add support for multiple ids for .find
+- Add support for multiple IDs for `.find`
 - Add MessagePack support
 
 ## 0.5.1
 
-- Fix mime type parsing for mime types with aditional parameters (ActionPack < 4.0)
+- Fix mime type parsing for mime types with additional parameters (`ActionPack` < 4.0)
 
 ## 0.5.0
 
-- Add mime type support for respones
+- Add mime type support for responses
 
 ## 0.4.0
 
 - Improve JSON response detection
-- Add bool attribute type
+- Add boolean attribute type
 
 ## 0.3.0
 
 - Add tracking for loading state (if resource is loaded or queued)
-- Add JSON middleware to decode respones
+- Add JSON middleware to decode responses
 - Add middleware support
 - Add method to fetch single resources or list of resources
-- Use typhoeus as http library for parallel request processing
+- Use typhoeus as HTTP library for parallel request processing
 
 ## 0.2.0
 
-- Allow to define resources and attributes
+- Allow defining resources and attributes
 
 ## 0.1.0
 
