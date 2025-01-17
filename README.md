@@ -14,7 +14,7 @@ Acfs covers model and service abstraction, convenient query and filter methods, 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'acfs', '~> 1.7'
+gem 'acfs', '~> 2.0'
 ```
 
 And then execute:
@@ -35,7 +35,7 @@ First you need to define your service(s):
 
 ```ruby
 class UserService < Acfs::Service
-  self.base_url = 'http://users.myapp.org'
+  self.base_url = 'https://users.myapp.org'
 
   # You can configure middlewares you want to use for the service here.
   # Each service has it own middleware stack.

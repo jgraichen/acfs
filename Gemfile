@@ -16,9 +16,10 @@ gem 'rspec-collection_matchers'
 gem 'rspec-its'
 gem 'webmock', '~> 3.0'
 
+gem 'rake-release', '~> 1.0'
+
 # Doc
 group :development do
-  gem 'rake-release', '~> 1.0'
   gem 'redcarpet', platform: :ruby
   gem 'yard', '~> 0.9.24'
 

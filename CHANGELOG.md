@@ -6,14 +6,24 @@
 
 ### New
 
+### Changes
+
+### Fixes
+
+### Breaks
+
+## 2.0.0 - (2025-01-17)
+
+---
+
+### New
+
 - Add support for Rails 7.2 and 8.0
 - Add support for Ruby 3.3 and 3.4
 
 ### Changes
 
 - Use newer Ruby syntax for performance and code improvements
-
-### Fixes
 
 ### Breaks
 
