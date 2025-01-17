@@ -56,11 +56,11 @@ class Acfs::Resource
       #
       #   @return [Collection] Collection of requested resources.
       #
-      def find(id_or_ids, **opts, &block)
+      def find(id_or_ids, **opts, &)
         if id_or_ids.respond_to? :each
-          find_multiple id_or_ids, opts, &block
+          find_multiple(id_or_ids, opts, &)
         else
-          find_single id_or_ids, opts, &block
+          find_single(id_or_ids, opts, &)
         end
       end
 

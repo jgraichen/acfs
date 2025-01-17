@@ -35,9 +35,9 @@ module Acfs
         #   @param [Proc] block Block passed to klass initialize
         #   @return [undefined]
         #
-        def use(klass, *args, &block)
+        def use(klass, ...)
           # Backward compatible behavior
-          middleware.insert(0, klass, *args, &block)
+          middleware.insert(0, klass, ...)
         end
 
         # @api private

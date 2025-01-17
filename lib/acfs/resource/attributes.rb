@@ -264,7 +264,7 @@ end
 
 # Load attribute type classes.
 #
-Dir[File.join(__dir__, 'attributes/*.rb')].sort.each do |path|
+Dir[File.join(__dir__, 'attributes/*.rb')].each do |path|
   filename = File.basename(path)
   require "acfs/resource/attributes/#{filename}"
 end

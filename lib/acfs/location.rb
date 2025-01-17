@@ -8,7 +8,7 @@ module Acfs
   class Location
     attr_reader :arguments, :raw, :struct, :vars
 
-    REGEXP = /^:([A-z][A-z0-9_]*)$/.freeze
+    REGEXP = /^:([A-z][A-z0-9_]*)$/
 
     def initialize(uri, vars = {})
       @raw       = URI.parse uri

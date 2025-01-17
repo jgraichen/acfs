@@ -18,8 +18,8 @@ class Acfs::Resource
 
     module ClassMethods
       # Invoke CRUD operation.
-      def operation(action, **opts, &block)
-        Acfs.runner.process ::Acfs::Operation.new(self, action, **opts, &block)
+      def operation(...)
+        Acfs.runner.process ::Acfs::Operation.new(self, ...)
       end
     end
   end

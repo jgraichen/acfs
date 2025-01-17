@@ -123,7 +123,7 @@ module Acfs
       if YAML.respond_to?(:safe_load_file)
         YAML.safe_load_file(path, aliases: true)
       else
-        YAML.safe_load(File.read(path), [], [], true)
+        YAML.safe_load_file(path, [], [], true)
       end
     end
   end

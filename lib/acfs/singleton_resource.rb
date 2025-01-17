@@ -59,8 +59,8 @@ module Acfs
       #
       #   @return [ self ] Resource object.
       #
-      def find(*attrs, &block)
-        find_single nil, params: attrs.extract_options!, &block
+      def find(*attrs, &)
+        find_single(nil, params: attrs.extract_options!, &)
       end
 
       # @api public

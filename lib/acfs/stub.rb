@@ -102,7 +102,7 @@ module Acfs
       # Stub a resource with given handler block. An already created handler
       # for same resource class will be overridden.
       #
-      def resource(klass, action, opts = {}, &_block)
+      def resource(klass, action, opts = {}, &)
         action = action.to_sym
         unless ACTIONS.include? action
           raise ArgumentError.new "Unknown action `#{action}`."

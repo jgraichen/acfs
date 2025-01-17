@@ -5,7 +5,7 @@ module Acfs::Collections
     extend ActiveSupport::Concern
 
     included do
-      def self.operation(_action, **opts, &_block)
+      def self.operation(_action, **opts, &)
         opts[:url]
       end
 
@@ -17,26 +17,26 @@ module Acfs::Collections
       setup_headers response.headers
     end
 
-    def next_page(&block)
-      page 'next', &block
+    def next_page(&)
+      page('next', &)
     end
 
-    def prev_page(&block)
-      page 'prev', &block
+    def prev_page(&)
+      page('prev', &)
     end
 
-    def first_page(&block)
-      page 'first', &block
+    def first_page(&)
+      page('first', &)
     end
 
-    def last_page(&block)
-      page 'last', &block
+    def last_page(&)
+      page('last', &)
     end
 
-    def page(rel, &block)
+    def page(rel, &)
       return unless relations[rel]
 
-      @resource_class.all nil, url: relations[rel], &block
+      @resource_class.all(nil, url: relations[rel], &)
     end
 
     private

@@ -41,8 +41,8 @@ module Acfs
     # @return [undefined]
     # @see Configuration#configure
     #
-    def configure(&block)
-      Configuration.current.configure(&block)
+    def configure(&)
+      Configuration.current.configure(&)
     end
 
     # @api public

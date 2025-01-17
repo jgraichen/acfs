@@ -11,6 +11,8 @@
 
 ### Changes
 
+- Use newer Ruby syntax for performance and code improvements
+
 ### Fixes
 
 ### Breaks
