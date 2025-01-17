@@ -1,14 +1,13 @@
 # Acfs - *API client for services*
 
 [![Gem Version](https://img.shields.io/gem/v/acfs?logo=ruby)](https://rubygems.org/gems/acfs)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/jgraichen/acfs/test?logo=github)](https://github.com/jgraichen/acfs/actions)
+[![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/jgraichen/acfs/test.yml?logo=github)](https://github.com/jgraichen/acfs/actions)
 [![Coverage Status](http://img.shields.io/coveralls/jgraichen/acfs/master.svg)](https://coveralls.io/r/jgraichen/acfs)
 [![RubyDoc Documentation](http://img.shields.io/badge/rubydoc-here-blue.svg)](http://rubydoc.info/github/jgraichen/acfs/master/frames)
 
 Acfs is a library to develop API client libraries for single services within a larger service oriented application.
 
 Acfs covers model and service abstraction, convenient query and filter methods, full middleware stack for pre-processing requests and responses, as well as automatic request queuing and parallel processing.
-
 
 ## Installation
 
@@ -20,12 +19,15 @@ gem 'acfs', '~> 1.7'
 
 And then execute:
 
-    > bundle
+```console
+bundle
+```
 
 Or install it yourself as:
 
-    > gem install acfs
-
+```console
+gem install acfs
+```
 
 ## Usage
 
@@ -119,10 +121,11 @@ Acfs.run # This call will fire all request as parallel as possible.
 
 @user.name       # => "John
 @comments.size   # => 25
-@friends[0].name # => "Miraculix"
+@friends[0].name # => "Miracolix"
 ```
 
 Use `.find_by` to get first element only. `.find_by` will call the `index`-Action and return the first resource. Optionally passed parameters will be sent as `GET` parameters and can be used for filtering in the service's controller.
+
 ```ruby
 @user = User.find_by age: 24
 
@@ -130,6 +133,7 @@ Acfs.run # Will request `http://users.myapp.org/users?age=24`
 
 @user # Contains the first user object returned by the index action
 ```
+
 If no object can be found, `.find_by` will return `nil`. The optional callback will then be called with `nil` as parameter. Use `.find_by!` to raise an `Acfs::ResourceNotFound` exception if no object can be found. `.find_by!` will only invoke the optional callback if an object was successfully loaded.
 
 Acfs has basic update support using `PUT` requests:
@@ -147,7 +151,6 @@ Acfs has basic update support using `PUT` requests:
 @user.changed? # => false
 @user.persisted? # => true
 ```
-
 
 ## Singleton resources
 
@@ -187,7 +190,6 @@ my_single = Single.find name: 'Max'
 Acfs.run # sends GET request with param to /single?name=Max
 ```
 
-
 ## Resource Inheritance
 
 Acfs provides a resource inheritance similar to ActiveRecord Single Table Inheritance. If a `type` attribute exists and is a valid subclass of your resource they will be converted to you subclassed resources:
@@ -220,7 +222,6 @@ Acfs.run
 @computer[1].class # => Mac
 @computer[2].class # => Pc
 ```
-
 
 ## Stubbing
 
@@ -268,7 +269,7 @@ it 'should allow stub resource creation' do
 end
 ```
 
-By default Acfs raises an error when a non stubbed resource should be requested. You can switch of the behavior:
+By default, Acfs raises an error when a non stubbed resource should be requested. You can switch of the behavior:
 
 ```ruby
 before do
@@ -281,7 +282,6 @@ it 'should find user number one' do
                        # Will run real request to user service instead.
 end
 ```
-
 
 ## Instrumentation
 
@@ -298,20 +298,16 @@ Read the [official guide][2] on how to subscribe to these events.
 [1]: http://guides.rubyonrails.org/active_support_instrumentation.html
 [2]: http://guides.rubyonrails.org/active_support_instrumentation.html#subscribing-to-an-event
 
-
 ## Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
-4. Add specs for your feature
-5. Implement your feature
-6. Commit your changes (`git commit -am 'Add some feature'`)
-7. Push to the branch (`git push origin my-new-feature`)
-8. Create new Pull Request
-
+3. Add specs for your feature
+4. Implement your feature
+5. Commit your changes (`git commit -am 'Add some feature'`)
+6. Push to the branch (`git push origin my-new-feature`)
+7. Create new Pull Request
 
 ## License
 
-MIT License
-
-Copyright (c) 2013-2022 Jan Graichen. MIT license, see LICENSE for more details.
+[MIT License](LICENSE)
