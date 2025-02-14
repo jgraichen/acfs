@@ -7,6 +7,8 @@ module Acfs
   #
   class Runner
     include Service::Middleware
+    include Acfs::Telemetry
+
     attr_reader :adapter
 
     def initialize(adapter)
@@ -25,8 +27,10 @@ module Acfs
     # Run operation right now skipping queue.
     #
     def run(operation)
-      ::ActiveSupport::Notifications.instrument('acfs.runner.sync_run', operation: operation) do
-        operation_request(operation) {|req| adapter.run req }
+      tracer.in_span('acfs.runner.sync_run') do
+        ::ActiveSupport::Notifications.instrument('acfs.runner.sync_run', operation: operation) do
+          operation_request(operation) {|req| adapter.run req }
+        end
       end
     end
 
@@ -39,11 +43,13 @@ module Acfs
     # Enqueue operation to be run later.
     #
     def enqueue(operation)
-      ::ActiveSupport::Notifications.instrument('acfs.runner.enqueue', operation: operation) do
-        if running?
-          operation_request(operation) {|req| adapter.queue req }
-        else
-          queue << operation
+      tracer.in_span('acfs.runner.enqueue') do
+        ::ActiveSupport::Notifications.instrument('acfs.runner.enqueue', operation: operation) do
+          if running?
+            operation_request(operation) {|req| adapter.queue req }
+          else
+            queue << operation
+          end
         end
       end
     end
@@ -93,10 +99,42 @@ module Acfs
       req = operation.service.prepare(operation.request)
       return unless req.is_a? Acfs::Request
 
-      req = prepare req
+      req = prepare(req)
       return unless req.is_a? Acfs::Request
 
       yield req
+    end
+
+    def prepare(request)
+      method = request.method.to_s.upcase
+      template = request.operation.location&.raw_uri.to_s
+
+      name = "HTTP #{method}"
+      name = "#{method} #{template}" if template
+
+      attributes = {
+        'http.request.method' => method,
+        'server.address' => request.uri.host,
+        'server.port' => request.uri.port,
+        'url.full' => request.uri.to_s,
+        'url.scheme' => request.uri.scheme,
+        'url.template' => template,
+      }
+
+      span = tracer.start_span(name, attributes:, kind: :client)
+      OpenTelemetry::Trace.with_span(span) do
+        OpenTelemetry.propagation.inject(request.headers)
+
+        request.on_complete do |response, nxt|
+          span.set_attribute('http.response.status_code', response.status_code)
+          span.status = OpenTelemetry::Trace::Status.error unless (100..399).cover?(response.status_code)
+
+          span.finish
+          nxt.call(response)
+        end
+
+        super
+      end
     end
   end
 end

@@ -6,6 +6,8 @@
 
 ### New
 
+- Experimental support for OpenTelemetry
+
 ### Changes
 
 ### Fixes

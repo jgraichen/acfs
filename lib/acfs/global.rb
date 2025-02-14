@@ -28,9 +28,11 @@ module Acfs
     # @return [undefined]
     #
     def run
-      ::ActiveSupport::Notifications.instrument 'acfs.before_run'
-      ::ActiveSupport::Notifications.instrument 'acfs.run' do
-        runner.start
+      Telemetry.in_span('acfs.run', attributes: {'code.stacktrace' => caller.join("\n")}) do
+        ::ActiveSupport::Notifications.instrument 'acfs.before_run'
+        ::ActiveSupport::Notifications.instrument 'acfs.run' do
+          runner.start
+        end
       end
     end
 
@@ -50,9 +52,11 @@ module Acfs
     # Reset all queues, stubs and internal state.
     #
     def reset
-      ::ActiveSupport::Notifications.instrument 'acfs.reset' do
-        runner.clear
-        Acfs::Stub.clear
+      Telemetry.in_span('acfs.reset') do
+        ::ActiveSupport::Notifications.instrument 'acfs.reset' do
+          runner.clear
+          Acfs::Stub.clear
+        end
       end
     end
 

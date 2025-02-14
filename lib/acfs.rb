@@ -7,12 +7,16 @@ require 'active_support/core_ext/string'
 require 'active_support/core_ext/module'
 require 'active_support/notifications'
 
+require 'opentelemetry'
+require 'opentelemetry/common'
+
 module Acfs
   extend ActiveSupport::Autoload
   require 'acfs/version'
   require 'acfs/errors'
   require 'acfs/global'
   require 'acfs/util'
+  require 'acfs/telemetry'
 
   require 'acfs/collection'
   require 'acfs/configuration'
