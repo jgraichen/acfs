@@ -158,7 +158,7 @@ module Acfs
         accepted_stubs.first
       end
 
-      def stubbed(operation)
+      def stubbed(operation) # rubocop:disable Naming/PredicateMethod
         stub = stub_for(operation)
         unless stub
           return false if allow_requests?

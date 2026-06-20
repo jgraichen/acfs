@@ -8,13 +8,13 @@ module Acfs
   class Location
     attr_reader :arguments, :raw, :struct, :vars
 
-    REGEXP = /^:([A-z][A-z0-9_]*)$/
+    REGEXP = /^:([A-Za-z][A-Za-z0-9_]*)$/
 
     def initialize(uri, vars = {})
       @raw       = URI.parse uri
       @vars      = vars
       @struct    = raw.path.split('/').reject(&:empty?).map {|s| s =~ REGEXP ? Regexp.last_match[1].to_sym : s }
-      @arguments = struct.select {|s| s.is_a?(Symbol) }
+      @arguments = struct.grep(Symbol)
     end
 
     def build(vars)

@@ -103,7 +103,7 @@ class Acfs::Resource
     #
     # @see #write_attribute Delegates attribute values to `#write_attribute`.
     #
-    def write_attributes(attributes, **opts)
+    def write_attributes(attributes, **opts) # rubocop:disable Naming/PredicateMethod
       unless attributes.respond_to?(:each) && attributes.respond_to?(:keys)
         return false
       end

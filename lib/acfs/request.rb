@@ -11,6 +11,7 @@ module Acfs
     attr_reader :uri, :url, :headers, :params, :data, :method, :operation
 
     include Request::Callbacks
+
     def initialize(url, **options, &block)
       @uri = URI.parse(url.to_s).tap do |_url|
         @data    = options.delete(:data) || nil

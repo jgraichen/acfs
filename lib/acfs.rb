@@ -9,6 +9,7 @@ require 'opentelemetry/common'
 
 module Acfs
   extend ActiveSupport::Autoload
+
   require 'acfs/version'
   require 'acfs/errors'
   require 'acfs/global'
@@ -32,6 +33,7 @@ module Acfs
 
   module Middleware
     extend ActiveSupport::Autoload
+
     require 'acfs/middleware/base'
     require 'acfs/middleware/serializer'
 

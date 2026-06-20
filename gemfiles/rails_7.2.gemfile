@@ -13,7 +13,7 @@ gem "actionpack", "~> 7.2.0"
 gem "railties", "~> 7.2.0", require: "rails"
 
 group :development do
-  gem "rubocop-config", github: "jgraichen/rubocop-config", tag: "v14"
+  gem "rubocop-config", github: "jgraichen/rubocop-config", tag: "v15"
 end
 
 group :test do
