@@ -31,7 +31,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'actionpack', '>= 7.0'
   spec.add_dependency 'activemodel', '>= 7.0'
   spec.add_dependency 'activesupport', '>= 7.0'
-  spec.add_dependency 'multi_json', '~> 1.0'
+  spec.add_dependency 'multi_json', '~> 1.21'
   spec.add_dependency 'opentelemetry-api', '~> 1.0'
   spec.add_dependency 'opentelemetry-common'
   spec.add_dependency 'rack'
