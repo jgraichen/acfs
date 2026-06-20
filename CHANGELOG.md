@@ -12,6 +12,15 @@
 
 ### Breaks
 
+## 2.2.0 - (2026-06-20)
+
+---
+
+### Changes
+
+- Maintenance release
+- Improve compatibility with ActiveSupport/JSON
+
 ## 2.1.0 - (2025-02-14)
 
 ---
