@@ -9,16 +9,16 @@ gem "rspec", "~> 3.6"
 gem "rspec-collection_matchers"
 gem "rspec-its"
 gem "webmock", "~> 3.0"
+gem "rake-release", "~> 1.0"
 gem "activesupport", "~> 8.0.0"
 gem "activemodel", "~> 8.0.0"
 gem "actionpack", "~> 8.0.0"
 gem "railties", "~> 8.0.0", require: "rails"
 
 group :development do
-  gem "rake-release", "~> 1.0"
   gem "redcarpet", platform: :ruby
   gem "yard", "~> 0.9.24"
-  gem "rubocop-config", tag: "v13", git: "https://github.com/jgraichen/rubocop-config.git"
+  gem "rubocop-config", tag: "v14", git: "https://github.com/jgraichen/rubocop-config.git"
 end
 
 group :test do
