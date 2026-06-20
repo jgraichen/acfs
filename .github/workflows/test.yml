@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@89f90524b88a01fe6e0b732220432cc6142926af # v1
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler-cache: True
@@ -42,7 +42,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
-      - uses: ruby/setup-ruby@v1
+      - uses: ruby/setup-ruby@89f90524b88a01fe6e0b732220432cc6142926af # v1
         with:
           ruby-version: "4.0.5"
           bundler-cache: True
