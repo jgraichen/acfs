@@ -140,7 +140,7 @@ describe Acfs::Stub do
         users = MyUser.all
         Acfs.run
 
-        expect(users).to have(2).items
+        expect(users.size).to eq(2)
       end
 
       it 'returns defined resources' do
@@ -169,7 +169,7 @@ describe Acfs::Stub do
       end
 
       context 'with header' do
-        subject do
+        subject(:comments_result) do
           Acfs.run
           comments
         end
@@ -188,8 +188,10 @@ describe Acfs::Stub do
           }
         end
 
-        its(:total_pages) { is_expected.to eq 2 }
-        its(:total_count) { is_expected.to eq 10 }
+        it 'exposes pagination headers', :aggregate_failures do
+          expect(comments_result.total_pages).to eq 2
+          expect(comments_result.total_count).to eq 10
+        end
       end
     end
 

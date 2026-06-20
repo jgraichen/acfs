@@ -50,24 +50,24 @@ describe Acfs::Runner do
     describe '#process' do
       it 'triggers event' do
         runner.process Acfs::Operation.new MyUser, :read, params: {id: 0}
-        expect(collector.events).to have(1).items
-        expect(collector2.events).to have(1).items
+        expect(collector.events.size).to eq(1)
+        expect(collector2.events.size).to eq(1)
       end
     end
 
     describe '#run' do
       it 'triggers event' do
         runner.run Acfs::Operation.new MyUser, :read, params: {id: 0}
-        expect(collector.events).to have(1).items
-        expect(collector2.events).to have(0).items
+        expect(collector.events.size).to eq(1)
+        expect(collector2.events.size).to eq(0)
       end
     end
 
     describe '#enqueue' do
       it 'triggers event' do
         runner.enqueue Acfs::Operation.new MyUser, :read, params: {id: 0}
-        expect(collector.events).to have(1).items
-        expect(collector2.events).to have(0).items
+        expect(collector.events.size).to eq(1)
+        expect(collector2.events.size).to eq(0)
       end
     end
   end

@@ -61,10 +61,9 @@ describe Acfs::Resource::Validation do
 
       before { model.valid? }
 
-      it { is_expected.not_to be_empty }
-      it { is_expected.to have(2).items }
-
-      it 'contains a list of error messages' do
+      it 'contains expected errors', :aggregate_failures do
+        expect(errors).not_to be_empty
+        expect(errors.size).to eq(2)
         expect(errors.to_hash).to eq age: ["can't be blank"], name: ['is invalid']
       end
     end

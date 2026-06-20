@@ -44,37 +44,31 @@ describe Acfs::Resource::Locatable do
       context ':list location' do
         let(:action) { :list }
 
-        its(:raw_uri) do
-          is_expected.to eq 'http://users.example.org/users/:user_id/sessions'
-        end
+        it { expect(location.raw_uri).to eq 'http://users.example.org/users/:user_id/sessions' }
       end
 
       context ':create location' do
         let(:action) { :create }
 
-        its(:raw_uri) { is_expected.to eq 'http://users.example.org/sessions' }
+        it { expect(location.raw_uri).to eq 'http://users.example.org/sessions' }
       end
 
       context ':read location' do
         let(:action) { :read }
 
-        its(:raw_uri) { is_expected.to eq 'http://users.example.org/sessions/:id' }
+        it { expect(location.raw_uri).to eq 'http://users.example.org/sessions/:id' }
       end
 
       context ':update location' do
         let(:action) { :update }
 
-        its(:raw_uri) do
-          expect { location }.to raise_error ArgumentError, /update.*disabled/
-        end
+        it { expect { location }.to raise_error ArgumentError, /update.*disabled/ }
       end
 
       context ':delete location' do
         let(:action) { :delete }
 
-        its(:raw_uri) do
-          is_expected.to eq 'http://users.example.org/users/:user_id/sessions/del/:id'
-        end
+        it { expect(location.raw_uri).to eq 'http://users.example.org/users/:user_id/sessions/del/:id' }
       end
     end
   end

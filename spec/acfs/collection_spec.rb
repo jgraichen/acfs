@@ -6,7 +6,7 @@ describe Acfs::Collection do
   let(:model) { MyUser }
 
   describe 'Pagination' do
-    subject do
+    subject(:res) do
       Acfs.run
       collection
     end
@@ -24,9 +24,11 @@ describe Acfs::Collection do
             },)
       end
 
-      its(:total_pages) { is_expected.to eq 2 }
-      its(:current_page) { is_expected.to eq 1 }
-      its(:total_count) { is_expected.to eq 10 }
+      it 'exposes pagination headers', :aggregate_failures do
+        expect(res.total_pages).to eq 2
+        expect(res.current_page).to eq 1
+        expect(res.total_count).to eq 10
+      end
     end
 
     context 'with page parameter' do
@@ -41,9 +43,11 @@ describe Acfs::Collection do
             },)
       end
 
-      its(:total_pages) { is_expected.to eq 2 }
-      its(:current_page) { is_expected.to eq 2 }
-      its(:total_count) { is_expected.to eq 10 }
+      it 'exposes pagination headers', :aggregate_failures do
+        expect(res.total_pages).to eq 2
+        expect(res.current_page).to eq 2
+        expect(res.total_count).to eq 10
+      end
     end
 
     context 'with non-numerical page parameter' do
@@ -58,9 +62,11 @@ describe Acfs::Collection do
             },)
       end
 
-      its(:total_pages) { is_expected.to eq 2 }
-      its(:current_page) { is_expected.to eq 'e546f5' }
-      its(:total_count) { is_expected.to eq 10 }
+      it 'exposes pagination headers', :aggregate_failures do
+        expect(res.total_pages).to eq 2
+        expect(res.current_page).to eq 'e546f5'
+        expect(res.total_count).to eq 10
+      end
     end
 
     describe '#next_page' do
