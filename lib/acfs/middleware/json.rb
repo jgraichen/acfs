@@ -12,12 +12,12 @@ module Acfs
       end
 
       def encode(data)
-        ::MultiJson.dump(data)
+        ::MultiJSON.generate(data)
       end
 
       def decode(body)
-        ::MultiJson.load(body)
-      rescue ::MultiJson::ParseError => e
+        ::MultiJSON.parse(body)
+      rescue ::MultiJSON::ParseError => e
         raise ::JSON::ParserError.new(e)
       end
     end
