@@ -10,7 +10,7 @@ describe Acfs::Request::Callbacks do
     it 'stores a given callback' do
       request.on_complete(&callback)
 
-      expect(request.callbacks).to have(1).item
+      expect(request.callbacks.size).to eq(1)
       expect(request.callbacks[0]).to eq callback
     end
 
@@ -18,7 +18,7 @@ describe Acfs::Request::Callbacks do
       request.on_complete {|_res| 'abc' }
       request.on_complete(&callback)
 
-      expect(request.callbacks).to have(2).item
+      expect(request.callbacks.size).to eq(2)
       expect(request.callbacks[0]).to eq callback
     end
   end

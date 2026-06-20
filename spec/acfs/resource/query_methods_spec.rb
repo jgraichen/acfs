@@ -197,7 +197,7 @@ describe Acfs::Resource::QueryMethods do
         Acfs.run
 
         expect(computers).to be_loaded
-        expect(computers).to have(3).items
+        expect(computers.size).to eq(3)
         expect(computers[0]).to be_a PC
         expect(computers[1]).to be_a Computer
         expect(computers[2]).to be_a Mac

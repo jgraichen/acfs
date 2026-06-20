@@ -9,8 +9,6 @@ gemspec
 gem 'appraisal'
 gem 'rake'
 gem 'rspec', '~> 3.6'
-gem 'rspec-collection_matchers'
-gem 'rspec-its'
 gem 'webmock', '~> 3.0'
 
 gem 'rake-release', '~> 1.0'

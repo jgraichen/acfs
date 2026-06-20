@@ -155,7 +155,7 @@ describe 'Acfs' do
     Acfs.run
 
     expect(users).to be_loaded
-    expect(users).to have(3).items
+    expect(users.size).to eq(3)
 
     expect(users[0].id).to eq 2
     expect(users[0].name).to eq 'John'
@@ -181,7 +181,7 @@ describe 'Acfs' do
     Acfs.run
 
     expect(users).to be_loaded
-    expect(users).to have(2).items
+    expect(users.size).to eq(2)
     expect(users[0].name).to eq 'Anon'
     expect(users[0].age).to eq 12
     expect(users[1].name).to eq 'John'
@@ -201,7 +201,7 @@ describe 'Acfs' do
     expect(user.name).to eq 'John'
     expect(user.age).to eq 26
 
-    expect(friends).to have(1).items
+    expect(friends.size).to eq(1)
   end
 
   it 'loads associated resources from different service' do
@@ -218,6 +218,6 @@ describe 'Acfs' do
     expect(user.name).to eq 'John'
     expect(user.age).to eq 26
 
-    expect(comments).to have(2).items
+    expect(comments.size).to eq(2)
   end
 end

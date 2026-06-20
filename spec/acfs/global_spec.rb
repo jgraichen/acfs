@@ -31,7 +31,7 @@ describe Acfs::Global do
 
       it 'triggers event' do
         Acfs.run
-        expect(collector.events).to have(1).items
+        expect(collector.events.size).to eq(1)
       end
     end
 
@@ -42,7 +42,7 @@ describe Acfs::Global do
 
       it 'triggers event' do
         Acfs.reset
-        expect(collector.events).to have(1).items
+        expect(collector.events.size).to eq(1)
       end
     end
   end
