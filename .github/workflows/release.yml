@@ -17,11 +17,6 @@ jobs:
       contents: write
       id-token: write
 
-    env:
-      BUNDLE_JOBS: 4
-      BUNDLE_RETRY: 10
-      BUNDLE_WITHOUT: development test
-
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6
 
@@ -29,6 +24,9 @@ jobs:
         with:
           ruby-version: ruby-4.0
           bundler-cache: true
+        env:
+          BUNDLE_JOBS: 4
+          BUNDLE_RETRY: 10
 
       - uses: rubygems/release-gem@052cc82692552de3ef2b81fd670e41d13cba8092 # v1
 
