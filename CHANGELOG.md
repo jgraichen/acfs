@@ -12,6 +12,19 @@
 
 ### Breaks
 
+## 2.2.1 - (2026-06-20)
+
+---
+
+### Fixes
+
+- Re-release due to release workflow issues
+
+### Changes
+
+- Maintenance release
+- Improve compatibility with ActiveSupport/JSON
+
 ## 2.2.0 - (2026-06-20)
 
 ---
