@@ -84,8 +84,8 @@ class Acfs::Resource
       #
       # @return [Location] Location object.
       #
-      def location(**opts)
-        service.location(self, **opts)
+      def location(**)
+        service.location(self, **)
       end
 
       # @api private
@@ -112,11 +112,11 @@ class Acfs::Resource
     # @return [ String ] Generated URL.
     # @see ClassMethods#url
     #
-    def url(**opts)
+    def url(**)
       return nil if need_primary_key? && !primary_key?
 
       self.class.service
-        .location(self.class, **opts, action: :read)
+        .location(self.class, **, action: :read)
         .build(attributes).str
     end
 
