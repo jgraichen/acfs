@@ -12,6 +12,8 @@
 
 ### Breaks
 
+- Require Ruby 3.3+ and Rails 8.0+
+
 ## 2.2.1 - (2026-06-20)
 
 ---

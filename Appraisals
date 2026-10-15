@@ -14,13 +14,6 @@ appraise 'rails-8.0' do
   gem 'railties', '~> 8.0.0', require: 'rails'
 end
 
-appraise 'rails-7.2' do
-  gem 'activesupport', '~> 7.2.0'
-  gem 'activemodel', '~> 7.2.0'
-  gem 'actionpack', '~> 7.2.0'
-  gem 'railties', '~> 7.2.0', require: 'rails'
-end
-
 appraise 'rails-master' do
   gem 'activesupport', github: 'rails/rails'
   gem 'activemodel', github: 'rails/rails'
