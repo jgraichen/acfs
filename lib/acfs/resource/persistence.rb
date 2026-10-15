@@ -57,8 +57,8 @@ class Acfs::Resource
     #   false otherwise.
     # @see #save! See {#save!} for available options.
     #
-    def save(**opts)
-      save!(**opts)
+    def save(**)
+      save!(**)
       true
     rescue Acfs::Error
       false
@@ -109,11 +109,11 @@ class Acfs::Resource
     # @see #attributes=
     # @see #update_attributes!
     #
-    def update_attributes(attrs, **opts)
-      check_loaded!(**opts)
+    def update_attributes(attrs, **)
+      check_loaded!(**)
 
       self.attributes = attrs
-      save(**opts)
+      save(**)
     end
 
     # @api public
@@ -152,8 +152,8 @@ class Acfs::Resource
     # @return [Boolean]
     # @see #delete!
     #
-    def delete(**opts)
-      delete!(**opts)
+    def delete(**)
+      delete!(**)
       true
     rescue Acfs::Error
       false

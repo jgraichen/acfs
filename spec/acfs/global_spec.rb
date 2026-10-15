@@ -3,8 +3,8 @@
 require 'spec_helper'
 
 class NotificationCollector
-  def call(*args)
-    events << ActiveSupport::Notifications::Event.new(*args)
+  def call(*)
+    events << ActiveSupport::Notifications::Event.new(*)
   end
 
   def events

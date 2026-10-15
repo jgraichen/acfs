@@ -200,12 +200,12 @@ class Acfs::Resource
       # @param [Symbol, String, Class] type Attribute
       #   type identifier or type class.
       #
-      def attribute(name, type, **opts)
+      def attribute(name, type, **)
         if type.is_a?(Symbol) || type.is_a?(String)
           type = "#{ATTR_CLASS_BASE}::#{type.to_s.classify}".constantize
         end
 
-        define_attribute(name.to_sym, type, **opts)
+        define_attribute(name.to_sym, type, **)
       end
 
       # @api public
@@ -243,9 +243,9 @@ class Acfs::Resource
         @local_attributes ||= {}
       end
 
-      def define_attribute(name, type, **opts)
+      def define_attribute(name, type, **)
         name      = name.to_s
-        attribute = type.new(**opts)
+        attribute = type.new(**)
 
         local_attributes[name] = attribute
         define_attribute_method name
