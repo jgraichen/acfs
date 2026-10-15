@@ -41,7 +41,8 @@ describe Acfs::Adapter::Typhoeus do
     adapter.queue request
 
     expect { adapter.run(request) }.to raise_error(Acfs::RequestError) do |err|
-      expect(err.message).to eq 'Couldn\'t resolve host name: GET http://should-never-exists.example.org'
+      # Wording differs between libcurl versions
+      expect(err.message).to match %r{\ACould(?:n't| not) resolve host ?name: GET http://should-never-exists\.example\.org\z}
     end
   end
 
