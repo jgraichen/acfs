@@ -39,12 +39,12 @@ module Acfs
       @response = opts[:response]
 
       message = if response
-                  (opts[:message] ? "#{opts[:message]}:" : 'Received') +
-                    " #{response.code} for #{response.request.method.upcase} " \
-                    "#{response.request.url} #{response.request.format}"
-                else
-                  opts[:message] || 'Received erroneous response'
-                end
+        (opts[:message] ? "#{opts[:message]}:" : 'Received') +
+          " #{response.code} for #{response.request.method.upcase} " \
+          "#{response.request.url} #{response.request.format}"
+      else
+        opts[:message] || 'Received erroneous response'
+      end
 
       super(opts, message)
     end
