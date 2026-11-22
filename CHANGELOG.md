@@ -10,6 +10,14 @@
 
 ### Fixes
 
+### Breaks
+
+## 3.0.0 - (2026-11-22)
+
+---
+
+### Fixes
+
 - `Acfs.run` returning `nil` with Typhoeus 1.7+; it now explicitly returns `true` after processing queued operations
 
 ### Breaks

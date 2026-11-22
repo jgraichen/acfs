@@ -2,9 +2,9 @@
 
 module Acfs
   module VERSION
-    MAJOR = 2
-    MINOR = 2
-    PATCH = 1
+    MAJOR = 3
+    MINOR = 0
+    PATCH = 0
     STAGE = nil
 
     STRING = [MAJOR, MINOR, PATCH, STAGE].compact.join('.')
