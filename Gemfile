@@ -15,7 +15,7 @@ gem 'rake-release', '~> 1.0'
 
 # Doc
 group :development do
-  gem 'rubocop-config', github: 'jgraichen/rubocop-config', tag: 'v15'
+  gem 'rubocop-config', github: 'jgraichen/rubocop-config', tag: 'v16'
 end
 
 group :test do
