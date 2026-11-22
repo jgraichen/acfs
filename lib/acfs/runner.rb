@@ -62,11 +62,16 @@ module Acfs
 
     # Start processing queued operations.
     #
+    # @return [true, nil] True after all queued operations have
+    #   been processed, nil if operations are already being processed.
+    #
     def start
       return if running?
 
       enqueue_operations
       start_all
+
+      true
     rescue StandardError
       queue.clear
       raise

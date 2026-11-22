@@ -25,7 +25,9 @@ module Acfs
     #
     # Run all queued operations.
     #
-    # @return [undefined]
+    # @return [true, nil] True after all queued operations have
+    #   been processed, nil if called while operations are already
+    #   being processed.
     #
     def run
       Telemetry.in_span('acfs.run', attributes: {'code.stacktrace' => caller.join("\n")}) do

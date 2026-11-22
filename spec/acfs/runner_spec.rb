@@ -94,4 +94,18 @@ describe Acfs::Runner do
       runner.start
     end
   end
+
+  describe '#start' do
+    it 'returns true independent of the adapter return value' do
+      allow(adapter).to receive(:start).and_return(nil)
+      expect(runner.start).to be true
+    end
+
+    it 'returns nil when already running' do
+      nested = :unset
+      allow(adapter).to receive(:start) { nested = runner.start }
+      runner.start
+      expect(nested).to be_nil
+    end
+  end
 end

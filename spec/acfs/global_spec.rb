@@ -47,6 +47,25 @@ describe Acfs::Global do
     end
   end
 
+  describe '#run' do
+    before do
+      stub_request(:get, 'http://users.example.org/users/1').to_return(
+        status: 200,
+        body: '{}',
+        headers: {'Content-Type' => 'application/json'},
+      )
+    end
+
+    it 'returns true after processing queued operations' do
+      MyUser.find 1
+      expect(Acfs.run).to be true
+    end
+
+    it 'returns true without queued operations' do
+      expect(Acfs.run).to be true
+    end
+  end
+
   describe '#on' do
     before do
       stub_request(:get, %r{http://users.example.org/users/\d+}).to_return(

@@ -10,6 +10,8 @@
 
 ### Fixes
 
+- `Acfs.run` returning `nil` with Typhoeus 1.7+; it now explicitly returns `true` after processing queued operations
+
 ### Breaks
 
 - Require Ruby 3.3+ and Rails 8.0+
